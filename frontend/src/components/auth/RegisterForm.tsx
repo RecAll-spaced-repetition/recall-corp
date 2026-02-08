@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod/src/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Input, FormItem } from '@/components/library';
@@ -11,8 +11,7 @@ import { useRegister } from '@/query/mutationHooks';
 const userRegisterScheme = z
   .object({
     email: z
-      .string({ message: 'auth.emailRequired' })
-      .email('auth.invalidEmail'),
+      .email({ message: 'auth.invalidEmail' }),
     nickname: z.string({ message: 'auth.nicknameRequired' }),
     password1: z
       .string({ message: 'auth.passwordRequired' })
