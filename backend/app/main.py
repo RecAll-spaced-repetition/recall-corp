@@ -13,9 +13,9 @@ async def lifespan(app: FastAPI):
     await create_db_tables()
     if not await is_bucket_available():
         raise RuntimeError("Minio server's bucket isn't available")
-    print(await load_model())
+    # print(await load_model())
     yield
-    print(await unload_model())
+    # print(await unload_model())
     await close_db_connections()
 
 
