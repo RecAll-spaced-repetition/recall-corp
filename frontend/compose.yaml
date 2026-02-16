@@ -1,11 +1,11 @@
-name: recall-frontend-compose
+name: recall-corp-frontend
 
 networks:
   dev:
 
 services:
   frontend:
-    container_name: recall-frontend
+    container_name: recall-corp-frontend
     build: .
     restart: always
     ports:

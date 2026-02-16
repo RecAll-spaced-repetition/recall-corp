@@ -1,4 +1,4 @@
-name: recall
+name: recall-corp
 
 networks:
   dev:
@@ -9,13 +9,13 @@ include:
 
 services:
   nginx:
-    container_name: recall-nginx
+    container_name: recall-corp-nginx
     image: nginx:1.27.3-alpine
     restart: always
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf
-      - $CERTBOT_PATH/www/:/var/www/certbot/:ro
-      - $CERTBOT_PATH/conf/:/etc/nginx/ssl/:ro
+      - $CERTBOT_PATH/www/:/var/www/certbot/:rw
+      - $CERTBOT_PATH/conf/:/etc/nginx/ssl/:rw
     ports:
       - "80:80"
       - "443:443"
