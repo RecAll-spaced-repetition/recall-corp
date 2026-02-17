@@ -26,10 +26,3 @@ services:
       - backend
     networks:
       - dev
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - $CERTBOT_PATH/www/:/var/www/certbot/:rw
-      - $CERTBOT_PATH/conf/:/etc/letsencrypt/:rw
-    networks:
-      - dev
