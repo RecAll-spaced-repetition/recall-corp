@@ -1,0 +1,29 @@
+name: recall-corp-certbot
+
+networks:
+  dev:
+
+services:
+  empty-nginx:
+    container_name: recall-corp-empty-nginx
+    image: nginx:1.27.3-alpine
+    restart: never
+    environment:
+      HOSTNAME: $HOSTNAME
+    volumes:
+      - ./nginx.certbot.conf.template:/etc/nginx/templates/default.conf.template
+      - $CERTBOT_PATH/www/:/var/www/certbot/:rw
+      - $CERTBOT_PATH/conf/:/etc/nginx/ssl/:rw
+    ports:
+      - "80:80"
+    networks:
+      - dev
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - $CERTBOT_PATH/www/:/var/www/certbot/:rw
+      - $CERTBOT_PATH/conf/:/etc/letsencrypt/:rw
+    depends_on:
+      - empty-nginx
+    networks:
+      - dev
