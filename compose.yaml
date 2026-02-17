@@ -1,0 +1,30 @@
+name: recall-corp
+
+networks:
+  dev:
+
+include:
+  - ./backend/compose.yaml
+  - ./frontend/compose.yaml
+
+services:
+  nginx:
+    container_name: recall-corp-nginx
+    image: nginx:1.27.3-alpine
+    restart: always
+    environment:
+      HOSTNAME: $HOSTNAME
+    volumes:
+      - ./config/nginx.conf.template:/etc/nginx/templates/default.conf.template
+      - $CERTBOT_PATH/www/:/var/www/certbot/:rw
+      - $CERTBOT_PATH/conf/:/etc/nginx/ssl/:rw
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    networks:
+      - dev
