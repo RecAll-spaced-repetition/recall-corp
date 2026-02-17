@@ -15,14 +15,16 @@ services:
     environment:
       HOSTNAME: $HOSTNAME
     volumes:
-      - ./config/nginx.certbot.conf.template:/etc/nginx/templates/default.conf.template
+      - ./config/nginx.conf.template:/etc/nginx/templates/default.conf.template
       - $CERTBOT_PATH/www/:/var/www/certbot/:rw
       - $CERTBOT_PATH/conf/:/etc/nginx/ssl/:rw
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-      - frontend
-      - backend
+      frontend:
+        condition: service_healthy
+      backend:
+        condition: service_started
     networks:
       - dev

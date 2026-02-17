@@ -7,7 +7,6 @@ services:
   empty-nginx:
     container_name: recall-corp-empty-nginx
     image: nginx:1.27.3-alpine
-    restart: never
     environment:
       HOSTNAME: $HOSTNAME
     volumes:
