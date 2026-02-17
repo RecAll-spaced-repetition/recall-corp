@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod/src/zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 
 import {
