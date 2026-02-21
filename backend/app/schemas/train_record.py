@@ -5,7 +5,7 @@ from pydantic import Field
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainRecord", "TrainRecordCreate", "UserAnswer", "AIFeedback"]
+__all__ = ["TrainRecord", "TrainRecordCreate", "UserAnswer"]
 
 
 class TrainRecordCreate(CamelCaseBaseModel):
@@ -23,8 +23,3 @@ class TrainRecord(TrainRecordCreate):
 
 class UserAnswer(CamelCaseBaseModel):
     answer: str
-
-
-class AIFeedback(CamelCaseBaseModel):
-    mark: int
-    comment: str

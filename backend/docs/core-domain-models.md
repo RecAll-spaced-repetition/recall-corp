@@ -103,8 +103,7 @@ The `TrainRecord` entity implements the spaced repetition algorithm by tracking 
 -   `progress`: Learning progress as float between 0.0-1.0
 -   `repeat_date`: When the training session occurred.
 -   `next_repeat_date`: When card should be reviewed next.
--   `UserAnswer`: Captures user's text response for AI evaluation.
--   `AIFeedback`: AI-generated score and feedback.
+-   `UserAnswer`: Captures user's text response for evaluation.
 
 ## Entity Relationships and Data Flow
 

@@ -4,38 +4,37 @@
 
 @layer utilities {
   .center {
-    @apply flex items-center justify-center
+    @apply flex items-center justify-center;
   }
 
   .around {
-    @apply flex items-center justify-around
+    @apply flex items-center justify-around;
   }
 
   .between {
-    @apply flex items-center justify-between
+    @apply flex items-center justify-between;
   }
 
   .vstack {
-    @apply flex flex-col
+    @apply flex flex-col;
   }
 
   .full {
-    @apply w-full h-full
+    @apply w-full h-full;
   }
 
   .center-full {
-    @apply full center
+    @apply full center;
   }
 
   .error {
-    @apply outline-pink-500 ring-1 ring-pink-500
+    @apply outline-pink-500 ring-1 ring-pink-500;
   }
 
   .font-ma {
     font-family: 'MontserratAlternates';
   }
 }
-
 
 @font-face {
   font-family: 'MontserratAlternates';
@@ -65,7 +64,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  font-family: "MontserratAlternates";
+  font-family: 'MontserratAlternates';
 
   @apply bg-o-white text-sm lg:text-base xl:text-lg 2xl:text-xl;
 }
@@ -90,7 +89,7 @@ body,
 
 *::-webkit-scrollbar-thumb {
   background-clip: content-box;
-  @apply bg-neutral-400 rounded-lg
+  @apply bg-neutral-400 rounded-lg;
 }
 
 ::-webkit-scrollbar {
@@ -113,7 +112,8 @@ body,
   -moz-transform: rotateY(180deg);
 }
 
-.flip-front, .flip-back {
+.flip-front,
+.flip-back {
   top: 0;
   position: absolute;
   backface-visibility: hidden;
@@ -128,16 +128,15 @@ body,
 }
 
 .custom-grid {
-  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .markdown {
-
   > * {
     @apply my-1 w-full;
   }
 
-  * {    
+  * {
     text-wrap: wrap;
   }
 
@@ -148,11 +147,11 @@ body,
   h2 {
     @apply text-lg lg:text-xl xl:text-2xl 2xl:text-3xl;
   }
-  
-  h3, h4 {
+
+  h3,
+  h4 {
     @apply text-base lg:text-lg xl:text-xl 2xl:text-2xl;
   }
-
 
   a {
     text-decoration: underline;
@@ -163,7 +162,7 @@ body,
     list-style: disc;
     margin-left: 20px;
   }
-  
+
   ol {
     list-style: decimal;
     margin-left: 20px;
@@ -181,11 +180,15 @@ body,
     @apply w-full m-auto;
   }
 
-  img, video {
+  img,
+  video {
     @apply w-full md:w-1/2 m-auto;
   }
 }
 
-.media-full > { img, video {
-  @apply md:w-1/2
-}}
+.media-full > {
+  img,
+  video {
+    @apply md:w-1/2;
+  }
+}

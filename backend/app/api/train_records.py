@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.schemas import AIFeedback, TrainRecord, TrainRecordCreate, UserAnswer
+from app.schemas import TrainRecord, TrainRecordCreate
 
 from .dependencies import TrainRecordServiceDep, UserIdDep
 
@@ -24,11 +24,3 @@ async def create_train_record(
         train_record_service: TrainRecordServiceDep
 ):
     return await train_record_service.create_train_record(user_id, card_id, train_record)
-
-
-@router.post("/{card_id}/compare", response_model=AIFeedback)
-async def compare_answers_by_ai(
-        user_id: UserIdDep, card_id: int, user_answer: UserAnswer,
-        train_record_service: TrainRecordServiceDep
-):
-    return await train_record_service.compare_answers_by_ai(user_id, card_id, user_answer)
