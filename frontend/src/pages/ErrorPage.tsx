@@ -20,7 +20,7 @@ export const ErrorPage: React.FC<ErrorPageProps> = ({ message, isPending }) => {
         </h2>
         <div className="w-full center text-lg">
           {/* TODO: Сделать тут наконец нормальный обратный переход */}
-          <Link to={routes.main.getUrl()}> 
+          <Link to={routes.main.getUrl()}>
             <Button className="m-2" variant="bordered">
               Go back
             </Button>
