@@ -8,7 +8,7 @@ import { useProfile } from '@/query/queryHooks';
 import { useLogout } from '@/query/mutationHooks';
 import { useTranslation } from 'react-i18next';
 
-import icon from '@public/favicon.ico';
+import icon from '@/assets/favicon.ico';
 
 export const Header: React.FC = () => {
   const { t } = useTranslation();

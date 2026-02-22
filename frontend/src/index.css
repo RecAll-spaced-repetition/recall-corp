@@ -105,25 +105,25 @@
 
 @font-face {
   font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Light.ttf');
+  src: url('/fonts/MontserratAlternates-Light.ttf');
   font-weight: 200;
 }
 
 @font-face {
   font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Regular.ttf');
+  src: url('/fonts/MontserratAlternates-Regular.ttf');
   font-weight: 400;
 }
 
 @font-face {
   font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Medium.ttf');
+  src: url('/fonts/MontserratAlternates-Medium.ttf');
   font-weight: 500;
 }
 
 @font-face {
   font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Bold.ttf');
+  src: url('/fonts/MontserratAlternates-Bold.ttf');
   font-weight: 800;
 }
 

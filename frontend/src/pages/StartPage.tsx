@@ -7,7 +7,7 @@ import { Button } from '@/components/library';
 import { useProfile } from '@/query/queryHooks';
 import { MiniCard } from '@/components/card';
 
-import intervalsImage from '@public/img/intervalsWide.png';
+import intervalsImage from '@/assets/img/intervalsWide.png';
 import { StaticFlippingCard } from '@/components/card';
 import { MarkdownRenderComponent } from '@/components/editor';
 import { Redirect } from 'wouter';
