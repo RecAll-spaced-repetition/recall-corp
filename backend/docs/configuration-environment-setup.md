@@ -4,7 +4,7 @@ This document covers the environment configuration, dependency management, and s
 
 ## Environment Configuration Files
 
-The application requires several environment configuration files located in the `config/` directory. These files configure authentication, database connections, object storage, and AI services.
+The application requires several environment configuration files located in the `config/` directory. These files configure authentication, database connections, and object storage.
 
 ### Core Configuration Files
 
@@ -47,17 +47,6 @@ MINIO_PASSWORD=<backend_minio_user_password>
 MINIO_MAX_FILE_MB_SIZE=<mb_integer_number>
 ```
 
-#### AI Service Configuration
-
-The `ollama.env` file configures the Ollama LLM service:
-
-```
-OLLAMA_FROM_MODEL=<basic_model> # now allowed llama3.1 and mistral
-OLLAMA_HOSTNAME=<ollama_addr> # IP address - without protocol
-OLLAMA_PORT=<port>
-OLLAMA_MODEL=<name_for_modified_model>
-```
-
 ### Deployment-Specific Configuration
 
 For Docker deployment, additional configuration files are required:
@@ -83,7 +72,6 @@ The following environment variables must be set for Docker deployment:
 | `RECALL_FRONTEND_PATH` | Frontend source code path | `/path/to/recall-front` |
 | `MINIO_VOLUME_PATH` | MinIO storage directory | `/data/minio` |
 | `POSTGRES_VOLUME_PATH` | PostgreSQL data directory | `/data/postgres` |
-| `OLLAMA_VOLUME_PATH` | Ollama models directory | `/data/ollama` |
 
 **Configuration File Structure**
 
@@ -105,7 +93,6 @@ The project requires Python 3.11+ and uses these primary dependencies:
 | `pydantic-settings` | ^2.6.1 | Configuration management |
 | `python-jose` | ^3.3.0 | JWT token handling |
 | `bcrypt` | ^4.2.0 | Password hashing |
-| `ollama` | ^0.4.7 | AI/LLM integration |
 | `miniopy-async` | ^1.22.1 | Async MinIO client |
 
 ### Poetry Installation and Setup
@@ -147,7 +134,6 @@ Local development setup enables running the FastAPI application directly without
 1.  **Poetry installed** (see previous section)
 2.  **PostgreSQL running locally** or accessible remotely
 3.  **MinIO server running** (optional for file operations)
-4.  **Ollama service running** (optional for AI features)
 
 ### Environment Configuration
 
@@ -180,7 +166,7 @@ uvicorn app.main:app --<your_flags>
 
 ## Docker Deployment Configuration
 
-Docker deployment uses `compose.yaml` to orchestrate multiple services including the web server, application, database, storage, and AI services.
+Docker deployment uses `compose.yaml` to orchestrate multiple services including the web server, application, database, and storage.
 
 ### Service Architecture
 
@@ -193,7 +179,6 @@ The Docker Compose configuration defines these services:
 | `frontend` | `recall-frontend` | Frontend application | None |
 | `postgres` | `recall-postgres` | PostgreSQL database | None |
 | `minio` | `recall-minio` | Object storage server | None |
-| `ollama` | `recall-ollama` | LLM service | None |
 
 ### Network and Volume Configuration
 
@@ -216,11 +201,6 @@ volumes:
       type: none
       o: bind
       device: $POSTGRES_VOLUME_PATH
-  recall-ollama-volume:
-    driver_opts:
-      type: none
-      o: bind
-      device: $OLLAMA_VOLUME_PATH
 ```
 
 ### Deployment Process
@@ -232,7 +212,6 @@ export CERTBOT_PATH=/path/to/certificates
 export RECALL_FRONTEND_PATH=/path/to/frontend
 export MINIO_VOLUME_PATH=/path/to/minio/storage
 export POSTGRES_VOLUME_PATH=/path/to/postgres/data
-export OLLAMA_VOLUME_PATH=/path/to/ollama/models
 ```
 
 Either wrote `.env` file inside project directory with described variables
@@ -300,14 +279,6 @@ healthcheck:
 
 -   Configured via `minio-backend.env`
 -   Setup script: `minio-setup.sh`
-
-### Ollama Configuration
-
-**Model Management:**
-
--   Custom model setup via `ollama-setup` container
--   Base models: `llama3.1`, `mistral`
--   Custom model naming via `OLLAMA_MODEL` environment variable
 
 **Service Initialization Flow**
 

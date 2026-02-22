@@ -70,9 +70,6 @@ import type {
   CreateTrainRecordTrainRecordsCardIdPostData,
   CreateTrainRecordTrainRecordsCardIdPostError,
   CreateTrainRecordTrainRecordsCardIdPostResponse,
-  CompareAnswersByAiTrainRecordsCardIdComparePostData,
-  CompareAnswersByAiTrainRecordsCardIdComparePostError,
-  CompareAnswersByAiTrainRecordsCardIdComparePostResponse,
   ReadUserUserProfileGetError,
   ReadUserUserProfileGetResponse,
   ReadUserCollectionsUserCollectionsGetData,
@@ -490,27 +487,6 @@ export const createTrainRecordTrainRecordsCardIdPost = <
   >({
     ...options,
     url: '/train_records/{card_id}',
-  });
-};
-
-/**
- * Compare Answers By Ai
- */
-export const compareAnswersByAiTrainRecordsCardIdComparePost = <
-  ThrowOnError extends boolean = false
->(
-  options: Options<
-    CompareAnswersByAiTrainRecordsCardIdComparePostData,
-    ThrowOnError
-  >
-) => {
-  return (options?.client ?? client).post<
-    CompareAnswersByAiTrainRecordsCardIdComparePostResponse,
-    CompareAnswersByAiTrainRecordsCardIdComparePostError,
-    ThrowOnError
-  >({
-    ...options,
-    url: '/train_records/{card_id}/compare',
   });
 };
 

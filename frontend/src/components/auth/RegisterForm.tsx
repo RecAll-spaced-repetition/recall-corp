@@ -10,8 +10,7 @@ import { useRegister } from '@/query/mutationHooks';
 
 const userRegisterScheme = z
   .object({
-    email: z
-      .email({ message: 'auth.invalidEmail' }),
+    email: z.email({ message: 'auth.invalidEmail' }),
     nickname: z.string({ message: 'auth.nicknameRequired' }),
     password1: z
       .string({ message: 'auth.passwordRequired' })

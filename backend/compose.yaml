@@ -73,25 +73,6 @@ services:
     restart: always
     networks:
       - dev
-  # ollama-setup:
-  #   build: ./config/ollama-setup-container
-  #   container_name: recall-ollama-setup
-  #   depends_on:
-  #     - ollama
-  #   env_file: ./config/ollama.env
-  #   restart: on-failure
-  #   networks:
-  #     - dev
-  # ollama:
-  #   container_name: recall-ollama
-  #   image: ollama/ollama
-  #   volumes:
-  #     - recall-ollama-volume:/root/.ollama
-  #   ports:
-  #     - "11434:11434"
-  #   restart: always
-  #   networks:
-  #     - dev
 
 volumes:
   recall-corp-minio-volume:
@@ -106,9 +87,3 @@ volumes:
       type: none
       o: bind
       device: $POSTGRES_VOLUME_PATH
-  # recall-ollama-volume:
-  #   driver: local
-  #   driver_opts:
-  #     type: none
-  #     o: bind
-  #     device: $OLLAMA_VOLUME_PATH

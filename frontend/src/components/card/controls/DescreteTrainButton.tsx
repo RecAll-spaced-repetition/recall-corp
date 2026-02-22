@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Button, Variants } from '@/components/library';
 import { useAppStore } from '@/state';
-import clsx from 'clsx';
 import { useCardTrain } from '@/query/mutationHooks';
 
 export enum Mark {
@@ -25,12 +24,10 @@ const MarksBtnVariants: Record<Mark, Variants> = {
 
 export interface DescreteTrainButtonProps {
   mark: Mark;
-  recommended?: boolean;
 }
 
 export const DescreteTrainButton: React.FC<DescreteTrainButtonProps> = ({
   mark,
-  recommended,
 }) => {
   const cardId = useAppStore((state) => state.activeCardId);
   const executeTrainCard = useAppStore((state) => state.executeTrainCard);
@@ -44,7 +41,7 @@ export const DescreteTrainButton: React.FC<DescreteTrainButtonProps> = ({
 
   return (
     <Button
-      className={clsx('px-2', recommended && 'border-4 border-o-black')}
+      className="px-2"
       variant={MarksBtnVariants[mark]}
       onClick={() => trainCard(mark)}
       withShadow

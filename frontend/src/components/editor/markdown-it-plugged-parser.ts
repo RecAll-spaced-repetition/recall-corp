@@ -11,7 +11,7 @@ export const simpleRenderer = markdownit({
   linkify: true,
   typographer: true,
   langPrefix: 'language-',
-  highlight: (str, lang, attrs) => {
+  highlight: (str, lang) => {
     if (highligher.getLanguage(lang)) {
       try {
         return highligher.highlight(str, { language: lang }).value;
@@ -23,12 +23,12 @@ export const simpleRenderer = markdownit({
   },
 })
   .use(tex, {
-    render: (content, mode) => {
+    render: (content, isParagraph) => {
       const texStr = katex.renderToString(content, {
         output: 'mathml',
         throwOnError: false,
       });
-      return !mode ? texStr : `<p>${texStr}</p>`;
+      return isParagraph ? `<p>${texStr}</p>` : texStr;
     },
   })
   .disable('image');

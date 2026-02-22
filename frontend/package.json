@@ -7,7 +7,10 @@
     "generate-api": "openapi-ts -f openapi-ts.config.ts",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "pre-commit": "lint-staged"
+    "prettier": "prettier --config .prettierrc.json -w ./src",
+    "lint": "eslint --fix ./src",
+    "ts-check": "tsc",
+    "checks": "npm run prettier && npm run lint && npm run ts-check"
   },
   "dependencies": {
     "@gotfeedback/markdown-it-media": "^1.0.1",
@@ -53,6 +56,7 @@
     "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@typescript-eslint/typescript-estree": "^8.56.0",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.24",
     "eslint": "^8.57.1",
