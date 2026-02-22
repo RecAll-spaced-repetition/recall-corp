@@ -58,19 +58,10 @@ class MinioSettings(BaseSettings):
     MAX_FILE_MB_SIZE: int
 
 
-class OllamaSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='OLLAMA_', env_file="./config/ollama.env", extra="ignore")
-
-    MODEL: str
-    HOSTNAME: str
-    PORT: int
-
-
 class Settings(BaseSettings):
     auth: AuthSettings = AuthSettings()
     db: PostgreSettings = PostgreSettings()
     minio: MinioSettings = MinioSettings()
-    ollama: OllamaSettings = OllamaSettings()
 
     @staticmethod
     @cache
@@ -115,11 +106,6 @@ class Settings(BaseSettings):
     @cache
     def max_file_mb_size(self) -> int:
         return self.minio.MAX_FILE_MB_SIZE
-
-    @property
-    @cache
-    def ollama_url(self) -> str:
-        return f"http://{self.ollama.HOSTNAME}:{self.ollama.PORT}"
 
     @cache
     def __create_postgres_dialect_url(self, dialect: str) -> str:
