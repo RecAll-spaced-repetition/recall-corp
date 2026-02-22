@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
-import { default as viteReact } from '@vitejs/plugin-react';
+import viteReact from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { resolve } from 'path';
-import svgr from 'vite-plugin-svgr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [viteReact(), svgr()],
+  plugins: [viteReact(), tailwindcss()],
   server: {
     strictPort: true,
   },
@@ -14,7 +14,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve('./src')
+      '@': resolve('./src'),
     },
   },
 });
