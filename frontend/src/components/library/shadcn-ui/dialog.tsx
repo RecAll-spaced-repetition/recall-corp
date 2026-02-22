@@ -36,7 +36,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={clsx(
-        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-o-white/25 backdrop-blur',
+        'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-o-white/25 backdrop-blur-sm',
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function DialogContent({
           className={clsx(
             'bg-o-white-max p-1 md:p-2',
             'fixed top-1 right-1 md:top-2 md:right-2 z-50',
-            'rounded text-sm md:text-md lg:text-lg'
+            'rounded-sm text-sm md:text-md lg:text-lg'
           )}
         >
           <Icon icon="close" />

@@ -122,7 +122,7 @@ export const CollectionEditForm: React.FC<CollectionEditFormProps> = ({
                 'text-center text-o-black font-medium',
                 'text-base md:text-lg lg:text-xl xl:text-3xl',
                 'bg-transparent resize-none',
-                'focus:outline-none',
+                'focus:outline-hidden',
                 'transition-all duration-200',
                 'hover:shadow-inner hover:shadow-neutral-400',
                 'focus:shadow-inner hover:shadow-neutral-400'

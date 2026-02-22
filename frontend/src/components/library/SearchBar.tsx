@@ -76,7 +76,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             'bg-transparent border-2 border-o-black',
             'transition-all duration-200',
             'hover:shadow-md hover:shadow-blue-200',
-            'focus:outline-none focus:shadow-blue-200'
+            'focus:outline-hidden focus:shadow-blue-200'
           )}
           value={searchTerm}
           onChange={(e) => {
