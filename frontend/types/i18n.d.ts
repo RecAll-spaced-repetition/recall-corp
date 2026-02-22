@@ -1,5 +1,5 @@
 import 'i18next';
-import translationNS from '@public/locales/ru/translation.json';
+import translationNS from '@/assets/locales/ru/translation.json';
 
 declare module 'i18next' {
   interface CustomTypeOptions {
