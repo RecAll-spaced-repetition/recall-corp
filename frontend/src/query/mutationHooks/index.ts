@@ -15,5 +15,3 @@ export * from './useCollectionDelete';
 
 export * from './useFileUpload';
 export * from './useFileDelete';
-
-export * from './useAiCompare';

@@ -10,7 +10,7 @@ This document provides a high-level introduction to the RecALL backend system, a
 
 RecALL is a web-based learning platform backend that implements flashcard-style studying with spaced repetition algorithms and AI-powered feedback. The system enables users to create flashcards, organize them into collections, attach files, and track learning progress through scientifically-backed spaced repetition techniques.
 
-The platform supports both private learning and public content sharing, allowing users to create personal study materials or contribute to a shared knowledge base. AI integration via Ollama provides intelligent feedback and scoring during study sessions.
+The platform supports both private learning and public content sharing, allowing users to create personal study materials or contribute to a shared knowledge base.
 
 ## Key Features
 
@@ -21,7 +21,6 @@ The platform supports both private learning and public content sharing, allowing
 | **Organization** | Collections to group related cards, public/private visibility |
 | **File Attachments** | Upload and attach images/documents to cards via MinIO storage |
 | **Learning System** | Spaced repetition algorithm, progress tracking, training records |
-| **AI Integration** | Automated feedback and scoring via Ollama LLM service |
 | **Content Sharing** | Public collections and cards for community learning |
 | **Multi-tenancy** | User-owned content with proper access controls |
 
@@ -51,7 +50,6 @@ The system is built on modern Python web technologies with a focus on type safet
 | **Containerization** | [Docker Engine + Docker Compose](https://docs.docker.com/engine/install/) | Multi-service deployment orchestration |
 | **Package Management** | [Poetry](https://python-poetry.org/docs/#installation) | Python dependency management and packaging |
 | **Web Server** | Nginx | Reverse proxy with SSL termination |
-| **AI/ML** | Ollama | Local LLM server for AI feedback (llama3.1, mistral) |
 
 ## System Components
 
@@ -66,15 +64,14 @@ The application runs as multiple Docker containers with specific responsibilitie
 | **frontend** | `recall-frontend` | Web UI application |
 | **postgres** | `recall-postgres` | Primary database for user data, cards, collections |
 | **minio** | `recall-minio` | Object storage for file attachments |
-| **ollama** | `recall-ollama` | LLM service for AI feedback |
 
 ### Application Lifecycle
 
 The FastAPI application implements comprehensive lifecycle management in `app/main.py`:
 
-1.  **Startup**: Creates database tables, verifies MinIO bucket availability, loads AI model
+1.  **Startup**: Creates database tables, verifies MinIO bucket availability
 2.  **Runtime**: Serves API requests with CORS middleware for cross-origin requests
-3.  **Shutdown**: Unloads AI model, closes database connections
+3.  **Shutdown**: Closes database connections
 
 ![](docs/.source/img_2.png)
 

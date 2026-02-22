@@ -75,7 +75,7 @@
   },
   "card": {
     "aiMark": "AI mark",
-    "flipCard": "Flip card and grade yourself or check your knowledge using AI",
+    "flipCard": "Flip card and grade yourself",
     "typeAnswer": "Type your answer",
     "checkAnswer": "Check answer",
     "checkingAnswer": "Checking answer...",
