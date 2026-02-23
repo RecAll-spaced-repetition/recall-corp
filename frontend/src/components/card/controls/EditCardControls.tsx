@@ -12,12 +12,7 @@ import {
   CollectionsSelect,
   Option,
 } from './CollectionsSelect';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from '@/components/library/shadcn-ui';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 export const EditCardControls: React.FC = () => {
   const { t } = useTranslation();
@@ -113,18 +108,18 @@ export const EditCardControls: React.FC = () => {
         >
           {t('card.requirements')}
         </span>
-        <DropdownMenu>
-          <DropdownMenuTrigger disabled={isAnyPending}>
-            <Button
-              className="text-xl p-2"
-              variant="bordered"
-              title={t('card.deleteCard')}
-              loading={isAnyPending}
-              icon="trash"
-            />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
+        <Menu>
+          <MenuButton
+            as={Button}
+            className="text-xl p-2"
+            variant="bordered"
+            title={t('card.deleteCard')}
+            loading={isAnyPending}
+            disabled={isAnyPending}
+            icon="trash"
+          />
+          <MenuItems anchor={{ to: 'bottom', gap: 2 }}>
+            <MenuItem>
               <Button
                 variant="plate-red"
                 onClick={() => deleteCard()}
@@ -132,9 +127,9 @@ export const EditCardControls: React.FC = () => {
               >
                 {t('common.confirmDeletion')}
               </Button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </MenuItem>
+          </MenuItems>
+        </Menu>
       </div>
     </div>
   );
