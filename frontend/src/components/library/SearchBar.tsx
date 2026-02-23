@@ -101,7 +101,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             'absolute top-20',
             'border-2 border-o-black text-o-black',
             'bg-o-white shadow-lg',
-            'w-full max-h-[300px]',
+            'w-full max-h-75',
             'rounded-xl p-4 overflow-auto',
             'grid grid-cols-1 gap-2',
             'transition-all duration-400'
@@ -109,7 +109,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         >
           {activeSearch.map((item, index) => (
             <div
-              ref={(el) => (resultRefs.current[index] = el)}
+              ref={(el) => {
+                resultRefs.current[index] = el;
+              }}
               key={index}
               className={clsx(
                 'flex justify-between items-center p-2 cursor-pointer',

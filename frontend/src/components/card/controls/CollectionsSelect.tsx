@@ -7,7 +7,7 @@ import { CollectionShort } from '@/api';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/state';
 
-export type Option<V> = { value: V; label: JSX.Element };
+export type Option<V> = { value: V; label: React.JSX.Element };
 
 export const collectionResponseToOptions = (collections?: CollectionShort[]) =>
   collections?.map((collection) => ({
