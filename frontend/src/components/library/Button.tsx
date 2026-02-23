@@ -3,8 +3,9 @@ import clsx from 'clsx';
 
 import { Icon, IconType, ShadowWrapper } from '@/components/library';
 
-interface IconButtonProps
-  extends PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement>> {
+interface IconButtonProps extends PropsWithChildren<
+  React.ButtonHTMLAttributes<HTMLButtonElement>
+> {
   icon?: IconType;
   loading?: boolean;
   withShadow?: boolean;
