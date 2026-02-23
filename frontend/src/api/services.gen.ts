@@ -134,7 +134,7 @@ export const updateCardCardsCardIdPut = <ThrowOnError extends boolean = false>(
  * Delete Card
  */
 export const deleteCardCardsCardIdDelete = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<DeleteCardCardsCardIdDeleteData, ThrowOnError>
 ) => {
@@ -152,7 +152,7 @@ export const deleteCardCardsCardIdDelete = <
  * Read Card Collections
  */
 export const readCardCollectionsCardsCardIdCollectionsGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     ReadCardCollectionsCardsCardIdCollectionsGetData,
@@ -173,7 +173,7 @@ export const readCardCollectionsCardsCardIdCollectionsGet = <
  * Read Card Files
  */
 export const readCardFilesCardsCardIdFilesGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<ReadCardFilesCardsCardIdFilesGetData, ThrowOnError>
 ) => {
@@ -207,7 +207,7 @@ export const createCardCardsPost = <ThrowOnError extends boolean = false>(
  * Read Collection
  */
 export const readCollectionCollectionsCollectionIdGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<ReadCollectionCollectionsCollectionIdGetData, ThrowOnError>
 ) => {
@@ -225,7 +225,7 @@ export const readCollectionCollectionsCollectionIdGet = <
  * Update Collection
  */
 export const updateCollectionCollectionsCollectionIdPut = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<UpdateCollectionCollectionsCollectionIdPutData, ThrowOnError>
 ) => {
@@ -243,7 +243,7 @@ export const updateCollectionCollectionsCollectionIdPut = <
  * Delete Collection
  */
 export const deleteCollectionCollectionsCollectionIdDelete = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     DeleteCollectionCollectionsCollectionIdDeleteData,
@@ -265,7 +265,7 @@ export const deleteCollectionCollectionsCollectionIdDelete = <
  * Returns collections' list without descriptions
  */
 export const readCollectionsCollectionsGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options?: Options<ReadCollectionsCollectionsGetData, ThrowOnError>
 ) => {
@@ -283,7 +283,7 @@ export const readCollectionsCollectionsGet = <
  * Create Collection
  */
 export const createCollectionCollectionsPost = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<CreateCollectionCollectionsPostData, ThrowOnError>
 ) => {
@@ -301,7 +301,7 @@ export const createCollectionCollectionsPost = <
  * Read Collection Cards
  */
 export const readCollectionCardsCollectionsCollectionIdCardsGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     ReadCollectionCardsCollectionsCollectionIdCardsGetData,
@@ -322,7 +322,7 @@ export const readCollectionCardsCollectionsCollectionIdCardsGet = <
  * Train Cards
  */
 export const trainCardsCollectionsCollectionIdCardsTrainGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     TrainCardsCollectionsCollectionIdCardsTrainGetData,
@@ -343,7 +343,7 @@ export const trainCardsCollectionsCollectionIdCardsTrainGet = <
  * Update Collection Publicity
  */
 export const updateCollectionPublicityCollectionsCollectionIdPublicityPut = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     UpdateCollectionPublicityCollectionsCollectionIdPublicityPutData,
@@ -385,7 +385,7 @@ export const addFileStoragePost = <ThrowOnError extends boolean = false>(
  * Get File Meta
  */
 export const getFileMetaStorageFileIdMetaGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<GetFileMetaStorageFileIdMetaGetData, ThrowOnError>
 ) => {
@@ -403,7 +403,7 @@ export const getFileMetaStorageFileIdMetaGet = <
  * Get File Cards
  */
 export const getFileCardsStorageFileIdCardsGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<GetFileCardsStorageFileIdCardsGetData, ThrowOnError>
 ) => {
@@ -437,7 +437,7 @@ export const getFileStorageFileIdGet = <ThrowOnError extends boolean = false>(
  * Delete File
  */
 export const deleteFileStorageFileIdDelete = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<DeleteFileStorageFileIdDeleteData, ThrowOnError>
 ) => {
@@ -455,7 +455,7 @@ export const deleteFileStorageFileIdDelete = <
  * Read Card Last Train Record
  */
 export const readCardLastTrainRecordTrainRecordsLastCardIdGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<
     ReadCardLastTrainRecordTrainRecordsLastCardIdGetData,
@@ -476,7 +476,7 @@ export const readCardLastTrainRecordTrainRecordsLastCardIdGet = <
  * Create Train Record
  */
 export const createTrainRecordTrainRecordsCardIdPost = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<CreateTrainRecordTrainRecordsCardIdPostData, ThrowOnError>
 ) => {
@@ -510,7 +510,7 @@ export const readUserUserProfileGet = <ThrowOnError extends boolean = false>(
  * Read User Collections
  */
 export const readUserCollectionsUserCollectionsGet = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options?: Options<ReadUserCollectionsUserCollectionsGetData, ThrowOnError>
 ) => {
@@ -560,7 +560,7 @@ export const readUserFilesUserFilesGet = <ThrowOnError extends boolean = false>(
  * Create User
  */
 export const createUserUserRegisterPost = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<CreateUserUserRegisterPostData, ThrowOnError>
 ) => {
@@ -578,7 +578,7 @@ export const createUserUserRegisterPost = <
  * Update User
  */
 export const updateUserUserEditProfilePut = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<UpdateUserUserEditProfilePutData, ThrowOnError>
 ) => {
@@ -596,7 +596,7 @@ export const updateUserUserEditProfilePut = <
  * Delete User
  */
 export const deleteUserUserDeleteProfileDelete = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options?: Options<unknown, ThrowOnError>
 ) => {
@@ -614,7 +614,7 @@ export const deleteUserUserDeleteProfileDelete = <
  * Authenticate User
  */
 export const authenticateUserUserLoginPost = <
-  ThrowOnError extends boolean = false
+  ThrowOnError extends boolean = false,
 >(
   options: Options<AuthenticateUserUserLoginPostData, ThrowOnError>
 ) => {
