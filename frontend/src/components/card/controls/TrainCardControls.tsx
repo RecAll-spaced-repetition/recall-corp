@@ -10,6 +10,7 @@ export const TrainCardControls: React.FC = () => {
   const [flippedCount, setFlippedCount] = useState(0);
   const flipped = useAppStore((state) => state.activeCardUI.flipped);
 
+  // const inc = () => setFlippedCount((val) => val + 1); // Можно поставить вместо тела эффекта, тогда ворнинг пропадёт
   useEffect(() => setFlippedCount((val) => val + 1), [flipped]);
   useEffect(() => setFlippedCount(0), []);
 
