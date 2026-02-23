@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { Button } from '@/components/library';
 import { useAppStore } from '@/state/state';
-import { Menu } from './Menu';
+import { NavMenu } from './NavMenu';
 import { useProfile } from '@/query/queryHooks';
 import { useLogout } from '@/query/mutationHooks';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
           <img className="h-4 w-4 md:h-8 md:w-8" src={icon} alt="Icon" />
           <h2>RecAll</h2>
         </Link>
-        <Menu />
+        <NavMenu />
         <div className="flex justify-center md:justify-end w-full">
           {profile ? (
             <Button

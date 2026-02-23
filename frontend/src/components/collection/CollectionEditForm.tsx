@@ -17,12 +17,7 @@ import {
 } from '@/query/mutationHooks';
 import { CollectionEditType, collectionScheme } from './CreateCollectionWindow';
 import { routes } from '@/routes';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/library/shadcn-ui';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useLocation } from 'wouter';
 import { useCollectionPublicityUpdate } from '@/query/mutationHooks/useCollectionPublicityUpdate';
 
@@ -160,31 +155,33 @@ export const CollectionEditForm: React.FC<CollectionEditFormProps> = ({
             loading={isAnyPending}
             icon="save"
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger disabled={isAnyPending}>
-              {collection && (
-                <Button
-                  variant="plate-yellow"
-                  className="p-2 md:p-3"
-                  title={t(
-                    collection.isPublic
-                      ? 'collection.private'
-                      : 'collection.public'
-                  )}
-                  loading={isAnyPending}
-                  icon={collection.isPublic ? 'lock' : 'open'}
-                />
-              )}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className={clsx(
-                'w-screen md:w-fit',
-                'vstack center gap-y-2 p-2',
-                'bg-o-white border border-o-black rounded-lg'
-              )}
-            >
-              {collection && (
-                <>
+          {collection && (
+            <Menu>
+              <MenuButton
+                as={Button}
+                disabled={isAnyPending}
+                variant="plate-yellow"
+                className="p-2 md:p-3"
+                title={t(
+                  collection.isPublic
+                    ? 'collection.private'
+                    : 'collection.public'
+                )}
+                loading={isAnyPending}
+                icon={collection.isPublic ? 'lock' : 'open'}
+              />
+              <MenuItems
+                anchor={{ to: 'bottom', gap: 4 }}
+                className={clsx(
+                  'w-screen md:w-fit',
+                  'vstack center gap-y-2 p-2',
+                  'bg-o-white border border-o-black rounded-lg'
+                )}
+              >
+                <MenuItem
+                  as="div"
+                  className="flex justify-around items-center gap-2"
+                >
                   <span>
                     {t(
                       collection.isPublic
@@ -192,38 +189,36 @@ export const CollectionEditForm: React.FC<CollectionEditFormProps> = ({
                         : 'collection.publicAlert'
                     )}
                   </span>
-                  <DropdownMenuItem>
-                    <Button
-                      variant="plate-yellow"
-                      onClick={() =>
-                        updateCollectionPublicity(!collection.isPublic)
-                      }
-                      className="p-2 md:p-3"
-                      title={t(
-                        collection.isPublic
-                          ? 'collection.private'
-                          : 'collection.public'
-                      )}
-                      loading={isAnyPending}
-                      icon={collection.isPublic ? 'lock' : 'open'}
-                    />
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger disabled={isAnyPending}>
-              <Button
-                variant="bordered"
-                className="p-2 md:p-3"
-                title={t('collection.deleteButton')}
-                icon="trash"
-                loading={isAnyPending}
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
+                  <Button
+                    variant="plate-yellow"
+                    onClick={() =>
+                      updateCollectionPublicity(!collection.isPublic)
+                    }
+                    className="p-2 md:p-3"
+                    title={t(
+                      collection.isPublic
+                        ? 'collection.private'
+                        : 'collection.public'
+                    )}
+                    loading={isAnyPending}
+                    icon={collection.isPublic ? 'lock' : 'open'}
+                  />
+                </MenuItem>
+              </MenuItems>
+            </Menu>
+          )}
+          <Menu>
+            <MenuButton
+              as={Button}
+              variant="bordered"
+              className="p-2 md:p-3"
+              title={t('collection.deleteButton')}
+              icon="trash"
+              loading={isAnyPending}
+              disabled={isAnyPending}
+            />
+            <MenuItems anchor={{ to: 'bottom', gap: 4 }}>
+              <MenuItem>
                 <Button
                   variant="plate-red"
                   onClick={() => deleteCollection()}
@@ -231,9 +226,9 @@ export const CollectionEditForm: React.FC<CollectionEditFormProps> = ({
                 >
                   {t('common.confirmDeletion')}
                 </Button>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
         </div>
       </form>
     </LoadableComponent>
