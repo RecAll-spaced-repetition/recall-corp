@@ -100,38 +100,14 @@
 }
 
 @utility font-ma {
-  font-family: 'MontserratAlternates';
-}
-
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('/fonts/MontserratAlternates-Light.ttf');
-  font-weight: 200;
-}
-
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('/fonts/MontserratAlternates-Regular.ttf');
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('/fonts/MontserratAlternates-Medium.ttf');
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('/fonts/MontserratAlternates-Bold.ttf');
-  font-weight: 800;
+  font-family: 'Montserrat Alternates';
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  font-family: 'MontserratAlternates';
+  font-family: 'Montserrat Alternates';
 
   @apply bg-o-white text-sm lg:text-base xl:text-lg 2xl:text-xl;
 }
@@ -253,7 +229,7 @@ body,
   }
 }
 
-.media-full > {
+.media-full > * {
   img,
   video {
     @apply md:w-1/2;
