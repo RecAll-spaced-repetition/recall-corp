@@ -7,12 +7,7 @@ import { ErrorPage } from './ErrorPage';
 import { FilesList } from '@/components/files';
 import { CollectionsSearchableList } from '@/components/collection';
 import { useProfileDelete } from '@/query/mutationHooks';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from '@/components/library/shadcn-ui';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
@@ -52,18 +47,19 @@ export const ProfilePage: React.FC = () => {
 
       <FilesList />
 
-      <DropdownMenu>
-        <DropdownMenuTrigger className="mt-16" disabled={isDeletePending}>
-          <Button
-            variant="bordered"
-            title={t('profile.deleteAccount')}
-            loading={isDeletePending}
-          >
-            {t('profile.deleteAccount')}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>
+      <Menu>
+        <MenuButton
+          as={Button}
+          className="mt-16"
+          disabled={isDeletePending}
+          variant="bordered"
+          title={t('profile.deleteAccount')}
+          loading={isDeletePending}
+        >
+          {t('profile.deleteAccount')}
+        </MenuButton>
+        <MenuItems anchor={{ to: 'bottom', gap: 2 }}>
+          <MenuItem>
             <Button
               variant="plate-red"
               onClick={() => deleteProfile()}
@@ -71,9 +67,9 @@ export const ProfilePage: React.FC = () => {
             >
               {t('common.confirmDeletion')}
             </Button>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          </MenuItem>
+        </MenuItems>
+      </Menu>
     </LoadableComponent>
   );
 };
