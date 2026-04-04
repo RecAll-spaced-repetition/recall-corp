@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { CustomTKeys } from '@/i18n';
 
 interface FormItemProps extends HTMLAttributes<React.FC> {
-  labelComponent?: JSX.Element;
+  labelComponent?: React.JSX.Element;
   errorMessage?: string | CustomTKeys;
 }
 

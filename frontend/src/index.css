@@ -1,70 +1,113 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer utilities {
-  .center {
-    @apply flex items-center justify-center;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --height-1\/12: 8.333333%;
+  --height-11\/12: 91.666666%;
+
+  --color-o-white-max: #fffff4;
+  --color-o-white: #ffffef;
+  --color-o-black: #02132a;
+
+  --animate-appear: appear 100ms ease-in;
+  --animate-disappear: disappear 100ms ease-in;
+  --animate-shake: shake 0.3s ease-in-out infinite;
+
+  @keyframes appear {
+    0% {
+      transform: scale(0.62);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
-
-  .around {
-    @apply flex items-center justify-around;
+  @keyframes disappear {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.62);
+      opacity: 0;
+    }
   }
-
-  .between {
-    @apply flex items-center justify-between;
-  }
-
-  .vstack {
-    @apply flex flex-col;
-  }
-
-  .full {
-    @apply w-full h-full;
-  }
-
-  .center-full {
-    @apply full center;
-  }
-
-  .error {
-    @apply outline-pink-500 ring-1 ring-pink-500;
-  }
-
-  .font-ma {
-    font-family: 'MontserratAlternates';
+  @keyframes shake {
+    0% {
+      transform: rotate(0deg);
+    }
+    25% {
+      transform: rotate(1deg);
+    }
+    50% {
+      transform: rotate(0deg);
+    }
+    75% {
+      transform: rotate(-1deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 }
 
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Light.ttf');
-  font-weight: 200;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Regular.ttf');
-  font-weight: 400;
+@utility center {
+  @apply flex items-center justify-center;
 }
 
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Medium.ttf');
-  font-weight: 500;
+@utility around {
+  @apply flex items-center justify-around;
 }
 
-@font-face {
-  font-family: 'MontserratAlternates';
-  src: url('$fonts/MontserratAlternates-Bold.ttf');
-  font-weight: 800;
+@utility between {
+  @apply flex items-center justify-between;
+}
+
+@utility vstack {
+  @apply flex flex-col;
+}
+
+@utility full {
+  @apply w-full h-full;
+}
+
+@utility center-full {
+  @apply full center;
+}
+
+@utility error {
+  @apply outline-pink-500 ring-1 ring-pink-500;
+}
+
+@utility font-ma {
+  font-family: 'Montserrat Alternates';
 }
 
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  font-family: 'MontserratAlternates';
+  font-family: 'Montserrat Alternates';
 
   @apply bg-o-white text-sm lg:text-base xl:text-lg 2xl:text-xl;
 }
@@ -186,7 +229,7 @@ body,
   }
 }
 
-.media-full > {
+.media-full > * {
   img,
   video {
     @apply md:w-1/2;

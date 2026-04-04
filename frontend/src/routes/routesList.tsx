@@ -11,9 +11,10 @@ import { CustomTKeys } from '@/i18n';
 
 type RouteData = {
   url: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getUrl: (kwargs?: any) => string;
   label?: CustomTKeys;
-  content: JSX.Element;
+  content: React.JSX.Element;
 };
 type RoutesEnum =
   | 'main'

@@ -19,7 +19,7 @@ export const Input: React.FC<CustomInputProps> = ({
         'text-o-black font-medium ',
         'bg-transparent',
         'transition-all duration-200',
-        'focus:outline-none',
+        'focus:outline-hidden',
         bottomBorder && 'border-b border-o-black focus:border-b-2',
         className
       )}
