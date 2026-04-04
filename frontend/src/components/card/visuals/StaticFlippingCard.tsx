@@ -4,8 +4,8 @@ import React, { HTMLAttributes } from 'react';
 import { CardSide } from './CardSide';
 
 interface StaticFlippingCardProps extends HTMLAttributes<HTMLDivElement> {
-  frontSide: JSX.Element;
-  backSide: JSX.Element;
+  frontSide: React.JSX.Element;
+  backSide: React.JSX.Element;
   flipped: boolean | 'hover';
 }
 

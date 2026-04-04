@@ -15,7 +15,7 @@ export const App: React.FC = () => {
       <Header />
       <main
         className={clsx(
-          'flex-grow',
+          'grow',
           'py-2 md:py-10',
           'px-4 sm:px-16 md:px-32 lg:px-48 xl:px-64'
         )}

@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite';
-import { default as viteReact } from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import svgr from 'vite-plugin-svgr';
+import viteReact from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import webfontDownload from 'vite-plugin-webfont-dl';
+import { resolve } from 'node:path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [viteReact(), svgr()],
+  plugins: [viteReact(), tailwindcss(), webfontDownload()],
   server: {
     strictPort: true,
   },
@@ -15,8 +16,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve('./src'),
-      '@public': resolve('./public'),
-      $fonts: resolve('./public/fonts'),
     },
   },
 });

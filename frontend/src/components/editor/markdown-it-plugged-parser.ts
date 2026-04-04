@@ -15,6 +15,7 @@ export const simpleRenderer = markdownit({
     if (highligher.getLanguage(lang)) {
       try {
         return highligher.highlight(str, { language: lang }).value;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (_) {
         /* empty */
       }
@@ -38,11 +39,11 @@ export const extendedMdRenderer = markdownit({ ...simpleRenderer.options })
     controls: true,
   })
   .use(tex, {
-    render: (content, mode) => {
+    render: (content, isParagraph) => {
       const texStr = katex.renderToString(content, {
         output: 'mathml',
         throwOnError: false,
       });
-      return !mode ? texStr : `<p>${texStr}</p>`;
+      return isParagraph ? `<p>${texStr}</p>` : texStr;
     },
   });
