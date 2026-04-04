@@ -36,9 +36,9 @@ export const ControlledModal: React.FC<ControlledModalProps> = ({
 
   return (
     <Dialog open={isShown} onClose={close} {...props}>
-      <DialogBackdrop className="fixed inset-0 z-40 bg-o-white/25 backdrop-blur-sm" />
+      <DialogBackdrop className="fixed inset-0 bg-o-white/25 backdrop-blur-sm" />
 
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-2 md:p-4">
+      <div className="fixed inset-0 flex items-center justify-center p-2 md:p-4">
         <DialogPanel
           className={clsx('overflow-y-auto rounded-lg', contentClassName)}
         >
@@ -50,7 +50,7 @@ export const ControlledModal: React.FC<ControlledModalProps> = ({
         type="button"
         className={clsx(
           'bg-o-white-max p-1 md:p-2',
-          'fixed top-1 right-1 md:top-2 md:right-2 z-50',
+          'fixed top-1 right-1 md:top-2 md:right-2',
           'rounded-sm text-sm md:text-md lg:text-lg'
         )}
         onClick={close}
