@@ -29,6 +29,8 @@ class UserDTO(CamelCaseBaseModel):
     email: EmailStr | None = None
     nickname: str | None = None
     password: str | None = Field(None, alias="hashed_password")
+    # train_logs_opt_cnt: int | None
+    # train_opt_params: str | None
 
     @classmethod
     def fields(cls) -> list[str]:

@@ -2,7 +2,7 @@ from .card import *
 from .card_collection import *
 from .collection import *
 from .metadata import *
-from .train_record import *
+from .train import *
 from .user import *
 from .file import *
 from .file_card import *
