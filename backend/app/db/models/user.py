@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table
+from sqlalchemy import Column, Integer, String, Table, JSON
 
 from .metadata import get_metadata
 
@@ -11,5 +11,7 @@ UserTable = Table(
     Column("id", Integer, primary_key=True),
     Column("email", String(100), unique=True, index=True, nullable=False),
     Column("nickname", String(35), unique=True, index=True, nullable=False),
-    Column("hashed_password", String(1024), nullable=False)
+    Column("hashed_password", String(1024), nullable=False),
+    Column("train_logs_opt_cnt", Integer, default=0),
+    Column("train_opt_params", JSON(True), nullable=True)
 )

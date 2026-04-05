@@ -769,6 +769,25 @@ files = [
 ]
 
 [[package]]
+name = "fsrs"
+version = "6.3.1"
+description = "Free Spaced Repetition Scheduler"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "fsrs-6.3.1-py3-none-any.whl", hash = "sha256:ac1bf9939573592d8c9bc1e11a00bd17e04146dc9f2c913127e2bcc431b9040b"},
+    {file = "fsrs-6.3.1.tar.gz", hash = "sha256:43c5c6056b97266baf6ebfef9e4cadeb9ac5a4e1b29ffdfb300f445b6e6b15ca"},
+]
+
+[package.dependencies]
+typing-extensions = "*"
+
+[package.extras]
+dev = ["numpy", "pandas", "pdoc", "pyrefly", "pytest", "pytest-cov", "pytest-xdist", "ruff", "setuptools", "torch", "tqdm", "uv"]
+optimizer = ["numpy", "pandas", "torch", "tqdm"]
+
+[[package]]
 name = "greenlet"
 version = "3.2.1"
 description = "Lightweight in-process concurrent programming"
@@ -2428,4 +2447,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.11"
-content-hash = "d86bd499c0d1b77fff20b8e437fc5986606ebfc364afcca454403cef81508143"
+content-hash = "443debc000adb8348a7a7fd9717f31747b9e582a6f896fa21114ebe8a059b87d"
