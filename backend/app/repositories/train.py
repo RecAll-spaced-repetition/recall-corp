@@ -1,4 +1,6 @@
 from sqlalchemy import select, desc, text, func, and_, asc, not_
+from sqlalchemy import Integer, cast
+from sqlalchemy.dialects.postgresql import ARRAY, aggregate_order_by, array
 from typing import Type
 from fsrs import Card, ReviewLog
 
@@ -26,19 +28,27 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
         )).to_fsrs_card()
     
     async def get_cards_nearest_due_cards(self, user_id: int, collection_cards: list[int]) -> list[int]:
-        need_train_cards_ids = (await self.connection.execute(
-            select(self.table.c.card_id, self.table.c.due)
-            .where(self.table.c.user_id == user_id, self.table.c.card_id.in_(collection_cards), self.table.c.due <= func.now())
-            .order_by(asc(self.table.c.due))
-        )).scalars().all()
-        no_need_train_cards_ids = (await self.connection.execute(
-            select(self.table.c.card_id, self.table.c.due)
-            .where(self.table.c.user_id == user_id, self.table.c.card_id.in_(collection_cards), self.table.c.card_id.not_in(need_train_cards_ids))
-            .order_by(asc(self.table.c.due))
-        )).scalars().all()
-        not_trained_cards = list(set(collection_cards) - set(need_train_cards_ids) - set(no_need_train_cards_ids))
-        return [*not_trained_cards, *need_train_cards_ids]
+        if not collection_cards:
+            return []
 
+        (need_train_again, no_need_train_again) = (await self.connection.execute(select(
+            func.array_agg(aggregate_order_by(self.table.c.card_id, self.table.c.due))
+                .filter(self.table.c.due <= func.now()).label("need_train_ids"),
+            func.array_agg(aggregate_order_by(self.table.c.card_id, self.table.c.due))
+                .filter(self.table.c.due > func.now()).label("no_need_train_ids"),
+        ).where(
+            self.table.c.user_id == user_id,
+            self.table.c.card_id.in_(collection_cards),
+        ))).one()
+
+        if not need_train_again:
+            need_train_again = []
+        if not no_need_train_again:
+            no_need_train_again = []
+
+        not_trained_cards = list(set(collection_cards) - set(need_train_again) - set(no_need_train_again))
+        
+        return [*not_trained_cards, *need_train_again]
 
 class TrainLogRepository(BaseSQLAlchemyRepository):
     table = TrainLogTable
