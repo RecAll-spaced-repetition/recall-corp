@@ -7,7 +7,7 @@ from fsrs.card import CardDict
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainRecordCreate", "UserAnswer", "TrainCard", "TrainLog"]
+__all__ = ["TrainRecordCreate", "UserAnswer", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
 
 
 class TrainRecordCreate(CamelCaseBaseModel):
@@ -56,10 +56,7 @@ class TrainCard(CamelCaseBaseModel):
             last_review=card.last_review
         )
 
-
-
-class TrainLog(CamelCaseBaseModel):
-    id: int
+class TrainLogCreate(CamelCaseBaseModel):
     user_id: int
 
     card_id: int
@@ -70,7 +67,25 @@ class TrainLog(CamelCaseBaseModel):
     def to_fsrs_review_log(self) -> ReviewLog:
         return ReviewLog(
             card_id=self.card_id, 
-            rating=Rating(int(self.rating)), 
+            rating=Rating(self.rating), 
             review_datetime=self.review_datetime,
             review_duration=self.review_duration
         )
+    
+    @staticmethod
+    def from_fsrs_review_log(user_id: int, review_log: ReviewLog):
+        return TrainLogCreate(
+            user_id=user_id,
+            card_id=review_log.card_id,
+            rating=int(review_log.rating),
+            review_datetime=review_log.review_datetime,
+            review_duration=review_log.review_duration
+        )
+
+class TrainLog(TrainLogCreate):
+    id: int
+
+class UserOptParams(CamelCaseBaseModel):
+    id: int
+    train_logs_opt_cnt: int | None
+    train_opt_params: list[float] | None
