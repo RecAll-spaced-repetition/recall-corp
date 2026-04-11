@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { dataExtractionWrapper } from '@/query';
-import { createTrainRecordTrainRecordsCardIdPost } from '@/api';
+import { trainCardTrainCardIdPost } from '@/api';
 
 export const useCardTrain = (cardId: number, onSuccess?: () => void) => {
   const { mutate: trainCard, ...rest } = useMutation({
     mutationFn: (mark: number) =>
       dataExtractionWrapper(
-        createTrainRecordTrainRecordsCardIdPost({
+        trainCardTrainCardIdPost({
           path: {
             card_id: cardId,
           },

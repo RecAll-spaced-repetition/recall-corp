@@ -9,7 +9,6 @@ export enum Mark {
   Two,
   Three,
   Four,
-  Five,
 }
 export const marks: Mark[] = Object.values(Mark).filter(
   (value) => typeof value === 'number'
@@ -17,9 +16,8 @@ export const marks: Mark[] = Object.values(Mark).filter(
 const MarksBtnVariants: Record<Mark, Variants> = {
   '1': 'plate-red',
   '2': 'plate-orange',
-  '3': 'plate-yellow',
-  '4': 'plate-lime',
-  '5': 'plate-green',
+  '3': 'plate-lime',
+  '4': 'plate-green',
 };
 
 export interface DescreteTrainButtonProps {

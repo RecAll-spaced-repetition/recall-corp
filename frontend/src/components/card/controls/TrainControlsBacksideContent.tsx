@@ -12,7 +12,7 @@ export const TrainContraolsBacksideContent: React.FC = () => {
         'px-1 py-2'
       )}
     >
-      <div className="grid grid-cols-5 gap-x-2 m-1">
+      <div className="grid grid-cols-4 gap-x-2 m-1">
         {marks.map((mark) => (
           <DescreteTrainButton key={mark} mark={mark} />
         ))}
