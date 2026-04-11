@@ -2,18 +2,17 @@ from datetime import datetime
 
 from pydantic import Field
 from fsrs import Rating, Card, ReviewLog, State
-from fsrs.card import CardDict
 
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainRecordCreate", "UserAnswer", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
+__all__ = ["TrainMarkAnswer", "UserAnswer", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
 
 
-class TrainRecordCreate(CamelCaseBaseModel):
+class TrainMarkAnswer(CamelCaseBaseModel):
     mark: int = Field(ge=1, le=4)
 
-    def to_rating(self) -> Rating:
+    def to_fsrs_rating(self) -> Rating:
         return Rating(int(self.mark))
 
 

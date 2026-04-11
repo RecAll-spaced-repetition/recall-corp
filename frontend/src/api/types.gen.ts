@@ -117,17 +117,18 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>;
 };
 
-export type TrainRecord = {
-  mark: number;
-  id: number;
-  cardId: number;
+export type TrainCard = {
   userId: number;
-  repeatDate: string;
-  nextRepeatDate: string;
-  progress: number;
+  cardId: number;
+  state: number;
+  step: number | null;
+  stability: number | null;
+  difficulty: number | null;
+  due: string;
+  lastReview: string | null;
 };
 
-export type TrainRecordCreate = {
+export type TrainMarkAnswer = {
   mark: number;
 };
 
@@ -359,28 +360,16 @@ export type DeleteFileStorageFileIdDeleteResponse = unknown;
 
 export type DeleteFileStorageFileIdDeleteError = HTTPValidationError;
 
-export type ReadCardLastTrainRecordTrainRecordsLastCardIdGetData = {
+export type TrainCardTrainCardIdPostData = {
+  body: TrainMarkAnswer;
   path: {
     card_id: number;
   };
 };
 
-export type ReadCardLastTrainRecordTrainRecordsLastCardIdGetResponse =
-  TrainRecord | null;
+export type TrainCardTrainCardIdPostResponse = TrainCard;
 
-export type ReadCardLastTrainRecordTrainRecordsLastCardIdGetError =
-  HTTPValidationError;
-
-export type CreateTrainRecordTrainRecordsCardIdPostData = {
-  body: TrainRecordCreate;
-  path: {
-    card_id: number;
-  };
-};
-
-export type CreateTrainRecordTrainRecordsCardIdPostResponse = TrainRecord;
-
-export type CreateTrainRecordTrainRecordsCardIdPostError = HTTPValidationError;
+export type TrainCardTrainCardIdPostError = HTTPValidationError;
 
 export type ReadUserUserProfileGetResponse = User;
 
