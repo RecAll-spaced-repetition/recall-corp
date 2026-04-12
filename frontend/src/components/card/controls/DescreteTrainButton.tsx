@@ -28,6 +28,7 @@ export const DescreteTrainButton: React.FC<DescreteTrainButtonProps> = ({
   mark,
 }) => {
   const cardId = useAppStore((state) => state.activeCardId);
+  const cardOpenedTimestamp = useAppStore((state) => state.cardOpenedTimestamp);
   const executeTrainCard = useAppStore((state) => state.executeTrainCard);
 
   const setUIFlag = useAppStore((state) => state.setActiveCardUIFlag);
@@ -41,7 +42,14 @@ export const DescreteTrainButton: React.FC<DescreteTrainButtonProps> = ({
     <Button
       className="px-2"
       variant={MarksBtnVariants[mark]}
-      onClick={() => trainCard(mark)}
+      onClick={() => {
+        const dur = Number(Date.now()) - cardOpenedTimestamp;
+        console.log(dur);
+        trainCard({
+          mark,
+          durationMs: Number(Date.now()) - cardOpenedTimestamp,
+        });
+      }}
       withShadow
       title={mark.toString()}
     >

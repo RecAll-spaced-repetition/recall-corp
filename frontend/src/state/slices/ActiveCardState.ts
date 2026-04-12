@@ -19,6 +19,7 @@ export type ActiveCardUI = {
 
 export type ActiveCardState = Immutable<{
   activeCardId: number;
+  cardOpenedTimestamp: number;
   isNewActiveCard: boolean;
   isActiveCardChanged: boolean;
   activeCard: CardStateType;
@@ -41,6 +42,7 @@ export const cardDraft: CardStateType = {
 
 export const createActiveCardStateSlice: Slice<ActiveCardState> = (mutate) => ({
   activeCardId: -1,
+  cardOpenedTimestamp: -1,
   isNewActiveCard: false,
   isActiveCardChanged: false,
   activeCard: {
@@ -70,6 +72,7 @@ export const createActiveCardStateSlice: Slice<ActiveCardState> = (mutate) => ({
       state.activeCardId = card.id;
       state.isActiveCardChanged = false;
       state.isNewActiveCard = false;
+      state.cardOpenedTimestamp = Number(Date.now());
     });
   },
   setActiveCardSide: (side, sideValue) => {

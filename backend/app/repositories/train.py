@@ -1,11 +1,10 @@
-from sqlalchemy import select, desc, text, func, and_, asc, not_
-from sqlalchemy import Integer, cast
-from sqlalchemy.dialects.postgresql import ARRAY, aggregate_order_by, array
-from typing import Type
+from sqlalchemy import select, func, and_
+from sqlalchemy.dialects.postgresql import aggregate_order_by
+from datetime import datetime, timezone
 from fsrs import Card, ReviewLog
 
 from app.db import TrainCardTable, TrainLogTable
-from app.schemas import TrainCard, TrainLog
+from app.schemas import TrainPlan, TrainCard, TrainLog
 
 from .base import BaseSQLAlchemyRepository
 
@@ -27,15 +26,22 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
             TrainCard
         )).to_fsrs_card()
     
-    async def get_cards_nearest_due_cards(self, user_id: int, collection_cards: list[int]) -> list[int]:
+    async def get_user_train_cards(self, user_id: int) -> list[Card]:
+        return [
+            db_card.to_fsrs_card() 
+            for db_card in await self.get_all_filtered(self.table.c.user_id == user_id, TrainCard)
+        ]
+    
+    async def get_cards_waiting_train(self, user_id: int, collection_cards: list[int]) -> TrainPlan:
         if not collection_cards:
             return []
 
-        (need_train_again, no_need_train_again) = (await self.connection.execute(select(
+        (need_train_again, no_need_train_again, min_due) = (await self.connection.execute(select(
             func.array_agg(aggregate_order_by(self.table.c.card_id, self.table.c.due))
                 .filter(self.table.c.due <= func.now()).label("need_train_ids"),
             func.array_agg(aggregate_order_by(self.table.c.card_id, self.table.c.due))
                 .filter(self.table.c.due > func.now()).label("no_need_train_ids"),
+            func.min(self.table.c.due).label('min_due')
         ).where(
             self.table.c.user_id == user_id,
             self.table.c.card_id.in_(collection_cards),
@@ -47,8 +53,10 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
             no_need_train_again = []
 
         not_trained_cards = list(set(collection_cards) - set(need_train_again) - set(no_need_train_again))
-        
-        return [*not_trained_cards, *need_train_again]
+        if len(not_trained_cards) > 0:
+            min_due = datetime.now(timezone.utc)
+
+        return TrainPlan(cards_to_train=[*not_trained_cards, *need_train_again], min_due=min_due)
 
 class TrainLogRepository(BaseSQLAlchemyRepository):
     table = TrainLogTable

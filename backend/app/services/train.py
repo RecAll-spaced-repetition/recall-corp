@@ -29,7 +29,7 @@ class TrainService(BaseService):
         if is_new:
             card = Card(card_id)
         scheduler = Scheduler() if not user.train_opt_params else Scheduler(user.train_opt_params)
-        new_card, review_log = scheduler.review_card(card, training.to_fsrs_rating())
+        new_card, review_log = scheduler.review_card(card, training.to_fsrs_rating(), review_duration=training.duration_ms)
         if is_new:
             await train_card_repo.create_one(TrainCard.from_fsrs_card(user_id, new_card).model_dump(), TrainCard)
         else:
@@ -45,5 +45,4 @@ class TrainService(BaseService):
             await self.uow.get_repository(UserRepository).update_user_by_id(
                 user_id, UserOptParams(id=user_id, train_logs_opt_cnt=all_logs_cnt, train_opt_params=new_params).model_dump(exclude=['id']), UserOptParams
             )
-        
         return TrainCard.from_fsrs_card(user_id, new_card)

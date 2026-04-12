@@ -130,6 +130,12 @@ export type TrainCard = {
 
 export type TrainMarkAnswer = {
   mark: number;
+  durationMs: number | null;
+};
+
+export type TrainPlan = {
+  cardsToTrain: Array<number>;
+  minDue: string | null;
 };
 
 export type User = {
@@ -291,8 +297,7 @@ export type TrainCardsCollectionsCollectionIdCardsTrainGetData = {
   };
 };
 
-export type TrainCardsCollectionsCollectionIdCardsTrainGetResponse =
-  Array<number>;
+export type TrainCardsCollectionsCollectionIdCardsTrainGetResponse = TrainPlan;
 
 export type TrainCardsCollectionsCollectionIdCardsTrainGetError =
   HTTPValidationError;

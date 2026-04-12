@@ -362,10 +362,48 @@ export const TrainMarkAnswerSchema = {
       minimum: 1,
       title: 'Mark',
     },
+    durationMs: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Durationms',
+    },
   },
   type: 'object',
-  required: ['mark'],
+  required: ['mark', 'durationMs'],
   title: 'TrainMarkAnswer',
+} as const;
+
+export const TrainPlanSchema = {
+  properties: {
+    cardsToTrain: {
+      items: {
+        type: 'integer',
+      },
+      type: 'array',
+      title: 'Cardstotrain',
+    },
+    minDue: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Mindue',
+    },
+  },
+  type: 'object',
+  required: ['cardsToTrain', 'minDue'],
+  title: 'TrainPlan',
 } as const;
 
 export const UserSchema = {

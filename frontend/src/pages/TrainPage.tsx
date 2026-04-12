@@ -31,7 +31,7 @@ export const TrainPage: React.FC = () => {
     error: collectionError,
   } = useCollection(id);
   const {
-    cards,
+    trainPlan,
     isPending: isTrainCardsPending,
     error: trainCardsError,
   } = useCollectionTrainCards(id);
@@ -49,8 +49,8 @@ export const TrainPage: React.FC = () => {
   }, [client, id]);
 
   useEffect(() => {
-    setTrainCards(cards ?? []);
-  }, [cards, setTrainCards]);
+    setTrainCards(trainPlan?.cardsToTrain ?? []);
+  }, [trainPlan, setTrainCards]);
 
   if (!profile)
     return (
