@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "generate-api": "openapi-ts -f openapi-ts.config.ts",
     "build": "tsc && vite build",
     "serve": "vite preview",
+    "generate-api": "openapi-ts -f openapi-ts.config.ts",
+    "test:dev": "vitest",
+    "test:check": "vitest --run",
     "prettier": "prettier --config .prettierrc.json -w ./src",
     "lint": "eslint --fix ./src",
     "ts-check": "tsc",
-    "checks": "npm run prettier && npm run lint && npm run ts-check"
+    "checks": "bun run ts-check && bun run test:check && bun run prettier && bun run lint"
   },
   "dependencies": {
     "@gotfeedback/markdown-it-media": "^1.0.1",
