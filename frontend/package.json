@@ -7,8 +7,10 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "generate-api": "openapi-ts -f openapi-ts.config.ts",
-    "test:dev": "vitest",
-    "test:check": "vitest --run",
+    "test:unit:dev": "vitest",
+    "test:unit:check": "vitest --run",
+    "test:browser:dev": "vitest --config=vitest.browser.config.ts",
+    "test:browser:check": "vitest --config=vitest.browser.config.ts --browser.headless --run",
     "prettier": "prettier --config .prettierrc.json -w ./src",
     "lint": "eslint --fix ./src",
     "ts-check": "tsc",
@@ -53,6 +55,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/typescript-estree": "^8.56.0",
     "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/browser-playwright": "^4.1.4",
     "@vitest/coverage-v8": "4.0.18",
     "eslint": "^10.0.1",
     "eslint-config-react": "^1.1.7",
@@ -68,7 +71,8 @@
     "typescript-eslint": "^8.56.0",
     "vite": "^7.3.1",
     "vite-plugin-webfont-dl": "^3.12.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.4",
+    "vitest-browser-react": "^2.2.0"
   },
   "eslintConfig": {
     "extends": [
