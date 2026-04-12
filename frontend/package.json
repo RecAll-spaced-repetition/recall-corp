@@ -12,7 +12,8 @@
     "prettier": "prettier --config .prettierrc.json -w ./src",
     "lint": "eslint --fix ./src",
     "ts-check": "tsc",
-    "checks": "bun run ts-check && bun run test:check && bun run prettier && bun run lint"
+    "checks": "bun run ts-check && bun run test:check && bun run lint",
+    "all-checks": "bun run prettier && bun run checks"
   },
   "dependencies": {
     "@gotfeedback/markdown-it-media": "^1.0.1",
@@ -52,6 +53,7 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/typescript-estree": "^8.56.0",
     "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/coverage-v8": "4.0.18",
     "eslint": "^10.0.1",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^5.5.5",
