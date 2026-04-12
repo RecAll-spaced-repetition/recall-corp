@@ -42,7 +42,7 @@ export const ZoomedCard: React.FC<ZoomedCardProps> = () => {
       <ActiveFlippingCard
         className={clsx(
           'mb-1 md:mb-2 w-full',
-          mode !== 'view' ? 'h-5/6' : 'h-full',
+          mode === 'view' ? 'h-full' : 'h-5/6',
           'bg-o-white text-o-black rounded-xl',
           'border border-gray-500',
           'shadow-md hover:shadow-gray-500'

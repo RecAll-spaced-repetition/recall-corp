@@ -6,18 +6,20 @@ from fsrs import Rating, Card, ReviewLog, State
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainMarkAnswer", "UserAnswer", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
+__all__ = ["TrainMarkAnswer", "TrainPlan", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
 
 
 class TrainMarkAnswer(CamelCaseBaseModel):
     mark: int = Field(ge=1, le=4)
+    duration_ms: int | None
 
     def to_fsrs_rating(self) -> Rating:
         return Rating(int(self.mark))
+    
 
-
-class UserAnswer(CamelCaseBaseModel):
-    answer: str
+class TrainPlan(CamelCaseBaseModel):
+    cards_to_train: list[int]
+    min_due: datetime | None
 
 
 class TrainCard(CamelCaseBaseModel):
