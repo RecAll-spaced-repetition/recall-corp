@@ -5,6 +5,8 @@
 
 ```bash
 bun i --frozen-lockfile
+
+bunx playwright install # for browser tests
 ```
 
 ## Running
@@ -20,19 +22,22 @@ bun run dev
 ```bash
 docker compose run frontend-test --build --rm
 ```
-or (if environment configured)
+or 
 ```bash
-bun run checks
+bun run test:unit:dev
+bun run test:unit:check
+bun run test:browser:dev
+bun run test:browser:check
 ```
-
-This will check:
-1. TS compilation
-2. Unit-tests
-3. eslint checks
 
 ## Contribution
 You should have all checks procceeded and correct formatting before commit. Use:
 ```bash
 bun run all-checks
 ```
-it combines tests described above and prettier's execution
+This will check:
+1. TS compilation
+2. Unit-tests
+3. Browser tests
+4. eslint checks
+5. prettier's formatting
