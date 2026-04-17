@@ -16,9 +16,9 @@ export const getCollectionTrainCardsQueryOptions = (id: number) =>
   });
 
 export const useCollectionTrainCards = (id: number) => {
-  const { data: cards, ...rest } = useQuery(
+  const { data: trainPlan, ...rest } = useQuery(
     getCollectionTrainCardsQueryOptions(id)
   );
 
-  return { cards, ...rest };
+  return { trainPlan, ...rest };
 };

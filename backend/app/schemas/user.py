@@ -42,3 +42,4 @@ class UserDTO(CamelCaseBaseModel):
 
     def table_dict(self):
         return self.model_dump(exclude_unset=True, by_alias=True)
+    

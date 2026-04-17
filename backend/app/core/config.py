@@ -57,11 +57,17 @@ class MinioSettings(BaseSettings):
     PASSWORD: str
     MAX_FILE_MB_SIZE: int
 
+class TrainSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='TRAIN_', env_file="./config/train.env", extra="ignore")
+
+    REOPT_REQUIRED_LOGS_CNT: int
+
 
 class Settings(BaseSettings):
     auth: AuthSettings = AuthSettings()
     db: PostgreSettings = PostgreSettings()
     minio: MinioSettings = MinioSettings()
+    train: TrainSettings = TrainSettings()
 
     @staticmethod
     @cache
@@ -123,6 +129,11 @@ class Settings(BaseSettings):
     @property
     def db_url_pysqlite(self) -> str:
         return "sqlite:///./sql_app.db"
+    
+    @property
+    @cache
+    def reopt_required_logs_cnt(self) -> int:
+        return self.train.REOPT_REQUIRED_LOGS_CNT
     
     def __hash__(self):
         return ''.__hash__()

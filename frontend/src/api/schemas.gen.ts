@@ -275,68 +275,135 @@ export const HTTPValidationErrorSchema = {
   title: 'HTTPValidationError',
 } as const;
 
-export const TrainRecordSchema = {
+export const TrainCardSchema = {
   properties: {
-    mark: {
+    userId: {
       type: 'integer',
-      maximum: 5,
-      minimum: 1,
-      title: 'Mark',
-    },
-    id: {
-      type: 'integer',
-      title: 'Id',
+      title: 'Userid',
     },
     cardId: {
       type: 'integer',
       title: 'Cardid',
     },
-    userId: {
+    state: {
       type: 'integer',
-      title: 'Userid',
+      title: 'State',
     },
-    repeatDate: {
+    step: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Step',
+    },
+    stability: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Stability',
+    },
+    difficulty: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Difficulty',
+    },
+    due: {
       type: 'string',
       format: 'date-time',
-      title: 'Repeatdate',
+      title: 'Due',
     },
-    nextRepeatDate: {
-      type: 'string',
-      format: 'date-time',
-      title: 'Nextrepeatdate',
-    },
-    progress: {
-      type: 'number',
-      maximum: 1,
-      minimum: 0,
-      title: 'Progress',
+    lastReview: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Lastreview',
     },
   },
   type: 'object',
   required: [
-    'mark',
-    'id',
-    'cardId',
     'userId',
-    'repeatDate',
-    'nextRepeatDate',
-    'progress',
+    'cardId',
+    'state',
+    'step',
+    'stability',
+    'difficulty',
+    'due',
+    'lastReview',
   ],
-  title: 'TrainRecord',
+  title: 'TrainCard',
 } as const;
 
-export const TrainRecordCreateSchema = {
+export const TrainMarkAnswerSchema = {
   properties: {
     mark: {
       type: 'integer',
-      maximum: 5,
+      maximum: 4,
       minimum: 1,
       title: 'Mark',
     },
+    durationMs: {
+      anyOf: [
+        {
+          type: 'integer',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Durationms',
+    },
   },
   type: 'object',
-  required: ['mark'],
-  title: 'TrainRecordCreate',
+  required: ['mark', 'durationMs'],
+  title: 'TrainMarkAnswer',
+} as const;
+
+export const TrainPlanSchema = {
+  properties: {
+    cardsToTrain: {
+      items: {
+        type: 'integer',
+      },
+      type: 'array',
+      title: 'Cardstotrain',
+    },
+    minDue: {
+      anyOf: [
+        {
+          type: 'string',
+          format: 'date-time',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Mindue',
+    },
+  },
+  type: 'object',
+  required: ['cardsToTrain', 'minDue'],
+  title: 'TrainPlan',
 } as const;
 
 export const UserSchema = {
