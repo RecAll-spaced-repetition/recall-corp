@@ -26,6 +26,10 @@ class BaseRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    async def get_all_filtered(self, filter_expr, output_schema):
+        raise NotImplementedError
+
+    @abstractmethod
     async def update_one(self, filter_expr, update_values, output_schema):
         raise NotImplementedError
 
@@ -68,6 +72,15 @@ class BaseSQLAlchemyRepository(BaseRepository):
         result = await self.connection.execute(
             select(self.table.c[*output_schema.fields()])
             .limit(limit).offset(offset)
+        )
+        return [output_schema(**elem) for elem in result.mappings().all()]
+
+    async def get_all_filtered(
+            self, filter_expr, output_schema: Type[SchemaType]
+    ) -> list[SchemaType]:
+        result = await self.connection.execute(
+            select(self.table.c[*output_schema.fields()])
+            .where(filter_expr)
         )
         return [output_schema(**elem) for elem in result.mappings().all()]
 
