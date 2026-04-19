@@ -136,8 +136,8 @@ body,
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
   background: transparent;
+  @apply w-1 mr-1 md:mr-2;
 }
 
 .flip-inner {
@@ -234,4 +234,9 @@ body,
   video {
     @apply md:w-1/2;
   }
+}
+
+.no-scrollbar {
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
