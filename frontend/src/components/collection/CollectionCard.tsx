@@ -9,7 +9,11 @@ import {
   Icon,
   IsPublicIcon,
 } from '@/components/library';
-import { useCollection, useProfile } from '@/query/queryHooks';
+import {
+  useCollection,
+  useCollectionTrainCards,
+  useProfile,
+} from '@/query/queryHooks';
 import { useAppStore } from '@/state';
 import clsx from 'clsx';
 
@@ -23,6 +27,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
   const { t } = useTranslation();
 
   const { collection, isPending, error } = useCollection(collectionId);
+  const { trainPlan } = useCollectionTrainCards(collectionId);
   const { profile } = useProfile();
   const showAuthWindow = useAppStore((state) => state.showLoginWindow);
 
@@ -52,6 +57,12 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 />
               </h2>
               <p className="text-md mb-2">{collection.description}</p>
+              {trainPlan?.minDue && (
+                <p className="text-md mb-2">
+                  {/* TODO: Сдлеать красивее */}
+                  {new Date(trainPlan.minDue).toLocaleString()}
+                </p>
+              )}
             </div>
 
             <div className="flex gap-x-2 mt-4">
@@ -81,7 +92,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 <Link to={routes.train.getUrl(collectionId)}>
                   <Button
                     variant="plate-green"
-                    className="py-1 px-4"
+                    className={clsx('py-1 px-4')}
                     withShadow
                     title={t('collection.trainButton')}
                   >

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response
 
-from app.schemas import Collection, CollectionCreate, CollectionShort
+from app.schemas import Collection, CollectionCreate, CollectionShort, TrainPlan
 
 from .dependencies import CollectionServiceDep, UserIdDep, UserIdSoftDep
 
@@ -11,7 +11,7 @@ router = APIRouter(
 )
 
 
-@router.get("/{collection_id}", response_model=Collection)
+@router.get("/{collection_id}")
 async def read_collection(
         collection_id: int, user_id: UserIdSoftDep, 
         collection_service: CollectionServiceDep
@@ -19,7 +19,7 @@ async def read_collection(
     return await collection_service.get_collection(collection_id, user_id)
 
 
-@router.get("/", response_model=list[CollectionShort], description="Returns collections' list without descriptions")
+@router.get("/", description="Returns collections' list without descriptions")
 async def read_collections(
         user_id: UserIdSoftDep, collection_service: CollectionServiceDep, 
         limit: int = 100, skip: int = 0
@@ -27,7 +27,7 @@ async def read_collections(
     return await collection_service.get_collections(user_id, limit, skip)
 
 
-@router.get("/{collection_id}/cards", response_model=list[int])
+@router.get("/{collection_id}/cards")
 async def read_collection_cards(
         collection_id: int, user_id: UserIdSoftDep,
         collection_service: CollectionServiceDep,
@@ -35,21 +35,21 @@ async def read_collection_cards(
     return await collection_service.get_collection_cards(collection_id, user_id)
 
 
-@router.get("/{collection_id}/cards/train", response_model=list[int])
+@router.get("/{collection_id}/cards/train")
 async def train_cards(
         user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
-) -> list[int]:
+) -> TrainPlan:
     return await collection_service.get_collection_training_cards(user_id, collection_id)
 
 
-@router.post("/", response_model=Collection)
+@router.post("/")
 async def create_collection(
         user_id: UserIdDep, collection: CollectionCreate, collection_service: CollectionServiceDep
 ) -> Collection:
     return await collection_service.add_collection(user_id, collection)
 
 
-@router.put("/{collection_id}", response_model=Collection)
+@router.put("/{collection_id}")
 async def update_collection(
         user_id: UserIdDep, collection_id: int, new_collection: CollectionCreate,
         collection_service: CollectionServiceDep
@@ -57,7 +57,7 @@ async def update_collection(
     return await collection_service.update_user_collection(user_id, collection_id, new_collection)
 
 
-@router.put("/{collection_id}/publicity", response_model=Collection)
+@router.put("/{collection_id}/publicity")
 async def update_collection_publicity(
         user_id: UserIdDep, collection_id: int, is_public: bool,
         collection_service: CollectionServiceDep

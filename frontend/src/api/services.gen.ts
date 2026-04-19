@@ -64,12 +64,9 @@ import type {
   DeleteFileStorageFileIdDeleteData,
   DeleteFileStorageFileIdDeleteError,
   DeleteFileStorageFileIdDeleteResponse,
-  ReadCardLastTrainRecordTrainRecordsLastCardIdGetData,
-  ReadCardLastTrainRecordTrainRecordsLastCardIdGetError,
-  ReadCardLastTrainRecordTrainRecordsLastCardIdGetResponse,
-  CreateTrainRecordTrainRecordsCardIdPostData,
-  CreateTrainRecordTrainRecordsCardIdPostError,
-  CreateTrainRecordTrainRecordsCardIdPostResponse,
+  TrainCardTrainCardIdPostData,
+  TrainCardTrainCardIdPostError,
+  TrainCardTrainCardIdPostResponse,
   ReadUserUserProfileGetError,
   ReadUserUserProfileGetResponse,
   ReadUserCollectionsUserCollectionsGetData,
@@ -452,41 +449,18 @@ export const deleteFileStorageFileIdDelete = <
 };
 
 /**
- * Read Card Last Train Record
+ * Train Card
  */
-export const readCardLastTrainRecordTrainRecordsLastCardIdGet = <
-  ThrowOnError extends boolean = false,
->(
-  options: Options<
-    ReadCardLastTrainRecordTrainRecordsLastCardIdGetData,
-    ThrowOnError
-  >
-) => {
-  return (options?.client ?? client).get<
-    ReadCardLastTrainRecordTrainRecordsLastCardIdGetResponse,
-    ReadCardLastTrainRecordTrainRecordsLastCardIdGetError,
-    ThrowOnError
-  >({
-    ...options,
-    url: '/train_records/last/{card_id}',
-  });
-};
-
-/**
- * Create Train Record
- */
-export const createTrainRecordTrainRecordsCardIdPost = <
-  ThrowOnError extends boolean = false,
->(
-  options: Options<CreateTrainRecordTrainRecordsCardIdPostData, ThrowOnError>
+export const trainCardTrainCardIdPost = <ThrowOnError extends boolean = false>(
+  options: Options<TrainCardTrainCardIdPostData, ThrowOnError>
 ) => {
   return (options?.client ?? client).post<
-    CreateTrainRecordTrainRecordsCardIdPostResponse,
-    CreateTrainRecordTrainRecordsCardIdPostError,
+    TrainCardTrainCardIdPostResponse,
+    TrainCardTrainCardIdPostError,
     ThrowOnError
   >({
     ...options,
-    url: '/train_records/{card_id}',
+    url: '/train/{card_id}',
   });
 };
 
