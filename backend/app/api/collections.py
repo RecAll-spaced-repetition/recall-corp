@@ -35,11 +35,25 @@ async def read_collection_cards(
     return await collection_service.get_collection_cards(collection_id, user_id)
 
 
-@router.get("/{collection_id}/cards/train")
+@router.get("/{collection_id}/train")
 async def train_cards(
         user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
 ) -> TrainPlan:
     return await collection_service.get_collection_training_cards(user_id, collection_id)
+
+
+@router.put("/{collection_id}/subscribe")
+async def subscribe_to_collection(
+        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+) -> list[CollectionShort]:
+    return await collection_service.change_subscription(user_id, collection_id, True)
+
+
+@router.put("/{collection_id}/unsubscribe")
+async def unsubscribe_from_collection(
+        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+) -> list[CollectionShort]:
+    return await collection_service.change_subscription(user_id, collection_id, False)
 
 
 @router.post("/")
