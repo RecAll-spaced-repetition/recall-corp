@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from app.schemas import Collection, CollectionCreate, CollectionShort, PublicStatusMixin, TrainPlan
 from app.repositories import (
     CardRepository, CardCollectionRepository, CollectionRepository,
-    UserRepository, TrainCardRepository, FileCardRepository
+    UserRepository, TrainCardRepository, FileCardRepository, CollectionSubscriptionRepository
 )
 
 from .base import BaseService, with_unit_of_work
@@ -74,6 +74,7 @@ class CollectionService(BaseService):
             await self.uow.get_repository(FileCardRepository).update_files_publicity(
                 updated_card.id, updated_card.is_public, PublicStatusMixin
             )
+        # TODO: Надо отписать всех кроме owner'а
         return collection
 
     @with_unit_of_work
@@ -109,3 +110,17 @@ class CollectionService(BaseService):
         cards = await card_collection_repo.get_collection_cards(collection_id)
         train_record_repo = self.uow.get_repository(TrainCardRepository)
         return await train_record_repo.get_cards_waiting_train(user_id, cards)
+
+    @with_unit_of_work
+    async def change_subscription(self, user_id: int, collection_id: int, subscription_value: bool) -> list[CollectionShort]:
+        if not await self.uow.get_repository(UserRepository).exists_user_with_id(user_id):
+            raise HTTPException(status_code=401, detail="Only authorized users can train collections")
+        await self.get_collection(collection_id, user_id) # Проверка существования коллекции и правтности
+        collection_subscription_repo = self.uow.get_repository(CollectionSubscriptionRepository)
+        has_subscription = await collection_subscription_repo.has_subscription(user_id, collection_id)
+        if subscription_value and not has_subscription:
+            await collection_subscription_repo.subscribe(user_id, collection_id)
+        elif not subscription_value and has_subscription:
+            await collection_subscription_repo.unsubscribe(user_id, collection_id)
+        return await collection_subscription_repo.get_user_subscriptions(user_id, 0, None, CollectionShort)
+        
