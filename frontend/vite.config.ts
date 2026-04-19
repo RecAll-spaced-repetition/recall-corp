@@ -3,6 +3,7 @@ import viteReact from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import webfontDownload from 'vite-plugin-webfont-dl';
 import { resolve } from 'node:path';
+import { defaultExclude } from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,5 +18,8 @@ export default defineConfig({
     alias: {
       '@': resolve('./src'),
     },
+  },
+  test: {
+    exclude: [...defaultExclude, './**/*.browser.{test,spec}.ts(x)'],
   },
 });
