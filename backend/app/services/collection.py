@@ -102,16 +102,6 @@ class CollectionService(BaseService):
             )
 
     @with_unit_of_work
-    async def get_collection_training_cards(self, user_id: int, collection_id: int) -> TrainPlan:
-        if not await self.uow.get_repository(UserRepository).exists_user_with_id(user_id):
-            raise HTTPException(status_code=401, detail="Only authorized users can train collections")
-        await self.get_collection(collection_id, user_id) # Проверка существования коллекции и правтности
-        card_collection_repo = self.uow.get_repository(CardCollectionRepository)
-        cards = await card_collection_repo.get_collection_cards(collection_id)
-        train_record_repo = self.uow.get_repository(TrainCardRepository)
-        return await train_record_repo.get_cards_waiting_train(user_id, cards)
-
-    @with_unit_of_work
     async def change_subscription(self, user_id: int, collection_id: int, subscription_value: bool) -> list[CollectionShort]:
         if not await self.uow.get_repository(UserRepository).exists_user_with_id(user_id):
             raise HTTPException(status_code=401, detail="Only authorized users can train collections")

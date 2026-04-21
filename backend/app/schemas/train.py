@@ -20,6 +20,8 @@ class TrainMarkAnswer(CamelCaseBaseModel):
 class TrainPlan(CamelCaseBaseModel):
     cards_to_train: list[int]
     min_due: datetime | None
+    avg_current_retrievability: float | None
+    avg_after_year_retrievability: float | None
 
 
 class TrainCard(CamelCaseBaseModel):
