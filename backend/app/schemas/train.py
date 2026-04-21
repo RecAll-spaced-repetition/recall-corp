@@ -6,7 +6,7 @@ from fsrs import Rating, Card, ReviewLog, State
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainMarkAnswer", "TrainPlan", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams"]
+__all__ = ["TrainMarkAnswer", "TrainPlan", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams", "TrainCardExt"]
 
 
 class TrainMarkAnswer(CamelCaseBaseModel):
@@ -21,6 +21,8 @@ class TrainPlan(CamelCaseBaseModel):
     cards_to_train: list[int]
     min_due: datetime | None
     avg_current_retrievability: float | None
+    avg_stability: float | None
+    avg_difficulty: float | None
     avg_after_year_retrievability: float | None
 
 
@@ -57,6 +59,26 @@ class TrainCard(CamelCaseBaseModel):
             difficulty=card.difficulty, 
             due=card.due, 
             last_review=card.last_review
+        )
+
+
+class TrainCardExt(TrainCard):
+    current_retrievability: float | None
+    after_year_retrievability: float | None
+    
+    @staticmethod
+    def from_fsrs_card(user_id: int, card: Card, curr_r: float | None, year_r: float | None):
+        return TrainCardExt(
+            user_id=user_id,
+            card_id=card.card_id, 
+            state=int(card.state), 
+            step=card.step, 
+            stability=card.stability, 
+            difficulty=card.difficulty, 
+            due=card.due, 
+            last_review=card.last_review,
+            current_retrievability=curr_r,
+            after_year_retrievability=year_r
         )
 
 class TrainLogCreate(CamelCaseBaseModel):
