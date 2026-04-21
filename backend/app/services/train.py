@@ -3,7 +3,7 @@ from fsrs import Card, Scheduler, Optimizer
 from datetime import datetime, timezone
 
 from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository
-from app.schemas import TrainMarkAnswer, TrainCard, TrainLog, TrainLogCreate, UserOptParams, TrainPlan
+from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, UserOptParams, TrainPlan
 from app.core import get_settings
 
 from .base import BaseService, with_unit_of_work
@@ -14,7 +14,7 @@ __all__ = ["TrainService"]
 
 class TrainService(BaseService):
     @with_unit_of_work
-    async def train_card(self, user_id: int, card_id: int, training: TrainMarkAnswer):
+    async def train_card(self, user_id: int, card_id: int, training: TrainMarkAnswer) -> TrainCard:
         # Базовые проверки
         user = await self.uow.get_repository(UserRepository).get_user_by_id(user_id, UserOptParams)
         if not user:
@@ -45,8 +45,32 @@ class TrainService(BaseService):
             await self.uow.get_repository(UserRepository).update_user_by_id(
                 user_id, UserOptParams(id=user_id, train_logs_opt_cnt=all_logs_cnt, train_opt_params=new_params).model_dump(exclude=['id']), UserOptParams
             )
+
+        # TODO: Подумать, может быть тут тоже считать TrainCardExt
         return TrainCard.from_fsrs_card(user_id, new_card)
     
+    @with_unit_of_work
+    async def get_card_stats(self, user_id: int, card_id: int):
+        # Базовые проверки
+        user = await self.uow.get_repository(UserRepository).get_user_by_id(user_id, UserOptParams)
+        if not user:
+            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        if not await self.uow.get_repository(CardRepository).exists_card_with_id(card_id):
+            raise HTTPException(status_code=404)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        
+        train_card_repo = self.uow.get_repository(TrainCardRepository)
+        scheduler = Scheduler() if not user.train_opt_params else Scheduler(user.train_opt_params)
+
+        card = await train_card_repo.get_train_card(user_id, card_id)
+        if card == None:
+            raise HTTPException(status_code=404) # TODO: Написать, что карточку не тренировали
+        
+        now_utc = datetime.now(timezone.utc)
+        year_utc = now_utc.replace(year=now_utc.year + 1)
+        curr_r = scheduler.get_card_retrievability(card, now_utc)
+        year_r = scheduler.get_card_retrievability(card, year_utc)
+        return TrainCardExt.from_fsrs_card(user_id, card, curr_r, year_r)
+
     @with_unit_of_work
     async def get_collection_train_stats(self, user_id: int, collection_id: int) -> TrainPlan:
         user = await self.uow.get_repository(UserRepository).get_user_by_id(user_id, UserOptParams)
@@ -68,17 +92,26 @@ class TrainService(BaseService):
         scheduler = Scheduler() if not user.train_opt_params else Scheduler(user.train_opt_params)
         avg_curr_r = 0.0
         avg_year_r = 0.0
+        avg_s = 0.0
+        avg_d = 0.0
         now_utc = datetime.now(timezone.utc)
         year_utc = now_utc.replace(year=now_utc.year + 1)
-        for card in await train_card_repo.get_user_train_cards(user_id, all_cards):
+        trained_cards = await train_card_repo.get_user_train_cards(user_id, all_cards)
+        for card in trained_cards:
             avg_curr_r += scheduler.get_card_retrievability(card, now_utc)
             avg_year_r += scheduler.get_card_retrievability(card, year_utc)
+            avg_s += card.stability
+            avg_d += card.difficulty
         avg_curr_r /= all_cards_len
         avg_year_r /= all_cards_len
+        avg_s /= all_cards_len
+        avg_d = (avg_d + (all_cards_len - len(trained_cards)) * 5.0) / all_cards_len
 
         return TrainPlan(
             cards_to_train=cards_to_train, 
             min_due=min_due, 
             avg_current_retrievability=avg_curr_r, 
-            avg_after_year_retrievability=avg_year_r
+            avg_after_year_retrievability=avg_year_r,
+            avg_stability=avg_s,
+            avg_difficulty=avg_d
         )
