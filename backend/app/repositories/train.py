@@ -26,13 +26,16 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
             TrainCard
         )).to_fsrs_card()
     
-    async def get_user_train_cards(self, user_id: int) -> list[Card]:
+    async def get_user_train_cards(self, user_id: int, collection_cards: list[int] | None = None) -> list[Card]:
+        expr = self.table.c.user_id == user_id 
+        if collection_cards != None:
+            expr = and_(self.table.c.user_id == user_id, self.table.c.card_id.in_(collection_cards))
         return [
             db_card.to_fsrs_card() 
-            for db_card in await self.get_all_filtered(self.table.c.user_id == user_id, TrainCard)
+            for db_card in await self.get_all_filtered(expr, TrainCard)
         ]
     
-    async def get_cards_waiting_train(self, user_id: int, collection_cards: list[int]) -> TrainPlan:
+    async def get_cards_waiting_train(self, user_id: int, collection_cards: list[int]) -> tuple[list[int], datetime]:
         if not collection_cards:
             return []
 
@@ -56,7 +59,7 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
         if len(not_trained_cards) > 0:
             min_due = datetime.now(timezone.utc)
 
-        return TrainPlan(cards_to_train=[*not_trained_cards, *need_train_again], min_due=min_due)
+        return ([*not_trained_cards, *need_train_again], min_due)
 
 class TrainLogRepository(BaseSQLAlchemyRepository):
     table = TrainLogTable
