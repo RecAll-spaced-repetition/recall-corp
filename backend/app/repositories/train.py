@@ -15,7 +15,7 @@ __all__ = ["TrainCardRepository", "TrainLogRepository"]
 class TrainCardRepository(BaseSQLAlchemyRepository):
     table = TrainCardTable
 
-    async def get_train_card(self, user_id: int, card_id: int) -> Card | None:
+    async def get_train_card(self, user_id: int, card_id: int) -> Card | None: # TODO: Поменять все эти типы на схемы, а типы из FSRS конструировать в сервисе
         db_card = await self.get_one_or_none(and_(self.table.c.user_id == user_id, self.table.c.card_id == card_id), TrainCard)
         return None if not db_card else db_card.to_fsrs_card()
 
@@ -64,11 +64,18 @@ class TrainCardRepository(BaseSQLAlchemyRepository):
 class TrainLogRepository(BaseSQLAlchemyRepository):
     table = TrainLogTable
 
-    async def get_user_train_logs(self, user_id: int) -> list[ReviewLog]:
+    async def get_user_train_logs(self, user_id: int, chrono: bool = False) -> list[TrainLog]:
+        if not chrono:
+            return await self.get_all_filtered(self.table.c.user_id == user_id, TrainLog)
+        
+        expr = (select(self.table.c[*TrainLog.fields()])
+                .where(self.table.c.user_id == user_id)
+                .order_by(self.table.c.review_datetime.desc()))
         return [
-            review.to_fsrs_review_log() 
-            for review in await self.get_all_filtered(self.table.c.user_id == user_id, TrainLog)
+            TrainLog(**review_dict)
+            for review_dict in (await self.connection.execute(expr)).mappings().all()
         ]
+        
 
     async def get_user_card_train_logs(self, card_id: int, user_id: int) -> list[ReviewLog]:
         return [
