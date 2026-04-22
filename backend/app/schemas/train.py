@@ -1,12 +1,22 @@
-from datetime import datetime
+from datetime import date, datetime, timezone, timedelta
 
 from pydantic import Field
-from fsrs import Rating, Card, ReviewLog, State
+from fsrs import Rating, Card, ReviewLog, State, Scheduler
 
 from .base import CamelCaseBaseModel
 
 
-__all__ = ["TrainMarkAnswer", "TrainPlan", "TrainCard", "TrainLog", "TrainLogCreate", "UserOptParams", "TrainCardExt"]
+__all__ = [
+    "TrainMarkAnswer",
+    "TrainPlan",
+    "TrainCard",
+    "TrainLog",
+    "TrainLogCreate",
+    "DayStat",
+    "AllStats",
+    "UserOptParams",
+    "TrainCardExt",
+]
 
 
 class TrainMarkAnswer(CamelCaseBaseModel):
@@ -80,6 +90,25 @@ class TrainCardExt(TrainCard):
             current_retrievability=curr_r,
             after_year_retrievability=year_r
         )
+    
+    @staticmethod
+    def from_fsrs_card_with_scheduler(user_id: int, card: Card, scheduler: Scheduler):
+        now_utc = datetime.now(timezone.utc)
+        year_utc = now_utc.replace(year=now_utc.year + 1)
+        curr_r = scheduler.get_card_retrievability(card, now_utc)
+        year_r = scheduler.get_card_retrievability(card, year_utc)
+        return TrainCardExt(
+            user_id=user_id,
+            card_id=card.card_id, 
+            state=int(card.state), 
+            step=card.step, 
+            stability=card.stability, 
+            difficulty=card.difficulty, 
+            due=card.due, 
+            last_review=card.last_review,
+            current_retrievability=curr_r,
+            after_year_retrievability=year_r
+        )
 
 class TrainLogCreate(CamelCaseBaseModel):
     user_id: int
@@ -109,6 +138,74 @@ class TrainLogCreate(CamelCaseBaseModel):
 
 class TrainLog(TrainLogCreate):
     id: int
+
+
+class DayStat(CamelCaseBaseModel):
+    train_date: date
+    cnt: int
+    avg_mark: float
+    total_duration: int
+    logs: list[TrainLog]
+
+    @staticmethod
+    def from_train_logs(all_logs: list[TrainLog]):
+        """
+        Собирает из всего списка логи до тех пор, пока не сменится день.
+        
+        Бросает исключение, если список пустой
+        """
+        l = len(all_logs)
+        if l == 0:
+            raise TypeError("DayStat can be constructed only from not empty list")
+        train_date = all_logs[0].review_datetime.date()
+        cnt = 0
+        avg_mark = 0.0
+        total_duration = 0
+        logs: list[TrainLog] = []
+        i = 0
+        while i < l and train_date == all_logs[i].review_datetime.date():
+            new_log = all_logs[i]
+            cnt += 1
+            avg_mark += new_log.rating
+            total_duration += new_log.review_duration if new_log.review_duration != None else 0
+            logs.append(new_log)
+            i += 1
+
+        avg_mark /= cnt
+        return DayStat(
+            train_date=train_date, 
+            cnt=cnt, 
+            avg_mark=avg_mark, 
+            total_duration=total_duration, 
+            logs=logs
+        )
+
+
+class AllStats(CamelCaseBaseModel):
+    streak: int
+    stats: list[DayStat]
+
+    @staticmethod
+    def from_train_logs(all_logs: list[TrainLog]):
+        max_streak = 0
+        streak = 0
+        stats: list[DayStat] = []
+        prev_date: date | None = None
+        i = 0
+        l = len(all_logs)
+        while i < l:
+            day_stat = DayStat.from_train_logs(all_logs[i:])
+            stats.append(day_stat)
+            if prev_date != None and prev_date - day_stat.train_date == timedelta(days=1):
+                streak += 1
+            elif prev_date != day_stat.train_date:
+                max_streak = max(max_streak, streak)
+                streak = 1
+            prev_date = day_stat.train_date
+            i += day_stat.cnt
+        
+        return AllStats(streak=max_streak, stats=stats)
+
 
 class UserOptParams(CamelCaseBaseModel):
     id: int
