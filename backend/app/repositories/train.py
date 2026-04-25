@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from fsrs import Card, ReviewLog
 
 from app.db import TrainCardTable, TrainLogTable
-from app.schemas import TrainPlan, TrainCard, TrainLog
+from app.schemas import CollectionStats, TrainCard, TrainLog
 
 from .base import BaseSQLAlchemyRepository
 
@@ -15,28 +15,26 @@ __all__ = ["TrainCardRepository", "TrainLogRepository"]
 class TrainCardRepository(BaseSQLAlchemyRepository):
     table = TrainCardTable
 
-    async def get_train_card(self, user_id: int, card_id: int) -> Card | None: # TODO: Поменять все эти типы на схемы, а типы из FSRS конструировать в сервисе
-        db_card = await self.get_one_or_none(and_(self.table.c.user_id == user_id, self.table.c.card_id == card_id), TrainCard)
-        return None if not db_card else db_card.to_fsrs_card()
+    async def get_train_card(self, user_id: int, card_id: int) -> TrainCard | None:
+        return await self.get_one_or_none(and_(self.table.c.user_id == user_id, self.table.c.card_id == card_id), TrainCard)
 
-    async def update_train_card(self, user_id: int, card: Card) -> Card:
-        return (await self.update_one(
+    async def update_train_card(self, user_id: int, card: TrainCard) -> TrainCard:
+        return await self.update_one(
             and_(self.table.c.user_id == user_id, self.table.c.card_id == card.card_id),
-            TrainCard.from_fsrs_card(user_id, card).model_dump(exclude=['card_id', 'user_id']), 
+            card.model_dump(exclude=['card_id', 'user_id']), 
             TrainCard
-        )).to_fsrs_card()
+        )
     
-    async def get_user_train_cards(self, user_id: int, collection_cards: list[int] | None = None) -> list[Card]:
+    async def get_user_train_cards(self, user_id: int, collection_cards: list[int] | None = None) -> list[TrainCard]:
         expr = self.table.c.user_id == user_id 
         if collection_cards != None:
+            if len(collection_cards) == 0:
+                return []
             expr = and_(self.table.c.user_id == user_id, self.table.c.card_id.in_(collection_cards))
-        return [
-            db_card.to_fsrs_card() 
-            for db_card in await self.get_all_filtered(expr, TrainCard)
-        ]
+        return await self.get_all_filtered(expr, TrainCard)
     
     async def get_cards_waiting_train(self, user_id: int, collection_cards: list[int]) -> tuple[list[int], datetime]:
-        if not collection_cards:
+        if len(collection_cards) == 0:
             return []
 
         (need_train_again, no_need_train_again, min_due) = (await self.connection.execute(select(
@@ -77,8 +75,5 @@ class TrainLogRepository(BaseSQLAlchemyRepository):
         ]
         
 
-    async def get_user_card_train_logs(self, card_id: int, user_id: int) -> list[ReviewLog]:
-        return [
-            review.to_fsrs_review_log() 
-            for review in await self.get_all_filtered(and_(self.table.c.card_id == card_id, self.table.c.user_id == user_id), TrainLog)
-        ]
+    async def get_user_card_train_logs(self, card_id: int, user_id: int) -> list[TrainLog]:
+        return await self.get_all_filtered(and_(self.table.c.card_id == card_id, self.table.c.user_id == user_id), TrainLog)

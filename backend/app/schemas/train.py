@@ -1,14 +1,19 @@
 from datetime import date, datetime, timezone, timedelta
 
-from pydantic import Field
+from typing import Literal, Union
+from pydantic import Field, RootModel
 from fsrs import Rating, Card, ReviewLog, State, Scheduler
 
-from .base import CamelCaseBaseModel
+from .base import CamelCaseBaseModel, IdMixin
 
 
 __all__ = [
     "TrainMarkAnswer",
+    "TrainNow",
+    "TrainDue",
     "TrainPlan",
+    "TrainWhen",
+    "CollectionStats",
     "TrainCard",
     "TrainLog",
     "TrainLogCreate",
@@ -27,13 +32,63 @@ class TrainMarkAnswer(CamelCaseBaseModel):
         return Rating(int(self.mark))
     
 
-class TrainPlan(CamelCaseBaseModel):
+class TrainNow(CamelCaseBaseModel):
+    type: Literal["now"]
+    
+
+class TrainDue(CamelCaseBaseModel):
+    type: Literal["due"]
+    due: datetime
+
+
+class TrainWhen(IdMixin):
+    when: Union[TrainNow, TrainDue] = Field(discriminator='type')
+
+
+class TrainPlan(IdMixin):
     cards_to_train: list[int]
-    min_due: datetime | None
+
+
+class CollectionStats(IdMixin):
     avg_current_retrievability: float | None
     avg_stability: float | None
     avg_difficulty: float | None
     avg_after_year_retrievability: float | None
+
+    @staticmethod
+    def from_cards_with_scheduler(id: int, all_cards_len: int, trained_cards: list[Card], scheduler: Scheduler):
+        if all_cards_len == 0:
+            return CollectionStats(
+                id=id,
+                avg_current_retrievability=None, 
+                avg_after_year_retrievability=None,
+                avg_stability=None,
+                avg_difficulty=None
+            )
+
+        avg_curr_r = 0.0
+        avg_year_r = 0.0
+        avg_s = 0.0
+        avg_d = 0.0
+        now_utc = datetime.now(timezone.utc)
+        year_utc = now_utc.replace(year=now_utc.year + 1)
+        for card in trained_cards:
+            avg_curr_r += scheduler.get_card_retrievability(card, now_utc)
+            avg_year_r += scheduler.get_card_retrievability(card, year_utc)
+            avg_s += card.stability
+            avg_d += card.difficulty
+        avg_curr_r /= all_cards_len
+        avg_year_r /= all_cards_len
+        avg_s /= all_cards_len
+        avg_d = (avg_d + (all_cards_len - len(trained_cards)) * 5.0) / all_cards_len
+
+        return CollectionStats(
+            id=id,
+            avg_current_retrievability=avg_curr_r, 
+            avg_after_year_retrievability=avg_year_r,
+            avg_stability=avg_s,
+            avg_difficulty=avg_d
+        )
 
 
 class TrainCard(CamelCaseBaseModel):
@@ -182,29 +237,38 @@ class DayStat(CamelCaseBaseModel):
 
 
 class AllStats(CamelCaseBaseModel):
-    streak: int
+    curr_streak: int
+    max_streak: int
     stats: list[DayStat]
 
     @staticmethod
     def from_train_logs(all_logs: list[TrainLog]):
         max_streak = 0
+        curr_streak = 0
         streak = 0
         stats: list[DayStat] = []
         prev_date: date | None = None
+        today = datetime.now(timezone.utc).date()
         i = 0
         l = len(all_logs)
         while i < l:
             day_stat = DayStat.from_train_logs(all_logs[i:])
             stats.append(day_stat)
+
+            if day_stat.train_date == today:
+                curr_streak += 1
+                today -= timedelta(days=1)
+
             if prev_date != None and prev_date - day_stat.train_date == timedelta(days=1):
                 streak += 1
             elif prev_date != day_stat.train_date:
                 max_streak = max(max_streak, streak)
                 streak = 1
+
             prev_date = day_stat.train_date
             i += day_stat.cnt
         
-        return AllStats(streak=max_streak, stats=stats)
+        return AllStats(curr_streak=curr_streak, max_streak=max_streak, stats=stats)
 
 
 class UserOptParams(CamelCaseBaseModel):
