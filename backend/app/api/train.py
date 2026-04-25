@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.schemas import TrainMarkAnswer, TrainCardExt, TrainPlan, AllStats
+from app.schemas import TrainMarkAnswer, TrainCardExt, TrainWhen, TrainPlan, CollectionStats, AllStats
 
 from .dependencies import TrainCardServiceDep, UserIdDep
 
@@ -18,6 +18,20 @@ async def train_card(
     return await train_card_service.train_card(user_id, card_id, training)
 
 
+@router.get("/collection/{collection_id}/when")
+async def get_collection_stats(
+        user_id: UserIdDep, collection_id: int, train_card_service: TrainCardServiceDep
+) -> TrainWhen:
+    return await train_card_service.get_collection_train_due(user_id, collection_id)
+
+
+@router.get("/collection/{collection_id}/cards")
+async def get_collection_stats(
+        user_id: UserIdDep, collection_id: int, train_card_service: TrainCardServiceDep
+) -> TrainPlan:
+    return await train_card_service.get_collection_train_cards(user_id, collection_id)
+
+
 @router.get("/stats/all")
 async def get_user_stats(
     user_id: UserIdDep, train_card_service: TrainCardServiceDep
@@ -32,12 +46,9 @@ async def get_card_stats(
     return await train_card_service.get_card_stats(user_id, card_id)
 
 
-# TODO: Подумать, а надо ли для всех коллекций
-
-
 @router.get("/stats/collection/{collection_id}")
 async def get_collection_stats(
         user_id: UserIdDep, collection_id: int, train_card_service: TrainCardServiceDep
-) -> TrainPlan:
+) -> CollectionStats:
     return await train_card_service.get_collection_train_stats(user_id, collection_id)
 

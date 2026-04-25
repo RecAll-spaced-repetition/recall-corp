@@ -1,7 +1,7 @@
 from typing import Optional
 from fastapi import HTTPException
 
-from app.schemas import Collection, CollectionCreate, CollectionShort, PublicStatusMixin, TrainPlan
+from app.schemas import Collection, CollectionCreate, CollectionShort, PublicStatusMixin, CollectionStats
 from app.repositories import (
     CardRepository, CardCollectionRepository, CollectionRepository,
     UserRepository, TrainCardRepository, FileCardRepository, CollectionSubscriptionRepository
