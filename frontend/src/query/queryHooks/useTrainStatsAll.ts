@@ -9,7 +9,9 @@ export const getTrainStatsAllQueryOptions = () =>
   });
 
 export const useTrainStatsAll = () => {
-  const { data: trainPlan, ...rest } = useQuery(getTrainStatsAllQueryOptions());
+  const { data: trainStats, ...rest } = useQuery(
+    getTrainStatsAllQueryOptions()
+  );
 
-  return { trainPlan, ...rest };
+  return { trainStats, ...rest };
 };
