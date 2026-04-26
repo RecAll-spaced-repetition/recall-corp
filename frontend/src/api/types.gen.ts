@@ -186,6 +186,9 @@ export type TrainPlan = {
 
 export type TrainWhen = {
   id: number;
+  isPublic: boolean;
+  ownerId: number;
+  title: string;
   when: TrainNever | TrainNow | TrainDue;
 };
 

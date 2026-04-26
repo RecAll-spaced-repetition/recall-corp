@@ -5,6 +5,7 @@ from pydantic import Field, RootModel
 from fsrs import Rating, Card, ReviewLog, State, Scheduler
 
 from .base import CamelCaseBaseModel, IdMixin
+from .collection import CollectionShort
 
 
 __all__ = [
@@ -46,8 +47,18 @@ class TrainDue(CamelCaseBaseModel):
     due: datetime
 
 
-class TrainWhen(IdMixin):
+class TrainWhen(CollectionShort):
     when: Union[TrainNever, TrainNow, TrainDue] = Field(discriminator='type')
+
+    @staticmethod
+    def from_collection_short(collection: CollectionShort, when: Union[TrainNever, TrainNow, TrainDue]):
+        return TrainWhen(
+            id=collection.id,
+            is_public=collection.is_public,
+            owner_id=collection.owner_id,
+            title=collection.title,
+            when=when
+        )
 
 
 class TrainPlan(IdMixin):

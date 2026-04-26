@@ -12,7 +12,7 @@ import { FilesList } from '@/components/files';
 import { CollectionsSearchableList } from '@/components/collection';
 import { useProfileDelete } from '@/query/mutationHooks';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Stats } from '@/components/stats';
+import { Stats, TrainsCalendar } from '@/components/stats';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
@@ -55,10 +55,13 @@ export const ProfilePage: React.FC = () => {
       </h2>
 
       {subscriptions && (
-        <CollectionsSearchableList
-          createBtnHidden
-          collections={subscriptions}
-        />
+        <>
+          <TrainsCalendar collections={subscriptions} />
+          <CollectionsSearchableList
+            createBtnHidden
+            collections={subscriptions}
+          />
+        </>
       )}
 
       <h2 className="text-center text-2xl font-bold mt-8 mb-4">
