@@ -13,7 +13,7 @@ export const Stats: React.FC = () => {
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>
       <div className="w-full flex flex-col gap-2">
         {/* TODO: Добавить мотивационнх сообщений и каких-нибудь цветов */}
-        <p>{t('stats.currentStreak', { streak: trainStats?.currStreak })}</p> 
+        <p>{t('stats.currentStreak', { streak: trainStats?.currStreak })}</p>
         <p>{t('stats.maxStreak', { streak: trainStats?.maxStreak })}</p>
         {trainStats && (
           // TODO: Перенести в модалки, чтобы было норм на мобилках

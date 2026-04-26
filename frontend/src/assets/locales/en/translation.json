@@ -51,7 +51,8 @@
     "myFiles": "My files",
     "emptyFilesList": "You haven't upload any file yes. Feel free to add them using card's edit form",
     "deleteAccount": "Delete account",
-    "stats": "My stats"
+    "stats": "My stats",
+    "nextTrains": "Planned trains"
   },
   "collection": {
     "titleRequired": "Title is required",

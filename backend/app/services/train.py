@@ -3,7 +3,7 @@ from fsrs import Card, Scheduler, Optimizer
 from datetime import datetime, timezone, date, timedelta
 
 from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository
-from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan, TrainNever
+from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan, TrainNever, CollectionShort
 from app.core import get_settings
 
 from .base import BaseService, with_unit_of_work
@@ -57,8 +57,9 @@ class TrainService(BaseService):
     async def get_collection_train_due(self, user_id: int, collection_id: int) -> TrainWhen:
         if not await self.uow.get_repository(UserRepository).exists_user_with_id(user_id):
             raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
-        if not await self.uow.get_repository(CollectionRepository).exists_collection_with_id(collection_id):
-            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        collection = await self.uow.get_repository(CollectionRepository).get_collection_by_id(collection_id, CollectionShort)
+        if not collection or collection.owner_id != user_id and not collection.is_public:
+            raise HTTPException(status_code=400)  # TODO: ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
         
         train_card_repo = self.uow.get_repository(TrainCardRepository)
         collection_card_repo = self.uow.get_repository(CardCollectionRepository)
@@ -66,7 +67,7 @@ class TrainService(BaseService):
         all_cards = await collection_card_repo.get_collection_cards(collection_id)
         all_cards_len = len(all_cards)
         if all_cards_len == 0:
-            return TrainWhen(id=collection_id, when=TrainNever(type='never'))
+            return TrainWhen.from_collection_short(collection, when=TrainNever(type='never'))
 
         (_, min_due) = await train_card_repo.get_cards_waiting_train(user_id, all_cards)
 
@@ -74,7 +75,7 @@ class TrainService(BaseService):
         if min_due > datetime.now(timezone.utc):
             when = TrainDue(due=min_due, type='due')
 
-        return TrainWhen(id=collection_id, when=when)
+        return TrainWhen.from_collection_short(collection, when)
 
     @with_unit_of_work
     async def get_collection_train_cards(self, user_id: int, collection_id: int) -> TrainPlan:

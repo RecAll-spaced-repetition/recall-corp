@@ -636,6 +636,20 @@ export const TrainWhenSchema = {
       type: 'integer',
       title: 'Id',
     },
+    isPublic: {
+      type: 'boolean',
+      title: 'Ispublic',
+    },
+    ownerId: {
+      type: 'integer',
+      title: 'Ownerid',
+    },
+    title: {
+      type: 'string',
+      maxLength: 100,
+      minLength: 1,
+      title: 'Title',
+    },
     when: {
       oneOf: [
         {
@@ -660,7 +674,7 @@ export const TrainWhenSchema = {
     },
   },
   type: 'object',
-  required: ['id', 'when'],
+  required: ['id', 'isPublic', 'ownerId', 'title', 'when'],
   title: 'TrainWhen',
 } as const;
 
