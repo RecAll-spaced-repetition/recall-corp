@@ -18,7 +18,7 @@ async def read_user(user_id: UserIdDep, user_service: UserServiceDep) -> User:
 
 
 @router.get("/subscriptions")
-async def read_user_collections(
+async def read_user_subscriptions(
         user_id: UserIdDep, user_service: UserServiceDep, offset: int = 0, limit: int | None = None
 ) -> list[CollectionShort]:
     return await user_service.get_user_subscriptions(user_id, offset, limit)

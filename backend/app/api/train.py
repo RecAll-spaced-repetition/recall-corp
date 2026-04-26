@@ -19,14 +19,14 @@ async def train_card(
 
 
 @router.get("/collection/{collection_id}/when")
-async def get_collection_stats(
+async def get_collection_train_when(
         user_id: UserIdDep, collection_id: int, train_card_service: TrainCardServiceDep
 ) -> TrainWhen:
     return await train_card_service.get_collection_train_due(user_id, collection_id)
 
 
 @router.get("/collection/{collection_id}/cards")
-async def get_collection_stats(
+async def get_collection_train_cards(
         user_id: UserIdDep, collection_id: int, train_card_service: TrainCardServiceDep
 ) -> TrainPlan:
     return await train_card_service.get_collection_train_cards(user_id, collection_id)

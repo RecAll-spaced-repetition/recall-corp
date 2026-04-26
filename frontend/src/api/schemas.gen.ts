@@ -585,6 +585,19 @@ export const TrainMarkAnswerSchema = {
   title: 'TrainMarkAnswer',
 } as const;
 
+export const TrainNeverSchema = {
+  properties: {
+    type: {
+      type: 'string',
+      const: 'never',
+      title: 'Type',
+    },
+  },
+  type: 'object',
+  required: ['type'],
+  title: 'TrainNever',
+} as const;
+
 export const TrainNowSchema = {
   properties: {
     type: {
@@ -626,6 +639,9 @@ export const TrainWhenSchema = {
     when: {
       oneOf: [
         {
+          $ref: '#/components/schemas/TrainNever',
+        },
+        {
           $ref: '#/components/schemas/TrainNow',
         },
         {
@@ -637,6 +653,7 @@ export const TrainWhenSchema = {
         propertyName: 'type',
         mapping: {
           due: '#/components/schemas/TrainDue',
+          never: '#/components/schemas/TrainNever',
           now: '#/components/schemas/TrainNow',
         },
       },

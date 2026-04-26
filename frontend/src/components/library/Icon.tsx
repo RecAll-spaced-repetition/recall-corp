@@ -24,6 +24,7 @@ import {
   TbUpload,
   TbLock,
   TbLockOpen2,
+  TbStar,
 } from 'react-icons/tb';
 import {
   AiFillFileAdd,
@@ -31,6 +32,7 @@ import {
   AiFillSave,
   AiOutlineLoading,
   AiOutlineLoading3Quarters,
+  AiFillStar,
 } from 'react-icons/ai';
 import {
   BsListOl,
@@ -89,6 +91,8 @@ export const icons = [
   'h1',
   'lock',
   'open',
+  'star',
+  'star-fill',
 ] as const;
 export type IconType = (typeof icons)[number];
 
@@ -144,6 +148,8 @@ export const Icon: React.FC<IconProps> = ({
     .with('h1', () => BsTypeH1)
     .with('lock', () => TbLock)
     .with('open', () => TbLockOpen2)
+    .with('star', () => TbStar)
+    .with('star-fill', () => AiFillStar)
     .exhaustive();
 
   const modifiers = match(icon)

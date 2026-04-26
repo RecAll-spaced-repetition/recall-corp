@@ -9,6 +9,7 @@ from .base import CamelCaseBaseModel, IdMixin
 
 __all__ = [
     "TrainMarkAnswer",
+    "TrainNever",
     "TrainNow",
     "TrainDue",
     "TrainPlan",
@@ -32,6 +33,10 @@ class TrainMarkAnswer(CamelCaseBaseModel):
         return Rating(int(self.mark))
     
 
+class TrainNever(CamelCaseBaseModel):
+    type: Literal["never"]
+    
+
 class TrainNow(CamelCaseBaseModel):
     type: Literal["now"]
     
@@ -42,7 +47,7 @@ class TrainDue(CamelCaseBaseModel):
 
 
 class TrainWhen(IdMixin):
-    when: Union[TrainNow, TrainDue] = Field(discriminator='type')
+    when: Union[TrainNever, TrainNow, TrainDue] = Field(discriminator='type')
 
 
 class TrainPlan(IdMixin):

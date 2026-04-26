@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, SearchBar } from '../library';
 import { useProfile } from '@/query/queryHooks';
 import { useAppStore } from '@/state';
@@ -9,11 +9,12 @@ import { useTranslation } from 'react-i18next';
 
 export interface CollectionsSearchableListProps {
   collections: CollectionShort[];
+  createBtnHidden?: boolean;
 }
 
 export const CollectionsSearchableList: React.FC<
   CollectionsSearchableListProps
-> = ({ collections }) => {
+> = ({ collections, createBtnHidden = false }) => {
   const { t } = useTranslation();
   const { profile } = useProfile();
 
@@ -22,40 +23,34 @@ export const CollectionsSearchableList: React.FC<
   );
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCollections, setAcitveCollections] = useState<CollectionShort[]>(
-    []
-  );
 
-  useEffect(() => {
-    if (!collections) return;
-    const filteredCollections =
-      searchTerm.trim() === ''
-        ? collections
-        : collections.filter((item) =>
-            item.title.toLowerCase().includes(searchTerm.toLowerCase())
-          );
-    setAcitveCollections(filteredCollections);
-  }, [searchTerm, collections]);
+  const activeCollections =
+    searchTerm.trim() === ''
+      ? collections
+      : collections.filter((item) =>
+          item.title.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
   return (
     <div className="center flex-col w-full">
-      {profile ? (
-        <div className="flex justify-center mb-4">
-          <Button
-            variant="plate-green"
-            className={clsx('py-2 px-4 rounded-full', 'text-lg font-medium')}
-            onClick={() => setIsCreateCollectionOpened(true)}
-            withShadow
-            title={t('collection.createButton')}
-          >
-            {t('collection.createButton')}
-          </Button>
-        </div>
-      ) : (
-        <h3 className="text-center text-xl mb-4 font-medium col-span-full">
-          {t('collection.authorizeToCreate')}
-        </h3>
-      )}
+      {!createBtnHidden &&
+        (profile ? (
+          <div className="flex justify-center mb-4">
+            <Button
+              variant="plate-green"
+              className={clsx('py-2 px-4 rounded-full', 'text-lg font-medium')}
+              onClick={() => setIsCreateCollectionOpened(true)}
+              withShadow
+              title={t('collection.createButton')}
+            >
+              {t('collection.createButton')}
+            </Button>
+          </div>
+        ) : (
+          <h3 className="text-center text-xl mb-4 font-medium col-span-full">
+            {t('collection.authorizeToCreate')}
+          </h3>
+        ))}
 
       {collections.length == 0 && (
         <h3 className="text-center text-xl font-medium col-span-full">
