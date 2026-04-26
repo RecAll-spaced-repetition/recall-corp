@@ -3,7 +3,7 @@ from fsrs import Card, Scheduler, Optimizer
 from datetime import datetime, timezone, date, timedelta
 
 from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository
-from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan
+from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan, TrainNever
 from app.core import get_settings
 
 from .base import BaseService, with_unit_of_work
@@ -66,7 +66,7 @@ class TrainService(BaseService):
         all_cards = await collection_card_repo.get_collection_cards(collection_id)
         all_cards_len = len(all_cards)
         if all_cards_len == 0:
-            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+            return TrainWhen(id=collection_id, when=TrainNever(type='never'))
 
         (_, min_due) = await train_card_repo.get_cards_waiting_train(user_id, all_cards)
 
@@ -87,9 +87,8 @@ class TrainService(BaseService):
         collection_card_repo = self.uow.get_repository(CardCollectionRepository)
 
         all_cards = await collection_card_repo.get_collection_cards(collection_id)
-        all_cards_len = len(all_cards)
-        if all_cards_len == 0:
-            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        if len(all_cards) == 0:
+            return TrainPlan(id=collection_id, cards_to_train=[])
 
         (cards, _) = await train_card_repo.get_cards_waiting_train(user_id, all_cards)
 

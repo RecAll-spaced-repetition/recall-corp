@@ -11,11 +11,16 @@ import {
 } from '@/components/library';
 import {
   useCollection,
-  useCollectionTrainCards,
   useProfile,
+  useProfileSubscriptions,
+  useTrainCollectionWhen,
 } from '@/query/queryHooks';
 import { useAppStore } from '@/state';
 import clsx from 'clsx';
+import {
+  useCollectionSubscribe,
+  useCollectionUnsubscribe,
+} from '@/query/mutationHooks';
 
 interface CollectionCardProps {
   collectionId: number;
@@ -27,8 +32,17 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
   const { t } = useTranslation();
 
   const { collection, isPending, error } = useCollection(collectionId);
-  const { trainPlan } = useCollectionTrainCards(collectionId);
+  const { trainWhen } = useTrainCollectionWhen(collectionId);
   const { profile } = useProfile();
+  const { collections } = useProfileSubscriptions();
+
+  const isSubscribed =
+    collection && collections?.some((sub) => sub.id === collection.id);
+
+  const { subscribe, isPending: subscribePending } =
+    useCollectionSubscribe(collectionId);
+  const { unsubscribe, isPending: unsubscribePending } =
+    useCollectionUnsubscribe(collectionId);
   const showAuthWindow = useAppStore((state) => state.showLoginWindow);
 
   return (
@@ -57,11 +71,15 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 />
               </h2>
               <p className="text-md mb-2">{collection.description}</p>
-              {trainPlan?.minDue && (
+              {trainWhen?.when.type === 'due' && (
                 <p className="text-md mb-2">
-                  {/* TODO: Сдлеать красивее */}
-                  {new Date(trainPlan.minDue).toLocaleString()}
+                  {t('collection.trainDue', {
+                    date: new Date(trainWhen.when.due).toLocaleString(),
+                  })}
                 </p>
+              )}
+              {trainWhen?.when.type === 'now' && (
+                <p className="text-md mb-2">{t('collection.trainNow')}</p>
               )}
             </div>
 
@@ -89,16 +107,30 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 </Link>
               )}
               {profile ? (
-                <Link to={routes.train.getUrl(collectionId)}>
+                <>
+                  <Link to={routes.train.getUrl(collectionId)}>
+                    <Button
+                      variant="plate-green"
+                      className={clsx('py-1 px-4')}
+                      withShadow
+                      title={t('collection.trainButton')}
+                    >
+                      {t('collection.trainButton')}
+                    </Button>
+                  </Link>
                   <Button
-                    variant="plate-green"
-                    className={clsx('py-1 px-4')}
-                    withShadow
-                    title={t('collection.trainButton')}
+                    variant={isSubscribed ? 'plate-yellow' : 'bordered'}
+                    className="p-2 md:p-3"
+                    title={t('collection.unsubscribe')}
+                    onClick={() => (isSubscribed ? unsubscribe() : subscribe())}
                   >
-                    {t('collection.trainButton')}
+                    {subscribePending || unsubscribePending ? (
+                      <Icon className="animate-spin" icon="loading-3/4" />
+                    ) : (
+                      <Icon icon={isSubscribed ? 'star-fill' : 'star'} />
+                    )}
                   </Button>
-                </Link>
+                </>
               ) : (
                 <Button
                   variant="plate-green"

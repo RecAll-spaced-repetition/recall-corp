@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button, Variants } from '@/components/library';
 import { useAppStore } from '@/state';
-import { useCardTrain } from '@/query/mutationHooks';
+import { useTrainCard } from '@/query/mutationHooks';
 
 export enum Mark {
   One = 1,
@@ -33,7 +33,7 @@ export const DescreteTrainButton: React.FC<DescreteTrainButtonProps> = ({
 
   const setUIFlag = useAppStore((state) => state.setActiveCardUIFlag);
 
-  const { trainCard } = useCardTrain(cardId, () => {
+  const { trainCard } = useTrainCard(cardId, () => {
     executeTrainCard(cardId);
     setUIFlag('zoomed', () => false);
   });

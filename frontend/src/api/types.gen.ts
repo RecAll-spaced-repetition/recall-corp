@@ -171,6 +171,10 @@ export type TrainMarkAnswer = {
   durationMs: number | null;
 };
 
+export type TrainNever = {
+  type: 'never';
+};
+
 export type TrainNow = {
   type: 'now';
 };
@@ -182,7 +186,7 @@ export type TrainPlan = {
 
 export type TrainWhen = {
   id: number;
-  when: TrainNow | TrainDue;
+  when: TrainNever | TrainNow | TrainDue;
 };
 
 export type User = {
@@ -338,29 +342,28 @@ export type ReadCollectionCardsCollectionsCollectionIdCardsGetResponse =
 export type ReadCollectionCardsCollectionsCollectionIdCardsGetError =
   HTTPValidationError;
 
-export type SubscribeToCollectionCollectionsCollectionIdSubscribePutData = {
+export type SubscribeCollectionsCollectionIdSubscribePostData = {
   path: {
     collection_id: number;
   };
 };
 
-export type SubscribeToCollectionCollectionsCollectionIdSubscribePutResponse =
+export type SubscribeCollectionsCollectionIdSubscribePostResponse =
   Array<CollectionShort>;
 
-export type SubscribeToCollectionCollectionsCollectionIdSubscribePutError =
+export type SubscribeCollectionsCollectionIdSubscribePostError =
   HTTPValidationError;
 
-export type UnsubscribeFromCollectionCollectionsCollectionIdUnsubscribePutData =
-  {
-    path: {
-      collection_id: number;
-    };
+export type UnsubscribeCollectionsCollectionIdUnsubscribeDeleteData = {
+  path: {
+    collection_id: number;
   };
+};
 
-export type UnsubscribeFromCollectionCollectionsCollectionIdUnsubscribePutResponse =
+export type UnsubscribeCollectionsCollectionIdUnsubscribeDeleteResponse =
   Array<CollectionShort>;
 
-export type UnsubscribeFromCollectionCollectionsCollectionIdUnsubscribePutError =
+export type UnsubscribeCollectionsCollectionIdUnsubscribeDeleteError =
   HTTPValidationError;
 
 export type UpdateCollectionPublicityCollectionsCollectionIdPublicityPutData = {
@@ -437,28 +440,28 @@ export type TrainCardTrainCardIdPostResponse = TrainCardExt;
 
 export type TrainCardTrainCardIdPostError = HTTPValidationError;
 
-export type GetCollectionStatsTrainCollectionCollectionIdWhenGetData = {
+export type GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetData = {
   path: {
     collection_id: number;
   };
 };
 
-export type GetCollectionStatsTrainCollectionCollectionIdWhenGetResponse =
+export type GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetResponse =
   TrainWhen;
 
-export type GetCollectionStatsTrainCollectionCollectionIdWhenGetError =
+export type GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetError =
   HTTPValidationError;
 
-export type GetCollectionStatsTrainCollectionCollectionIdCardsGetData = {
+export type GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetData = {
   path: {
     collection_id: number;
   };
 };
 
-export type GetCollectionStatsTrainCollectionCollectionIdCardsGetResponse =
+export type GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetResponse =
   TrainPlan;
 
-export type GetCollectionStatsTrainCollectionCollectionIdCardsGetError =
+export type GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetError =
   HTTPValidationError;
 
 export type GetUserStatsTrainStatsAllGetResponse = AllStats;
@@ -491,17 +494,18 @@ export type ReadUserUserProfileGetResponse = User;
 
 export type ReadUserUserProfileGetError = unknown;
 
-export type ReadUserCollectionsUserSubscriptionsGetData = {
+export type ReadUserSubscriptionsUserSubscriptionsGetData = {
   query?: {
     limit?: number | null;
     offset?: number;
   };
 };
 
-export type ReadUserCollectionsUserSubscriptionsGetResponse =
+export type ReadUserSubscriptionsUserSubscriptionsGetResponse =
   Array<CollectionShort>;
 
-export type ReadUserCollectionsUserSubscriptionsGetError = HTTPValidationError;
+export type ReadUserSubscriptionsUserSubscriptionsGetError =
+  HTTPValidationError;
 
 export type ReadUserCollectionsUserCollectionsGetData = {
   query?: {

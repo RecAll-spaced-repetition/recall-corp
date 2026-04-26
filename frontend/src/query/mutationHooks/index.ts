@@ -7,10 +7,13 @@ export * from './useProfileDelete';
 export * from './useCardCreate';
 export * from './useCardUpdate';
 export * from './useCardDelete';
-export * from './useCardTrain';
+export * from './useTrainCard';
 
 export * from './useCollectionCreate';
 export * from './useCollectionUpdate';
+export * from './useCollectionPublicityUpdate';
+export * from './useCollectionSubscribe';
+export * from './useCollectionUnsubscribe';
 export * from './useCollectionDelete';
 
 export * from './useFileUpload';
