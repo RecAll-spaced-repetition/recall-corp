@@ -50,7 +50,8 @@
     "myCollections": "My collections",
     "myFiles": "My files",
     "emptyFilesList": "You haven't upload any file yes. Feel free to add them using card's edit form",
-    "deleteAccount": "Delete account"
+    "deleteAccount": "Delete account",
+    "stats": "My stats"
   },
   "collection": {
     "titleRequired": "Title is required",
@@ -127,5 +128,16 @@
     "thisPublic": "File is public",
     "thisPrivate": "File is private",
     "copy": "Copy component for card"
+  },
+  "stats": {
+    "currentStreak": "Current trains streak is {{streak}}",
+    "maxStreak": "Maximal trains streak is {{streak}}",
+    "chart": {
+      "titleHigh": "Trains' chart",
+      "titleMark": "Marks' chart",
+      "cnt": "Cards trained",
+      "avgMark": "Average mark",
+      "totalDuration": "Train's duration (sec)"
+    }
   }
 }

@@ -12,6 +12,7 @@ import { FilesList } from '@/components/files';
 import { CollectionsSearchableList } from '@/components/collection';
 import { useProfileDelete } from '@/query/mutationHooks';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Stats } from '@/components/stats';
 
 export const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
@@ -42,6 +43,12 @@ export const ProfilePage: React.FC = () => {
       <h1 className="text-center text-2xl font-bold mb-4">
         {t('startPage.hello')}, {profile?.nickname}!
       </h1>
+
+      <h2 className="text-center text-2xl font-bold mt-8 mb-4">
+        {t('profile.stats')}
+      </h2>
+
+      <Stats />
 
       <h2 className="text-center text-2xl font-bold mt-8 mb-4">
         {t('profile.mySubscriptions')}
