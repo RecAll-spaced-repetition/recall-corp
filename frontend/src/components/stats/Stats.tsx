@@ -4,6 +4,7 @@ import { LoadableComponent } from '../library';
 import { useTranslation } from 'react-i18next';
 import { DayStatsChart } from './StatsChart';
 
+// TODO: Вынести статистику в модалку
 export const Stats: React.FC = () => {
   const { t } = useTranslation();
 

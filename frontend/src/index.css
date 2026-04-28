@@ -240,3 +240,7 @@ body,
   scroll-behavior: smooth;
   scrollbar-width: none;
 }
+
+.transition-base {
+  @apply transition-all duration-300 ease-in;
+}
