@@ -45,24 +45,16 @@ export const ProfilePage: React.FC = () => {
       </h1>
 
       <h2 className="text-center text-2xl font-bold mt-8 mb-4">
+        {t('profile.mySubscriptions')}
+      </h2>
+
+      {subscriptions && <TrainsCalendar collections={subscriptions} />}
+
+      <h2 className="text-center text-2xl font-bold mt-8 mb-4">
         {t('profile.stats')}
       </h2>
 
       <Stats />
-
-      <h2 className="text-center text-2xl font-bold mt-8 mb-4">
-        {t('profile.mySubscriptions')}
-      </h2>
-
-      {subscriptions && (
-        <>
-          <TrainsCalendar collections={subscriptions} />
-          <CollectionsSearchableList
-            createBtnHidden
-            collections={subscriptions}
-          />
-        </>
-      )}
 
       <h2 className="text-center text-2xl font-bold mt-8 mb-4">
         {t('profile.myCollections')}

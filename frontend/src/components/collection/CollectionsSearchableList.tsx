@@ -32,7 +32,7 @@ export const CollectionsSearchableList: React.FC<
         );
 
   return (
-    <div className="center flex-col w-full">
+    <div className="center flex-col w-full transition-base">
       {!createBtnHidden &&
         (profile ? (
           <div className="flex justify-center mb-4">

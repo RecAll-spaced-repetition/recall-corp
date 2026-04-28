@@ -60,10 +60,26 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
               <h2
                 className={clsx(
                   'mb-2 gap-x-2',
-                  'flex items-center justify-start',
+                  'flex items-center justify-between',
                   'text-lg font-bold'
                 )}
               >
+                <Button
+                  variant={isSubscribed ? 'plate-yellow' : 'bordered'}
+                  className="p-1 text-xs md:text-lg size-7 md:size-5"
+                  title={
+                    isSubscribed
+                      ? t('collection.unsubscribe')
+                      : t('collection.subscribe')
+                  }
+                  onClick={() => (isSubscribed ? unsubscribe() : subscribe())}
+                >
+                  {subscribePending || unsubscribePending ? (
+                    <Icon className="animate-spin" icon="loading-3/4" />
+                  ) : (
+                    <Icon icon={isSubscribed ? 'star-fill' : 'star'} />
+                  )}
+                </Button>
                 <span>{collection.title}</span>
                 <IsPublicIcon
                   objectType="collection"
@@ -71,77 +87,69 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 />
               </h2>
               <p className="text-md mb-2">{collection.description}</p>
-              {trainWhen?.when.type === 'due' && (
-                <p className="text-md mb-2">
-                  {t('collection.trainDue', {
-                    date: new Date(trainWhen.when.due).toLocaleString(),
-                  })}
-                </p>
-              )}
-              {trainWhen?.when.type === 'now' && (
-                <p className="text-md mb-2">{t('collection.trainNow')}</p>
-              )}
             </div>
 
-            <div className="flex gap-x-2 mt-4">
-              <Link to={routes.collectionView.getUrl(collectionId)}>
-                <Button
-                  variant="plate-blue"
-                  className="p-2 md:p-3"
-                  withShadow
-                  title={t('common.view')}
-                >
-                  <Icon icon="eye" />
-                </Button>
-              </Link>
-              {collection.ownerId === profile?.id && (
-                <Link to={routes.collectionEdit.getUrl(collectionId)}>
+            <div className="flex gap-x-2 items-center justify-between mt-4">
+              <div className="flex justify-start gap-x-2">
+                {profile ? (
+                  <>
+                    {trainWhen?.when.type === 'now' && (
+                      <Link to={routes.train.getUrl(collectionId)}>
+                        <Button
+                          variant="plate-green"
+                          className={clsx('py-1 px-4')}
+                          withShadow
+                          title={t('collection.trainButton')}
+                        >
+                          {t('collection.trainButton')}
+                        </Button>
+                      </Link>
+                    )}
+                    {trainWhen?.when.type === 'due' && (
+                      <p className="text-md mb-2">
+                        {t('collection.trainDue', {
+                          date: new Date(trainWhen.when.due).toLocaleString(),
+                        })}
+                      </p>
+                    )}
+                  </>
+                ) : (
                   <Button
-                    variant="plate-yellow"
+                    variant="plate-green"
+                    className="py-1 px-4"
+                    onClick={showAuthWindow}
+                    withShadow
+                    title={t('collection.trainButton')}
+                  >
+                    {t('collection.trainButton')}
+                  </Button>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-x-2">
+                <Link to={routes.collectionView.getUrl(collectionId)}>
+                  <Button
+                    variant="plate-blue"
                     className="p-2 md:p-3"
                     withShadow
-                    title={t('common.edit')}
+                    title={t('common.view')}
                   >
-                    <Icon icon="editor" />
+                    <Icon icon="eye" />
                   </Button>
                 </Link>
-              )}
-              {profile ? (
-                <>
-                  <Link to={routes.train.getUrl(collectionId)}>
+                {collection.ownerId === profile?.id && (
+                  <Link to={routes.collectionEdit.getUrl(collectionId)}>
                     <Button
-                      variant="plate-green"
-                      className={clsx('py-1 px-4')}
+                      variant="plate-yellow"
+                      className="p-2 md:p-3"
                       withShadow
-                      title={t('collection.trainButton')}
+                      title={t('common.edit')}
                     >
-                      {t('collection.trainButton')}
+                      <Icon icon="editor" />
                     </Button>
                   </Link>
-                  <Button
-                    variant={isSubscribed ? 'plate-yellow' : 'bordered'}
-                    className="p-2 md:p-3"
-                    title={t('collection.unsubscribe')}
-                    onClick={() => (isSubscribed ? unsubscribe() : subscribe())}
-                  >
-                    {subscribePending || unsubscribePending ? (
-                      <Icon className="animate-spin" icon="loading-3/4" />
-                    ) : (
-                      <Icon icon={isSubscribed ? 'star-fill' : 'star'} />
-                    )}
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  variant="plate-green"
-                  className="py-1 px-4"
-                  onClick={showAuthWindow}
-                  withShadow
-                  title={t('collection.trainButton')}
-                >
-                  {t('collection.trainButton')}
-                </Button>
-              )}
+                )}
+              </div>
             </div>
           </>
         )}
