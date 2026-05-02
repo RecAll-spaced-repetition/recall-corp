@@ -94,7 +94,7 @@ export const TrainsCalendar: React.FC<TrainsCalendarProps> = ({
     >
       {whenCollections && whenCollections.length > 0 && (
         <DayPicker
-          className="mb-2 md:mb-6"
+          className="mb-2 md:mb-6 z-0"
           locale={locale}
           animate
           mode="single"

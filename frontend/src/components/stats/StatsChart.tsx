@@ -15,6 +15,7 @@ import {
 import { Chart } from 'react-chartjs-2';
 import { DayStat } from '@/api';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 
 ChartJS.register(
   CategoryScale,
@@ -29,6 +30,8 @@ ChartJS.register(
 
 function getOptions(title?: string): ChartOptions {
   return {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -57,6 +60,7 @@ export const DayStatsChart: React.FC<DayStatsChartProps> = ({
   title,
   type,
   variant,
+  className,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -70,7 +74,7 @@ export const DayStatsChart: React.FC<DayStatsChartProps> = ({
       avgMark: [],
       totalDuration: [],
     };
-    dayStats.reverse().forEach((stat) => {
+    dayStats.toReversed().forEach((stat) => {
       res.dates.push(stat.trainDate);
       res.cnt.push(stat.cnt);
       res.avgMark.push(stat.avgMark);
@@ -108,6 +112,14 @@ export const DayStatsChart: React.FC<DayStatsChartProps> = ({
   };
 
   return (
-    <Chart type={type} title={title} data={data} options={options} {...props} />
+    <div className={clsx('relative h-full min-h-80', className)}>
+      <Chart
+        type={type}
+        title={title}
+        data={data}
+        options={options}
+        {...props}
+      />
+    </div>
   );
 };
