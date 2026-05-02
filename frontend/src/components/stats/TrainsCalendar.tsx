@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DayPicker, getDefaultClassNames } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 import { ru, enUS } from 'react-day-picker/locale';
 import 'react-day-picker/style.css';
 
@@ -37,7 +37,6 @@ export const TrainsCalendar: React.FC<TrainsCalendarProps> = ({
 
   const [selectedDate, setSelectedDate] = useState<Date>();
 
-  const defaultClassNames = useMemo(() => getDefaultClassNames(), []);
   const [activeMonth, setActiveMonth] = useState<Date>(new Date());
   const hasTrainInNextMonth = useMemo(() => {
     if (!activeMonth) return false;
@@ -94,7 +93,6 @@ export const TrainsCalendar: React.FC<TrainsCalendarProps> = ({
       animated
     >
       {whenCollections && whenCollections.length > 0 && (
-        // TODO: Добавить стилизации (подчёркивать стрелочки, если в будущем / в прошлом есть тренировки)
         <DayPicker
           className="mb-2 md:mb-6"
           locale={locale}
@@ -112,18 +110,18 @@ export const TrainsCalendar: React.FC<TrainsCalendarProps> = ({
           }}
           classNames={{
             button_next: clsx(
-              // defaultClassNames.button_next,
-              hasTrainInNextMonth && 'bg-black'
+              'cursor-pointer rounded-full inline-flex items-center justify-center transition-base',
+              hasTrainInNextMonth && 'bg-black/10'
             ),
             button_previous: clsx(
-              // defaultClassNames.button_previous,
-              hasTrainInPrevMonth && 'bg-black'
+              'cursor-pointer rounded-full inline-flex items-center justify-center transition-base',
+              hasTrainInPrevMonth && 'bg-black/10'
             ),
           }}
         />
       )}
       <div
-        className="w-full overflow-hidden transition-base"
+        className="w-full transition-base"
         style={{
           height: `${contentHeight}px`,
           opacity: hasSelectedDayCollections ? 1 : 0,

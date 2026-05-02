@@ -3,22 +3,36 @@ import React, { HTMLAttributes } from 'react';
 
 export interface ProgressBarProps extends HTMLAttributes<React.FC> {
   value: number;
+  valuePostfix?: string;
+  hideValue?: boolean;
+
   minValue: number;
+
   maxValue: number;
+  maxValuePostfix?: string;
+  hideMaxValue?: boolean;
+
   fillClassName?: string;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
+  valuePostfix,
+  hideValue,
+
   minValue,
+
   maxValue,
+  maxValuePostfix,
+  hideMaxValue,
+
   className,
   fillClassName,
 }) => {
   return (
     <div
       className={clsx(
-        'relative m-1 overflow-hidden',
+        'relative overflow-hidden',
         'border border-black',
         className
       )}
@@ -34,9 +48,19 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         }}
       ></div>
       <div className="absolute h-full w-full text-center">
-        <span className="m-1">{value}</span>
-        <span className="m-1">{'/'}</span>
-        <span className="m-1">{maxValue}</span>
+        {!hideValue && (
+          <span className="m-1">
+            {value}
+            {valuePostfix}
+          </span>
+        )}
+        {!hideValue && !hideMaxValue && <span className="m-1">{'/'}</span>}
+        {!hideMaxValue && (
+          <span className="m-1">
+            {maxValue}
+            {maxValuePostfix}
+          </span>
+        )}
       </div>
       <span className="invisible">.</span>
     </div>

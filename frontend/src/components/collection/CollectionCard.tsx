@@ -9,18 +9,12 @@ import {
   Icon,
   IsPublicIcon,
 } from '@/components/library';
-import {
-  useCollection,
-  useProfile,
-  useProfileSubscriptions,
-  useTrainCollectionWhen,
-} from '@/query/queryHooks';
-import { useAppStore } from '@/state';
+import { useCollection, useProfile } from '@/query/queryHooks';
 import clsx from 'clsx';
-import {
-  useCollectionSubscribe,
-  useCollectionUnsubscribe,
-} from '@/query/mutationHooks';
+import { CollectionSubscriptionButton } from './CollectionSubscriptionButton';
+import { CollectionTrainButton } from './CollectionTrainButton';
+import { CollectionProgressBar } from './CollectionProgressBar';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 interface CollectionCardProps {
   collectionId: number;
@@ -32,18 +26,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
   const { t } = useTranslation();
 
   const { collection, isPending, error } = useCollection(collectionId);
-  const { trainWhen } = useTrainCollectionWhen(collectionId);
   const { profile } = useProfile();
-  const { collections } = useProfileSubscriptions();
-
-  const isSubscribed =
-    collection && collections?.some((sub) => sub.id === collection.id);
-
-  const { subscribe, isPending: subscribePending } =
-    useCollectionSubscribe(collectionId);
-  const { unsubscribe, isPending: unsubscribePending } =
-    useCollectionUnsubscribe(collectionId);
-  const showAuthWindow = useAppStore((state) => state.showLoginWindow);
 
   return (
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>
@@ -64,22 +47,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                   'text-lg font-bold'
                 )}
               >
-                <Button
-                  variant={isSubscribed ? 'plate-yellow' : 'bordered'}
-                  className="p-1 text-xs md:text-lg size-7 md:size-5"
-                  title={
-                    isSubscribed
-                      ? t('collection.unsubscribe')
-                      : t('collection.subscribe')
-                  }
-                  onClick={() => (isSubscribed ? unsubscribe() : subscribe())}
-                >
-                  {subscribePending || unsubscribePending ? (
-                    <Icon className="animate-spin" icon="loading-3/4" />
-                  ) : (
-                    <Icon icon={isSubscribed ? 'star-fill' : 'star'} />
-                  )}
-                </Button>
+                <CollectionSubscriptionButton collectionId={collectionId} />
                 <span>{collection.title}</span>
                 <IsPublicIcon
                   objectType="collection"
@@ -91,39 +59,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
 
             <div className="flex gap-x-2 items-center justify-between mt-4">
               <div className="flex justify-start gap-x-2">
-                {profile ? (
-                  <>
-                    {trainWhen?.when.type === 'now' && (
-                      <Link to={routes.train.getUrl(collectionId)}>
-                        <Button
-                          variant="plate-green"
-                          className={clsx('py-1 px-4')}
-                          withShadow
-                          title={t('collection.trainButton')}
-                        >
-                          {t('collection.trainButton')}
-                        </Button>
-                      </Link>
-                    )}
-                    {trainWhen?.when.type === 'due' && (
-                      <p className="text-md mb-2">
-                        {t('collection.trainDue', {
-                          date: new Date(trainWhen.when.due).toLocaleString(),
-                        })}
-                      </p>
-                    )}
-                  </>
-                ) : (
-                  <Button
-                    variant="plate-green"
-                    className="py-1 px-4"
-                    onClick={showAuthWindow}
-                    withShadow
-                    title={t('collection.trainButton')}
-                  >
-                    {t('collection.trainButton')}
-                  </Button>
-                )}
+                <CollectionTrainButton collectionId={collectionId} />
               </div>
 
               <div className="flex justify-end gap-x-2">
@@ -151,6 +87,25 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 )}
               </div>
             </div>
+
+            {profile && (
+              <div className="mt-4 flex flex-col gap-2">
+                <div className="flex justify-start items-center gap-1">
+                  <p>{t('collection.progress')}</p>
+                  <Menu>
+                    <MenuButton as={Button} variant="inline" icon="info" />
+                    <MenuItems anchor={{ to: 'bottom', gap: 2 }}>
+                      <MenuItem>
+                        <p className="m-1 p-2 bg-o-white border border-o-black rounded-xl">
+                          {t('collection.progressInfo')}
+                        </p>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
+                </div>
+                <CollectionProgressBar collectionId={collectionId} />
+              </div>
+            )}
           </>
         )}
       </div>
