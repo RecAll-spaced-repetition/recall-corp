@@ -29,16 +29,18 @@ ChartJS.register(
 );
 
 function getOptions(title?: string): ChartOptions {
-  return {
+  const options: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: {
-      title: {
-        display: true,
-        text: title,
-      },
-    },
+    plugins: {},
   };
+  if (title) {
+    options.plugins!.title = {
+      display: true,
+      text: title,
+    };
+  }
+  return options;
 }
 
 type DayStatsDataset = {
@@ -50,7 +52,7 @@ type DayStatsDataset = {
 
 type DayStatsChartProps = HTMLAttributes<HTMLCanvasElement> & {
   dayStats: DayStat[];
-  title: string;
+  title?: string;
   type: 'bar' | 'line';
   variant: 'mark' | 'high';
 };
@@ -61,6 +63,7 @@ export const DayStatsChart: React.FC<DayStatsChartProps> = ({
   type,
   variant,
   className,
+  style,
   ...props
 }) => {
   const { t } = useTranslation();
@@ -111,15 +114,19 @@ export const DayStatsChart: React.FC<DayStatsChartProps> = ({
           ],
   };
 
+  const chartMinWidth = dataset.dates.length * (data.datasets.length ?? 1) * 32;
+
   return (
-    <div className={clsx('relative h-full min-h-80', className)}>
-      <Chart
-        type={type}
-        title={title}
-        data={data}
-        options={options}
-        {...props}
-      />
+    <div
+      className={clsx('h-11/12 min-h-80 overflow-x-auto', className)}
+      style={style}
+    >
+      <div
+        className="relative h-full min-h-80"
+        style={{ minWidth: `max(100%, ${chartMinWidth}px)` }}
+      >
+        <Chart type={type} data={data} options={options} {...props} />
+      </div>
     </div>
   );
 };
