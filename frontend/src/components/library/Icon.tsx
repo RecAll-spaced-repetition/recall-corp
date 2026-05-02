@@ -25,6 +25,7 @@ import {
   TbLock,
   TbLockOpen2,
   TbStar,
+  TbInfoCircle,
 } from 'react-icons/tb';
 import {
   AiFillFileAdd,
@@ -93,6 +94,7 @@ export const icons = [
   'open',
   'star',
   'star-fill',
+  'info',
 ] as const;
 export type IconType = (typeof icons)[number];
 
@@ -150,6 +152,7 @@ export const Icon: React.FC<IconProps> = ({
     .with('open', () => TbLockOpen2)
     .with('star', () => TbStar)
     .with('star-fill', () => AiFillStar)
+    .with('info', () => TbInfoCircle)
     .exhaustive();
 
   const modifiers = match(icon)

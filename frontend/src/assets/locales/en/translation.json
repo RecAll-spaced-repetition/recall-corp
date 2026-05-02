@@ -78,7 +78,9 @@
     "subscribe": "Subscribe",
     "unsubscribe": "Unsubscribe",
     "trainNow": "There are new cards to train",
-    "trainDue": "Next train at {{date}}"
+    "trainDue": "Next train at {{date}}",
+    "progress": "Training progress",
+    "progressInfo": "It will be 100% if the probability of remembering any card from the collection in a year is above 90%"
   },
   "card": {
     "aiMark": "AI mark",
