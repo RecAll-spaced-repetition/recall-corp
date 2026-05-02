@@ -10,13 +10,11 @@ import clsx from 'clsx';
 import { CollectionCard } from '../collection/CollectionCard';
 import { useTrainCollectionsWhens } from '@/query/queryHooks/useTrainCollectionsWhens';
 import { match } from 'ts-pattern';
+import { isEqualByDate } from '@/utils/date';
 
 export type TrainsCalendarProps = {
   collections: CollectionShort[];
 };
-
-const isEqualByDate = (date1: Date, date2: Date) =>
-  date1.toDateString() === date2.toDateString();
 
 export const TrainsCalendar: React.FC<TrainsCalendarProps> = ({
   collections,
