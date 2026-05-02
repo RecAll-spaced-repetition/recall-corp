@@ -46,22 +46,26 @@ export const Stats: React.FC = () => {
               contentClassName="w-11/12 h-11/12 p-2 md:p-4 no-scrollbar bg-o-white rounded-xl border-2 border-black"
             >
               {activeChart === 'high' && (
-                <DayStatsChart
-                  id="chart-high"
-                  title={t('stats.chart.titleHigh')}
-                  dayStats={trainStats.stats}
-                  type="bar"
-                  variant="high"
-                />
+                <>
+                  <h1 className="text-center">{t('stats.chart.titleHigh')}</h1>
+                  <DayStatsChart
+                    id="chart-high"
+                    dayStats={trainStats.stats}
+                    type="bar"
+                    variant="high"
+                  />
+                </>
               )}
               {activeChart === 'mark' && (
-                <DayStatsChart
-                  id="chart-mark"
-                  title={t('stats.chart.titleMark')}
-                  dayStats={trainStats.stats}
-                  type="line"
-                  variant="mark"
-                />
+                <>
+                  <h1 className="text-center">{t('stats.chart.titleMark')}</h1>
+                  <DayStatsChart
+                    id="chart-mark"
+                    dayStats={trainStats.stats}
+                    type="bar"
+                    variant="mark"
+                  />
+                </>
               )}
             </ControlledModal>
           </>
