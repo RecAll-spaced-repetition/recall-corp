@@ -37,7 +37,7 @@ export const ZoomedCard: React.FC<ZoomedCardProps> = () => {
           }
         } else setCardUIFlag('zoomed', () => false);
       }}
-      contentClassName={clsx('w-11/12 p-2 md:p-4 h-screen', 'no-scrollbar')}
+      contentClassName="w-11/12 p-2 md:p-4 h-screen no-scrollbar"
     >
       <ActiveFlippingCard
         className={clsx(

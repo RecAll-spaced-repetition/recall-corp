@@ -1,14 +1,20 @@
-import { useTrainStatsAll } from '@/query/queryHooks';
-import React from 'react';
-import { LoadableComponent } from '../library';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useTrainStatsAll } from '@/query/queryHooks';
+import {
+  ControlledModal,
+  LoadableComponent,
+  Button,
+} from '@/components/library';
 import { DayStatsChart } from './StatsChart';
 
-// TODO: Вынести статистику в модалку
 export const Stats: React.FC = () => {
   const { t } = useTranslation();
 
   const { trainStats, error, isPending } = useTrainStatsAll();
+
+  const [activeChart, setActiveChart] = useState<'high' | 'mark'>();
 
   return (
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>
@@ -17,20 +23,47 @@ export const Stats: React.FC = () => {
         <p>{t('stats.currentStreak', { streak: trainStats?.currStreak })}</p>
         <p>{t('stats.maxStreak', { streak: trainStats?.maxStreak })}</p>
         {trainStats && (
-          // TODO: Перенести в модалки, чтобы было норм на мобилках
           <>
-            <DayStatsChart
-              title={t('stats.chart.titleHigh')}
-              dayStats={trainStats.stats}
-              type="bar"
-              variant="high"
-            />
-            <DayStatsChart
-              title={t('stats.chart.titleMark')}
-              dayStats={trainStats.stats}
-              type="line"
-              variant="mark"
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2">
+              <Button
+                variant="plate-blue"
+                withShadow
+                onClick={() => setActiveChart('high')}
+              >
+                {t('stats.chart.titleHigh')}
+              </Button>
+              <Button
+                variant="plate-yellow"
+                withShadow
+                onClick={() => setActiveChart('mark')}
+              >
+                {t('stats.chart.titleMark')}
+              </Button>
+            </div>
+            <ControlledModal
+              isShown={!!activeChart}
+              close={() => setActiveChart(undefined)}
+              contentClassName="w-11/12 h-11/12 p-2 md:p-4 no-scrollbar bg-o-white rounded-xl border-2 border-black"
+            >
+              {activeChart === 'high' && (
+                <DayStatsChart
+                  id="chart-high"
+                  title={t('stats.chart.titleHigh')}
+                  dayStats={trainStats.stats}
+                  type="bar"
+                  variant="high"
+                />
+              )}
+              {activeChart === 'mark' && (
+                <DayStatsChart
+                  id="chart-mark"
+                  title={t('stats.chart.titleMark')}
+                  dayStats={trainStats.stats}
+                  type="line"
+                  variant="mark"
+                />
+              )}
+            </ControlledModal>
           </>
         )}
       </div>
