@@ -18,3 +18,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+  frontend-test:
+    container_name: recall-corp-frontend-test
+    build: 
+      dockerfile: Dockerfile.test
