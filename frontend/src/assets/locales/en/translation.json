@@ -133,9 +133,7 @@
     "copy": "Copy component for card"
   },
   "stats": {
-    "streaksBar": "Trains streak: current / maximal",
-    "currentStreak": "Current trains streak is {{streak}}",
-    "maxStreak": "Maximal trains streak is {{streak}}",
+    "yearRetrievabilityBar": "Average learnedness in a year (across all subscriptions)",
     "chart": {
       "titleHigh": "Trains' chart",
       "titleMark": "Marks' chart",

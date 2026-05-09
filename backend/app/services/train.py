@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from fsrs import Card, Scheduler, Optimizer
 from datetime import datetime, timezone, date, timedelta
 
-from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository
+from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository, CollectionSubscriptionRepository
 from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan, TrainNever, CollectionShort
 from app.core import get_settings
 
@@ -145,7 +145,38 @@ class TrainService(BaseService):
         user = await self.uow.get_repository(UserRepository).get_user_by_id(user_id, UserOptParams)
         if not user:
             raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
-        
+
         train_log_repo = self.uow.get_repository(TrainLogRepository)
         user_logs = await train_log_repo.get_user_train_logs(user_id, chrono=True)
-        return AllStats.from_train_logs(user_logs)
+
+        subscriptions = await self.uow.get_repository(CollectionSubscriptionRepository).get_user_subscriptions(
+            user_id, 0, None, CollectionShort
+        )
+
+        collection_card_repo = self.uow.get_repository(CardCollectionRepository)
+        train_card_repo = self.uow.get_repository(TrainCardRepository)
+        scheduler = Scheduler() if not user.train_opt_params else Scheduler(user.train_opt_params)
+
+        collection_stats_list: list[CollectionStats] = []
+        for subscription in subscriptions:
+            collection_cards = await collection_card_repo.get_collection_cards(subscription.id)
+            if not collection_cards:
+                continue
+            trained = await train_card_repo.get_user_train_cards(user_id, collection_cards)
+            cstats = CollectionStats.from_cards_with_scheduler(
+                id=subscription.id,
+                all_cards_len=len(collection_cards),
+                trained_cards=[tc.to_fsrs_card() for tc in trained],
+                scheduler=scheduler,
+            )
+            collection_stats_list.append(cstats)
+
+        if collection_stats_list:
+            n = len(collection_stats_list)
+            avg_curr_r = sum(cs.avg_current_retrievability for cs in collection_stats_list) / n
+            avg_year_r = sum(cs.avg_after_year_retrievability for cs in collection_stats_list) / n
+        else:
+            avg_curr_r = None
+            avg_year_r = None
+
+        return AllStats.from_components(user_logs, avg_curr_r, avg_year_r)

@@ -2,6 +2,7 @@ import React from 'react';
 import { LoadableComponent, ProgressBar } from '../library';
 import clsx from 'clsx';
 import { useTrainStatsCollection } from '@/query/queryHooks';
+import { toLearnPercent } from '@/utils/percent';
 
 type CollectionProgressBarProps = {
   collectionId: number;
@@ -15,9 +16,7 @@ export const CollectionProgressBar: React.FC<CollectionProgressBarProps> = ({
   const { collectionStats, isPending, error } =
     useTrainStatsCollection(collectionId);
 
-  const progress = collectionStats?.avgAfterYearRetrievability
-    ? Math.round((collectionStats.avgAfterYearRetrievability / 0.9) * 100)
-    : 0;
+  const progress = toLearnPercent(collectionStats?.avgAfterYearRetrievability);
 
   return (
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>

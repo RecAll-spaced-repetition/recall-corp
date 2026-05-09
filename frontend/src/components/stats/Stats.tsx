@@ -9,18 +9,12 @@ import {
   ProgressBar,
 } from '@/components/library';
 import { DayStatsChart } from './StatsChart';
-import { isEqualByDate } from '@/utils/date';
+import { toLearnPercent } from '@/utils/percent';
 
 export const Stats: React.FC = () => {
   const { t } = useTranslation();
 
   const { trainStats, error, isPending } = useTrainStatsAll();
-  // const wasTrainToday = useMemo(() => {
-  //   if (!trainStats) return false;
-  //   const today = new Date();
-  //   const lastTrainDate = new Date(trainStats.stats[0].trainDate);
-  //   return isEqualByDate(today, lastTrainDate);
-  // }, [trainStats]);
 
   const [activeChart, setActiveChart] = useState<'high' | 'mark'>();
 
@@ -28,14 +22,14 @@ export const Stats: React.FC = () => {
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>
       {trainStats && (
         <div className="w-full flex flex-col gap-2">
-          <p>{t('stats.streaksBar')}</p>
-          {/* TODO: Сама идея серии противоречит идеи интервальности повторений */}
+          <p>{t('stats.yearRetrievabilityBar')}</p>
           <ProgressBar
-            value={trainStats.currStreak}
+            value={toLearnPercent(trainStats.avgAfterYearRetrievability)}
             minValue={0}
-            maxValue={trainStats.maxStreak}
+            maxValue={100}
+            valuePostfix="%"
+            hideMaxValue
           />
-          {/* TODO: Добавить мотивационнх сообщений */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 my-2">
             <Button
               variant="plate-blue"
