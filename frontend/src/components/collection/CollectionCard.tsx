@@ -9,13 +9,12 @@ import {
   Icon,
   IsPublicIcon,
 } from '@/components/library';
-import {
-  useCollection,
-  useCollectionTrainCards,
-  useProfile,
-} from '@/query/queryHooks';
-import { useAppStore } from '@/state';
+import { useCollection, useProfile } from '@/query/queryHooks';
 import clsx from 'clsx';
+import { CollectionSubscriptionButton } from './CollectionSubscriptionButton';
+import { CollectionTrainButton } from './CollectionTrainButton';
+import { CollectionProgressBar } from './CollectionProgressBar';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 interface CollectionCardProps {
   collectionId: number;
@@ -27,9 +26,7 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
   const { t } = useTranslation();
 
   const { collection, isPending, error } = useCollection(collectionId);
-  const { trainPlan } = useCollectionTrainCards(collectionId);
   const { profile } = useProfile();
-  const showAuthWindow = useAppStore((state) => state.showLoginWindow);
 
   return (
     <LoadableComponent isPending={isPending} errorMessage={error?.message}>
@@ -46,10 +43,11 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
               <h2
                 className={clsx(
                   'mb-2 gap-x-2',
-                  'flex items-center justify-start',
+                  'flex items-center justify-between',
                   'text-lg font-bold'
                 )}
               >
+                <CollectionSubscriptionButton collectionId={collectionId} />
                 <span>{collection.title}</span>
                 <IsPublicIcon
                   objectType="collection"
@@ -57,60 +55,57 @@ export const CollectionCard: React.FC<CollectionCardProps> = ({
                 />
               </h2>
               <p className="text-md mb-2">{collection.description}</p>
-              {trainPlan?.minDue && (
-                <p className="text-md mb-2">
-                  {/* TODO: Сдлеать красивее */}
-                  {new Date(trainPlan.minDue).toLocaleString()}
-                </p>
-              )}
             </div>
 
-            <div className="flex gap-x-2 mt-4">
-              <Link to={routes.collectionView.getUrl(collectionId)}>
-                <Button
-                  variant="plate-blue"
-                  className="p-2 md:p-3"
-                  withShadow
-                  title={t('common.view')}
-                >
-                  <Icon icon="eye" />
-                </Button>
-              </Link>
-              {collection.ownerId === profile?.id && (
-                <Link to={routes.collectionEdit.getUrl(collectionId)}>
+            <div className="flex gap-x-2 items-center justify-between mt-4">
+              <div className="flex justify-start gap-x-2">
+                <CollectionTrainButton collectionId={collectionId} />
+              </div>
+
+              <div className="flex justify-end gap-x-2">
+                <Link to={routes.collectionView.getUrl(collectionId)}>
                   <Button
-                    variant="plate-yellow"
+                    variant="plate-blue"
                     className="p-2 md:p-3"
                     withShadow
-                    title={t('common.edit')}
+                    title={t('common.view')}
                   >
-                    <Icon icon="editor" />
+                    <Icon icon="eye" />
                   </Button>
                 </Link>
-              )}
-              {profile ? (
-                <Link to={routes.train.getUrl(collectionId)}>
-                  <Button
-                    variant="plate-green"
-                    className={clsx('py-1 px-4')}
-                    withShadow
-                    title={t('collection.trainButton')}
-                  >
-                    {t('collection.trainButton')}
-                  </Button>
-                </Link>
-              ) : (
-                <Button
-                  variant="plate-green"
-                  className="py-1 px-4"
-                  onClick={showAuthWindow}
-                  withShadow
-                  title={t('collection.trainButton')}
-                >
-                  {t('collection.trainButton')}
-                </Button>
-              )}
+                {collection.ownerId === profile?.id && (
+                  <Link to={routes.collectionEdit.getUrl(collectionId)}>
+                    <Button
+                      variant="plate-yellow"
+                      className="p-2 md:p-3"
+                      withShadow
+                      title={t('common.edit')}
+                    >
+                      <Icon icon="editor" />
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </div>
+
+            {profile && (
+              <div className="mt-4 flex flex-col gap-2">
+                <div className="flex justify-start items-center gap-1">
+                  <p>{t('collection.progress')}</p>
+                  <Menu>
+                    <MenuButton as={Button} variant="inline" icon="info" />
+                    <MenuItems anchor={{ to: 'bottom', gap: 2 }}>
+                      <MenuItem>
+                        <p className="m-1 p-2 bg-o-white border border-o-black rounded-xl">
+                          {t('collection.progressInfo')}
+                        </p>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
+                </div>
+                <CollectionProgressBar collectionId={collectionId} />
+              </div>
+            )}
           </>
         )}
       </div>

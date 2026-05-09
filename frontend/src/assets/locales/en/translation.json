@@ -46,10 +46,13 @@
   },
   "profile": {
     "onlyAuthorized": "Only authorized users can view their profiles",
+    "mySubscriptions": "My subscriptions",
     "myCollections": "My collections",
     "myFiles": "My files",
     "emptyFilesList": "You haven't upload any file yes. Feel free to add them using card's edit form",
-    "deleteAccount": "Delete account"
+    "deleteAccount": "Delete account",
+    "stats": "My stats",
+    "nextTrains": "Planned trains"
   },
   "collection": {
     "titleRequired": "Title is required",
@@ -58,7 +61,7 @@
     "creationTitle": "Collection's creation",
     "createButton": "Create collection",
     "authorizeToCreate": "Authorize to create new collection",
-    "noCollections": "There're no collections yet. Create the first!",
+    "noCollections": "There're no collections yet",
     "noCollectionsFound": "No collections found. Maybe create new one?",
     "deleteButton": "Delete collection",
     "trainButton": "Train",
@@ -71,7 +74,13 @@
     "publicAlert": "All paired cards are becoming public including connected files",
     "privateAlert": "Cards still to be public when they paired with at least one public collection",
     "thisPublic": "Collection is public",
-    "thisPrivate": "Collection is private"
+    "thisPrivate": "Collection is private",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe",
+    "trainNow": "There are new cards to train",
+    "trainDue": "Next train at {{date}}",
+    "progress": "Training progress",
+    "progressInfo": "It will be 100% if the probability of remembering any card from the collection in a year is above 90%"
   },
   "card": {
     "aiMark": "AI mark",
@@ -122,5 +131,15 @@
     "thisPublic": "File is public",
     "thisPrivate": "File is private",
     "copy": "Copy component for card"
+  },
+  "stats": {
+    "yearRetrievabilityBar": "Average learnedness in a year (across all subscriptions)",
+    "chart": {
+      "titleHigh": "Trains' chart",
+      "titleMark": "Marks' chart",
+      "cnt": "Cards trained",
+      "avgMark": "Average mark",
+      "totalDuration": "Train's duration (sec)"
+    }
   }
 }

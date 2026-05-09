@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 
 from app.core import get_password_hash, verify_password
-from app.repositories import UserRepository, CollectionRepository, CardRepository, FileRepository
+from app.repositories import UserRepository, CollectionRepository, CardRepository, FileRepository, CollectionSubscriptionRepository
 from app.schemas import CollectionShort, User, UserAuth, UserBase, UserCreate, UserDTO
 
 from .base import BaseService, with_unit_of_work
@@ -26,6 +26,16 @@ class UserService(BaseService):
         if user is None:
             raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
         return user
+
+    @with_unit_of_work
+    async def get_user_subscriptions(
+            self, user_id: int, offset: int = 0, limit: int | None = None
+    ) -> list[CollectionShort]:
+        user_repo = self.uow.get_repository(UserRepository)
+        if not await user_repo.exists_user_with_id(user_id):
+            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        collection_subsctiption_repo = self.uow.get_repository(CollectionSubscriptionRepository)
+        return await collection_subsctiption_repo.get_user_subscriptions(user_id, offset, limit, CollectionShort)
 
     @with_unit_of_work
     async def get_user_collections(

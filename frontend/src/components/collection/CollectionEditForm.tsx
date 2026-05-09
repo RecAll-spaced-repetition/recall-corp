@@ -14,12 +14,12 @@ import { useCollection } from '@/query/queryHooks';
 import {
   useCollectionDelete,
   useCollectionUpdate,
+  useCollectionPublicityUpdate,
 } from '@/query/mutationHooks';
 import { CollectionEditType, collectionScheme } from './CreateCollectionWindow';
 import { routes } from '@/routes';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { useLocation } from 'wouter';
-import { useCollectionPublicityUpdate } from '@/query/mutationHooks/useCollectionPublicityUpdate';
 
 export type CollectionType = CollectionEditType & {
   id: number;

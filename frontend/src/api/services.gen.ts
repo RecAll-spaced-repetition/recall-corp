@@ -43,9 +43,12 @@ import type {
   ReadCollectionCardsCollectionsCollectionIdCardsGetData,
   ReadCollectionCardsCollectionsCollectionIdCardsGetError,
   ReadCollectionCardsCollectionsCollectionIdCardsGetResponse,
-  TrainCardsCollectionsCollectionIdCardsTrainGetData,
-  TrainCardsCollectionsCollectionIdCardsTrainGetError,
-  TrainCardsCollectionsCollectionIdCardsTrainGetResponse,
+  SubscribeCollectionsCollectionIdSubscribePostData,
+  SubscribeCollectionsCollectionIdSubscribePostError,
+  SubscribeCollectionsCollectionIdSubscribePostResponse,
+  UnsubscribeCollectionsCollectionIdUnsubscribeDeleteData,
+  UnsubscribeCollectionsCollectionIdUnsubscribeDeleteError,
+  UnsubscribeCollectionsCollectionIdUnsubscribeDeleteResponse,
   UpdateCollectionPublicityCollectionsCollectionIdPublicityPutData,
   UpdateCollectionPublicityCollectionsCollectionIdPublicityPutError,
   UpdateCollectionPublicityCollectionsCollectionIdPublicityPutResponse,
@@ -67,8 +70,25 @@ import type {
   TrainCardTrainCardIdPostData,
   TrainCardTrainCardIdPostError,
   TrainCardTrainCardIdPostResponse,
+  GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetData,
+  GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetError,
+  GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetResponse,
+  GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetData,
+  GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetError,
+  GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetResponse,
+  GetUserStatsTrainStatsAllGetError,
+  GetUserStatsTrainStatsAllGetResponse,
+  GetCardStatsTrainStatsCardCardIdGetData,
+  GetCardStatsTrainStatsCardCardIdGetError,
+  GetCardStatsTrainStatsCardCardIdGetResponse,
+  GetCollectionStatsTrainStatsCollectionCollectionIdGetData,
+  GetCollectionStatsTrainStatsCollectionCollectionIdGetError,
+  GetCollectionStatsTrainStatsCollectionCollectionIdGetResponse,
   ReadUserUserProfileGetError,
   ReadUserUserProfileGetResponse,
+  ReadUserSubscriptionsUserSubscriptionsGetData,
+  ReadUserSubscriptionsUserSubscriptionsGetError,
+  ReadUserSubscriptionsUserSubscriptionsGetResponse,
   ReadUserCollectionsUserCollectionsGetData,
   ReadUserCollectionsUserCollectionsGetError,
   ReadUserCollectionsUserCollectionsGetResponse,
@@ -316,23 +336,44 @@ export const readCollectionCardsCollectionsCollectionIdCardsGet = <
 };
 
 /**
- * Train Cards
+ * Subscribe
  */
-export const trainCardsCollectionsCollectionIdCardsTrainGet = <
+export const subscribeCollectionsCollectionIdSubscribePost = <
   ThrowOnError extends boolean = false,
 >(
   options: Options<
-    TrainCardsCollectionsCollectionIdCardsTrainGetData,
+    SubscribeCollectionsCollectionIdSubscribePostData,
     ThrowOnError
   >
 ) => {
-  return (options?.client ?? client).get<
-    TrainCardsCollectionsCollectionIdCardsTrainGetResponse,
-    TrainCardsCollectionsCollectionIdCardsTrainGetError,
+  return (options?.client ?? client).post<
+    SubscribeCollectionsCollectionIdSubscribePostResponse,
+    SubscribeCollectionsCollectionIdSubscribePostError,
     ThrowOnError
   >({
     ...options,
-    url: '/collections/{collection_id}/cards/train',
+    url: '/collections/{collection_id}/subscribe',
+  });
+};
+
+/**
+ * Unsubscribe
+ */
+export const unsubscribeCollectionsCollectionIdUnsubscribeDelete = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    UnsubscribeCollectionsCollectionIdUnsubscribeDeleteData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).delete<
+    UnsubscribeCollectionsCollectionIdUnsubscribeDeleteResponse,
+    UnsubscribeCollectionsCollectionIdUnsubscribeDeleteError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/collections/{collection_id}/unsubscribe',
   });
 };
 
@@ -465,6 +506,105 @@ export const trainCardTrainCardIdPost = <ThrowOnError extends boolean = false>(
 };
 
 /**
+ * Get Collection Train When
+ */
+export const getCollectionTrainWhenTrainCollectionCollectionIdWhenGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).get<
+    GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetResponse,
+    GetCollectionTrainWhenTrainCollectionCollectionIdWhenGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/train/collection/{collection_id}/when',
+  });
+};
+
+/**
+ * Get Collection Train Cards
+ */
+export const getCollectionTrainCardsTrainCollectionCollectionIdCardsGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).get<
+    GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetResponse,
+    GetCollectionTrainCardsTrainCollectionCollectionIdCardsGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/train/collection/{collection_id}/cards',
+  });
+};
+
+/**
+ * Get User Stats
+ */
+export const getUserStatsTrainStatsAllGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<unknown, ThrowOnError>
+) => {
+  return (options?.client ?? client).get<
+    GetUserStatsTrainStatsAllGetResponse,
+    GetUserStatsTrainStatsAllGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/train/stats/all',
+  });
+};
+
+/**
+ * Get Card Stats
+ */
+export const getCardStatsTrainStatsCardCardIdGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<GetCardStatsTrainStatsCardCardIdGetData, ThrowOnError>
+) => {
+  return (options?.client ?? client).get<
+    GetCardStatsTrainStatsCardCardIdGetResponse,
+    GetCardStatsTrainStatsCardCardIdGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/train/stats/card/{card_id}',
+  });
+};
+
+/**
+ * Get Collection Stats
+ */
+export const getCollectionStatsTrainStatsCollectionCollectionIdGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    GetCollectionStatsTrainStatsCollectionCollectionIdGetData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).get<
+    GetCollectionStatsTrainStatsCollectionCollectionIdGetResponse,
+    GetCollectionStatsTrainStatsCollectionCollectionIdGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/train/stats/collection/{collection_id}',
+  });
+};
+
+/**
  * Read User
  */
 export const readUserUserProfileGet = <ThrowOnError extends boolean = false>(
@@ -477,6 +617,24 @@ export const readUserUserProfileGet = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: '/user/profile',
+  });
+};
+
+/**
+ * Read User Subscriptions
+ */
+export const readUserSubscriptionsUserSubscriptionsGet = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<ReadUserSubscriptionsUserSubscriptionsGetData, ThrowOnError>
+) => {
+  return (options?.client ?? client).get<
+    ReadUserSubscriptionsUserSubscriptionsGetResponse,
+    ReadUserSubscriptionsUserSubscriptionsGetError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/user/subscriptions',
   });
 };
 

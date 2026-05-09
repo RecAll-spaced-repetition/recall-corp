@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response
 
-from app.schemas import Collection, CollectionCreate, CollectionShort, TrainPlan
+from app.schemas import Collection, CollectionCreate, CollectionShort
 
 from .dependencies import CollectionServiceDep, UserIdDep, UserIdSoftDep
 
@@ -35,11 +35,18 @@ async def read_collection_cards(
     return await collection_service.get_collection_cards(collection_id, user_id)
 
 
-@router.get("/{collection_id}/cards/train")
-async def train_cards(
+@router.post("/{collection_id}/subscribe")
+async def subscribe(
         user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
-) -> TrainPlan:
-    return await collection_service.get_collection_training_cards(user_id, collection_id)
+) -> list[CollectionShort]:
+    return await collection_service.change_subscription(user_id, collection_id, True)
+
+
+@router.delete("/{collection_id}/unsubscribe")
+async def unsubscribe(
+        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+) -> list[CollectionShort]:
+    return await collection_service.change_subscription(user_id, collection_id, False)
 
 
 @router.post("/")

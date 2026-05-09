@@ -11,8 +11,8 @@ import { CardsList } from '@/components/card';
 import {
   useCollection,
   useProfile,
-  getCollectionTrainCardsQueryOptions,
-  useCollectionTrainCards,
+  getTrainCollectionCardsQueryOptions,
+  useTrainCollectionCards,
 } from '@/query/queryHooks';
 import { ErrorPage } from './ErrorPage';
 
@@ -31,10 +31,10 @@ export const TrainPage: React.FC = () => {
     error: collectionError,
   } = useCollection(id);
   const {
-    trainPlan,
+    trainCards: trainPlan,
     isPending: isTrainCardsPending,
     error: trainCardsError,
-  } = useCollectionTrainCards(id);
+  } = useTrainCollectionCards(id);
 
   const cardsIds = useAppStore(useShallow((state) => state.cardsToTrainIds));
   const setTrainCards = useAppStore((state) => state.setTrainCards);
@@ -44,7 +44,7 @@ export const TrainPage: React.FC = () => {
   const client = useQueryClient();
   const refreshTrainCards = useCallback(() => {
     client.invalidateQueries({
-      queryKey: getCollectionTrainCardsQueryOptions(id).queryKey,
+      queryKey: getTrainCollectionCardsQueryOptions(id).queryKey,
     });
   }, [client, id]);
 
