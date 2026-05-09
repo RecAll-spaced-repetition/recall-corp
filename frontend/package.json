@@ -14,7 +14,7 @@
     "prettier": "prettier --config .prettierrc.json -w ./src",
     "lint": "eslint --fix ./src",
     "ts-check": "tsc",
-    "checks": "bun run ts-check && bun run test:check && bun run lint",
+    "checks": "bun run ts-check && bun run test:unit:check && bun run lint",
     "all-checks": "bun run prettier && bun run checks"
   },
   "dependencies": {
