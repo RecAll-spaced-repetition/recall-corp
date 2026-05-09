@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone, timedelta
+from datetime import date, datetime, timezone
 
 from typing import Literal, Union
 from pydantic import Field, RootModel
@@ -253,38 +253,28 @@ class DayStat(CamelCaseBaseModel):
 
 
 class AllStats(CamelCaseBaseModel):
-    curr_streak: int
-    max_streak: int
+    avg_current_retrievability: float | None
+    avg_after_year_retrievability: float | None
     stats: list[DayStat]
 
     @staticmethod
-    def from_train_logs(all_logs: list[TrainLog]):
-        max_streak = 0
-        curr_streak = 0
-        streak = 0
+    def from_components(
+        all_logs: list[TrainLog],
+        avg_current_retrievability: float | None,
+        avg_after_year_retrievability: float | None,
+    ) -> 'AllStats':
         stats: list[DayStat] = []
-        prev_date: date | None = None
-        today = datetime.now(timezone.utc).date()
         i = 0
         l = len(all_logs)
         while i < l:
             day_stat = DayStat.from_train_logs(all_logs[i:])
             stats.append(day_stat)
-
-            if day_stat.train_date == today:
-                curr_streak += 1
-                today -= timedelta(days=1)
-
-            if prev_date != None and prev_date - day_stat.train_date == timedelta(days=1):
-                streak += 1
-            elif prev_date != day_stat.train_date:
-                max_streak = max(max_streak, streak)
-                streak = 1
-
-            prev_date = day_stat.train_date
             i += day_stat.cnt
-        
-        return AllStats(curr_streak=curr_streak, max_streak=max_streak, stats=stats)
+        return AllStats(
+            avg_current_retrievability=avg_current_retrievability,
+            avg_after_year_retrievability=avg_after_year_retrievability,
+            stats=stats,
+        )
 
 
 class UserOptParams(CamelCaseBaseModel):

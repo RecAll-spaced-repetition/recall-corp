@@ -2,13 +2,27 @@
 
 export const AllStatsSchema = {
   properties: {
-    currStreak: {
-      type: 'integer',
-      title: 'Currstreak',
+    avgCurrentRetrievability: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Avgcurrentretrievability',
     },
-    maxStreak: {
-      type: 'integer',
-      title: 'Maxstreak',
+    avgAfterYearRetrievability: {
+      anyOf: [
+        {
+          type: 'number',
+        },
+        {
+          type: 'null',
+        },
+      ],
+      title: 'Avgafteryearretrievability',
     },
     stats: {
       items: {
@@ -19,7 +33,7 @@ export const AllStatsSchema = {
     },
   },
   type: 'object',
-  required: ['currStreak', 'maxStreak', 'stats'],
+  required: ['avgCurrentRetrievability', 'avgAfterYearRetrievability', 'stats'],
   title: 'AllStats',
 } as const;
 

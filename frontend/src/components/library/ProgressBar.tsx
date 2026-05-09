@@ -44,7 +44,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           fillClassName
         )}
         style={{
-          width: `${((value - minValue) / (maxValue - minValue)) * 100}%`,
+          width: `${Math.max(Math.min((value - minValue) / (maxValue - minValue), 1), 0) * 100}%`,
         }}
       ></div>
       <div className="absolute h-full w-full text-center">
