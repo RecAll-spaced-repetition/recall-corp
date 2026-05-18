@@ -1,8 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from app.core import get_settings
-
-from .models import get_metadata
+from app.models import get_metadata
 
 
 __all__ = ["create_db_tables", "get_db_engine", "close_db_connections", "delete_tables"]

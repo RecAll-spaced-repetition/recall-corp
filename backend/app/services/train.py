@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from fsrs import Card, Scheduler, Optimizer
-from datetime import datetime, timezone, date, timedelta
+from datetime import datetime, timezone
 
 from app.repositories import CardRepository, UserRepository, TrainCardRepository, TrainLogRepository, CollectionRepository, CardCollectionRepository, CollectionSubscriptionRepository
 from app.schemas import TrainMarkAnswer, TrainCard, TrainCardExt, TrainLog, TrainLogCreate, AllStats, TrainWhen, UserOptParams, CollectionStats, TrainNow, TrainDue, TrainPlan, TrainNever, CollectionShort

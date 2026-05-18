@@ -1,10 +1,13 @@
-from typing import Optional
 from fastapi import HTTPException
 
-from app.schemas import Collection, CollectionCreate, CollectionShort, PublicStatusMixin, CollectionStats
+from app.schemas import Collection, CollectionCreate, CollectionShort, PublicStatusMixin
 from app.repositories import (
-    CardRepository, CardCollectionRepository, CollectionRepository,
-    UserRepository, TrainCardRepository, FileCardRepository, CollectionSubscriptionRepository
+    CardRepository,
+    CardCollectionRepository,
+    CollectionRepository,
+    UserRepository,
+    FileCardRepository,
+    CollectionSubscriptionRepository,
 )
 
 from .base import BaseService, with_unit_of_work

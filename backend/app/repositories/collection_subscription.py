@@ -1,7 +1,7 @@
 from sqlalchemy import and_, select, insert, update, func
 from typing import Type
 
-from app.db.models import CollectionTable, CollectionSubscriptionTable
+from app.models import CollectionTable, CollectionSubscriptionTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
 

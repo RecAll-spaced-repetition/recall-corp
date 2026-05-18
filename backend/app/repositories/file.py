@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from typing import Type
 
-from app.db import FileTable
+from app.models import FileTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
 

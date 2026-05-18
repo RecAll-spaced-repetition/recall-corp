@@ -1,7 +1,7 @@
 from sqlalchemy import and_, select, insert, update, func
 from typing import Type
 
-from app.db.models import CardCollectionTable, CollectionTable, CardTable
+from app.models import CardCollectionTable, CollectionTable, CardTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
 

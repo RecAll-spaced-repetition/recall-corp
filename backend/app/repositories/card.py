@@ -1,7 +1,7 @@
 from sqlalchemy import and_, select
 from typing import Type
 
-from app.db import CardTable
+from app.models import CardTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
 

@@ -1,7 +1,7 @@
 from sqlalchemy import select, and_, or_
 from typing import Type
 
-from app.db import CollectionTable
+from app.models import CollectionTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
 

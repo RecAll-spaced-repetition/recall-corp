@@ -9,6 +9,7 @@ from .base import BaseService, with_unit_of_work
 
 __all__ = ["StorageService"]
 
+
 class StorageService(BaseService):
     @with_unit_of_work
     async def upload_file(self, user_id: int, file: UploadFile) -> FileMeta:

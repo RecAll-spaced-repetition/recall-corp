@@ -1,10 +1,9 @@
 from sqlalchemy import select, func, and_
 from sqlalchemy.dialects.postgresql import aggregate_order_by
 from datetime import datetime, timezone
-from fsrs import Card, ReviewLog
 
-from app.db import TrainCardTable, TrainLogTable
-from app.schemas import CollectionStats, TrainCard, TrainLog
+from app.models import TrainCardTable, TrainLogTable
+from app.schemas import TrainCard, TrainLog
 
 from .base import BaseSQLAlchemyRepository
 
