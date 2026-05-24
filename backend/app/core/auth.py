@@ -1,13 +1,21 @@
-from datetime import datetime, timedelta, timezone
-from fastapi import Depends, Request, HTTPException, Response
-from jose import jwt, JWTError
+from datetime import UTC, datetime, timedelta
+
+from fastapi import Depends, HTTPException, Request, Response
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 from .config import get_settings
 
-
-__all__ = ["get_password_hash", "verify_password", "get_expiration_datetime", "delete_cookie",
-           "create_access_token", "get_profile_id", "get_profile_id_soft", "set_authentication_cookie"]
+__all__ = [
+    "get_password_hash",
+    "verify_password",
+    "get_expiration_datetime",
+    "delete_cookie",
+    "create_access_token",
+    "get_profile_id",
+    "get_profile_id_soft",
+    "set_authentication_cookie",
+]
 
 
 __pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -22,16 +30,17 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def get_expiration_datetime() -> datetime:
-    return datetime.now(timezone.utc) + timedelta(hours=get_settings().expire_hours)
+    return datetime.now(UTC) + timedelta(hours=get_settings().expire_hours)
 
 
 def create_access_token(user_id: int) -> str:
     expire = get_expiration_datetime()
     token_data = {"sub": str(user_id), "exp": expire}
+    
     return jwt.encode(
         token_data,
         key=get_settings().auth_secret_key.get_secret_value(),
-        algorithm=get_settings().auth_algorithm
+        algorithm=get_settings().auth_algorithm,
     )
 
 
@@ -46,18 +55,20 @@ def get_profile_id(token: str | None = Depends(get_token)) -> int:
     """Бросает исключение, если есть проблемы с токеном"""
     if not token:
         raise HTTPException(status_code=401, detail="This action requires authorization")
+    
     try:
         payload = jwt.decode(
             token,
             key=get_settings().auth_secret_key.get_secret_value(),
-            algorithms=get_settings().auth_algorithm
+            algorithms=get_settings().auth_algorithm,
         )
     except JWTError:
-        raise HTTPException(status_code=401, detail="Your authorization is expired")
+        raise HTTPException(status_code=401, detail="Your authorization is expired") from None
 
-    user_id = payload.get('sub')
+    user_id = payload.get("sub")
     if not user_id:
         raise HTTPException(status_code=401, detail="Your authorization is expired")
+    
     return int(user_id)
 
 
@@ -67,7 +78,6 @@ def get_profile_id_soft(token: str | None = Depends(get_token)) -> int | None:
         return get_profile_id(token)
     except HTTPException:
         return None
-    
 
 
 def set_authentication_cookie(response: Response, user_id: int) -> None:
@@ -75,7 +85,7 @@ def set_authentication_cookie(response: Response, user_id: int) -> None:
         key=get_settings().access_token_key,
         value=create_access_token(user_id),
         expires=get_expiration_datetime(),
-        **get_settings().cookie_kwargs.model_dump()
+        **get_settings().cookie_kwargs.model_dump(),
     )
 
 

@@ -1,12 +1,12 @@
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
+from typing import Annotated, TypeVar
+
 from fastapi import Depends
-from typing import Annotated, Type, TypeVar
 
 from app.repositories import BaseSQLAlchemyRepository
 
 from .database import get_db_engine
-
 
 __all__ = ["UnitOfWork", "UnitOfWorkDep"]
 
@@ -23,6 +23,7 @@ class UnitOfWork:
     предоставляя методы для начала транзакции и инициализации репозиториев при установленном
     соединении.
     """
+
     __connection = ContextVar("connection", default=None)
 
     @asynccontextmanager
@@ -32,12 +33,13 @@ class UnitOfWork:
             try:
                 yield self
             except Exception:
-                ## logging
-                raise  # Без возбуждения исключения нужен явный rollback соединения
+                # TODO: логирование
+                # WHY: без возбуждения исключения понадобился бы явный rollback соединения
+                raise
             finally:
                 self.__connection.reset(token)
 
-    def get_repository(self, repo_class: Type[RepositoryType]) -> RepositoryType:
+    def get_repository(self, repo_class: type[RepositoryType]) -> RepositoryType:
         current_connection = self.__connection.get()
         if current_connection is None:
             raise RuntimeError("Connection is not established. Use 'async with uow.begin()'.")

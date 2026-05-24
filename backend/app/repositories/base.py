@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from sqlalchemy import Table, insert, select, update, delete, exists
+from typing import TypeVar
+
+from sqlalchemy import Table, delete, exists, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncConnection
-from typing import Type, TypeVar
 
 from app.schemas import CamelCaseBaseModel
-
 
 __all__ = ["BaseRepository", "BaseSQLAlchemyRepository", "SchemaType"]
 
@@ -51,41 +51,60 @@ class BaseSQLAlchemyRepository(BaseRepository):
     def _item_id_filter(self, item_id: int):
         return self.table.c.id == item_id
 
-    async def create_one(self, input_data: dict, output_schema: Type[SchemaType]) -> SchemaType:
+    async def create_one(self, input_data: dict, output_schema: type[SchemaType]) -> SchemaType:
         result = await self.connection.execute(
             insert(self.table)
             .values(**input_data)
             .returning(self.table.c[*output_schema.fields()])
         )
+
         return output_schema(**result.mappings().first())
 
-    async def get_one_or_none(self, filter_expr, output_schema: Type[SchemaType]) -> SchemaType | None:
-        result = (await self.connection.execute(
-            select(self.table.c[*output_schema.fields()])
-            .where(filter_expr)
-        )).mappings().first()
+    async def get_one_or_none(
+        self,
+        filter_expr,
+        output_schema: type[SchemaType],
+    ) -> SchemaType | None:
+        result = (
+            (
+                await self.connection.execute(
+                    select(self.table.c[*output_schema.fields()]).where(filter_expr)
+                )
+            )
+            .mappings()
+            .first()
+        )
+
         return result and output_schema(**result)
 
     async def get_all(
-            self, output_schema: Type[SchemaType], limit: int, offset: int
+        self,
+        limit: int,
+        offset: int,
+        output_schema: type[SchemaType],
     ) -> list[SchemaType]:
         result = await self.connection.execute(
-            select(self.table.c[*output_schema.fields()])
-            .limit(limit).offset(offset)
+            select(self.table.c[*output_schema.fields()]).limit(limit).offset(offset)
         )
+
         return [output_schema(**elem) for elem in result.mappings().all()]
 
     async def get_all_filtered(
-            self, filter_expr, output_schema: Type[SchemaType]
+        self,
+        filter_expr,
+        output_schema: type[SchemaType],
     ) -> list[SchemaType]:
         result = await self.connection.execute(
-            select(self.table.c[*output_schema.fields()])
-            .where(filter_expr)
+            select(self.table.c[*output_schema.fields()]).where(filter_expr)
         )
+
         return [output_schema(**elem) for elem in result.mappings().all()]
 
     async def update_one(
-            self, filter_expr, update_values: dict, output_schema: Type[SchemaType]
+        self,
+        filter_expr,
+        update_values: dict,
+        output_schema: type[SchemaType],
     ) -> SchemaType:
         result = await self.connection.execute(
             update(self.table)
@@ -93,6 +112,7 @@ class BaseSQLAlchemyRepository(BaseRepository):
             .values(**update_values)
             .returning(self.table.c[*output_schema.fields()])
         )
+
         return output_schema(**result.mappings().first())
 
     async def delete(self, filter_expr) -> None:
@@ -100,4 +120,5 @@ class BaseSQLAlchemyRepository(BaseRepository):
 
     async def exists(self, filter_expr) -> bool:
         result = await self.connection.execute(select(exists().where(filter_expr)))
+
         return result.scalar_one()

@@ -1,9 +1,9 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
 from sqlalchemy.dialects.postgresql import ENUM
 
-from .metadata import get_metadata
-from app.schemas import get_allowed_types, get_allowed_exts
+from app.schemas import get_allowed_exts, get_allowed_types
 
+from .metadata import get_metadata
 
 __all__ = ["FileTable"]
 
@@ -13,12 +13,13 @@ file_exts = ENUM(*get_allowed_exts(), name="file_exts", metadata=get_metadata())
 
 
 FileTable = Table(
-    "files", get_metadata(),
+    "files",
+    get_metadata(),
     Column("id", Integer, primary_key=True),
     Column("owner_id", ForeignKey("users.id"), index=True, nullable=False),
     Column("filename", String, index=True, nullable=False, unique=True),
     Column("type", file_types, nullable=False),
     Column("ext", file_exts, nullable=False),
     Column("size", Integer, nullable=True, default=None),
-    Column("is_public", Boolean, nullable=False, default=False)
+    Column("is_public", Boolean, nullable=False, default=False),
 )

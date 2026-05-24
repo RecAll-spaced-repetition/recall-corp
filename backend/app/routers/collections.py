@@ -4,76 +4,88 @@ from app.schemas import Collection, CollectionCreate, CollectionShort
 
 from .dependencies import CollectionServiceDep, UserIdDep, UserIdSoftDep
 
-
-router = APIRouter(
-    prefix="/collections",
-    tags=["collection"]
-)
+router = APIRouter(prefix="/collections", tags=["collection"])
 
 
 @router.get("/{collection_id}")
 async def read_collection(
-        collection_id: int, user_id: UserIdSoftDep, 
-        collection_service: CollectionServiceDep
+    collection_id: int, user_id: UserIdSoftDep, collection_service: CollectionServiceDep
 ) -> Collection:
     return await collection_service.get_collection(collection_id, user_id)
 
 
 @router.get("/", description="Returns collections' list without descriptions")
 async def read_collections(
-        user_id: UserIdSoftDep, collection_service: CollectionServiceDep, 
-        limit: int = 100, skip: int = 0
+    user_id: UserIdSoftDep,
+    collection_service: CollectionServiceDep,
+    limit: int = 100,
+    skip: int = 0,
 ) -> list[CollectionShort]:
     return await collection_service.get_collections(user_id, limit, skip)
 
 
 @router.get("/{collection_id}/cards")
 async def read_collection_cards(
-        collection_id: int, user_id: UserIdSoftDep,
-        collection_service: CollectionServiceDep,
+    collection_id: int,
+    user_id: UserIdSoftDep,
+    collection_service: CollectionServiceDep,
 ) -> list[int]:
     return await collection_service.get_collection_cards(collection_id, user_id)
 
 
 @router.post("/{collection_id}/subscribe")
 async def subscribe(
-        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+    user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
 ) -> list[CollectionShort]:
     return await collection_service.change_subscription(user_id, collection_id, True)
 
 
 @router.delete("/{collection_id}/unsubscribe")
 async def unsubscribe(
-        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+    user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
 ) -> list[CollectionShort]:
     return await collection_service.change_subscription(user_id, collection_id, False)
 
 
 @router.post("/")
 async def create_collection(
-        user_id: UserIdDep, collection: CollectionCreate, collection_service: CollectionServiceDep
+    user_id: UserIdDep,
+    collection: CollectionCreate,
+    collection_service: CollectionServiceDep,
 ) -> Collection:
     return await collection_service.add_collection(user_id, collection)
 
 
 @router.put("/{collection_id}")
 async def update_collection(
-        user_id: UserIdDep, collection_id: int, new_collection: CollectionCreate,
-        collection_service: CollectionServiceDep
+    user_id: UserIdDep,
+    collection_id: int,
+    new_collection: CollectionCreate,
+    collection_service: CollectionServiceDep,
 ) -> Collection:
-    return await collection_service.update_user_collection(user_id, collection_id, new_collection)
+    return await collection_service.update_user_collection(
+        user_id=user_id,
+        collection_id=collection_id,
+        new_collection=new_collection,
+    )
 
 
 @router.put("/{collection_id}/publicity")
 async def update_collection_publicity(
-        user_id: UserIdDep, collection_id: int, is_public: bool,
-        collection_service: CollectionServiceDep
+    user_id: UserIdDep,
+    collection_id: int,
+    is_public: bool,
+    collection_service: CollectionServiceDep,
 ) -> Collection:
-    return await collection_service.update_collection_publicity(user_id, collection_id, is_public)
+    return await collection_service.update_collection_publicity(
+        user_id=user_id,
+        collection_id=collection_id,
+        is_public=is_public,
+    )
 
 
 @router.delete("/{collection_id}", response_class=Response)
 async def delete_collection(
-        user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
+    user_id: UserIdDep, collection_id: int, collection_service: CollectionServiceDep
 ):
     return await collection_service.delete_collection(user_id, collection_id)

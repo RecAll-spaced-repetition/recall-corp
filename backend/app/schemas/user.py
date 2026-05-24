@@ -2,7 +2,6 @@ from pydantic import EmailStr, Field
 
 from .base import CamelCaseBaseModel
 
-
 __all__ = ["User", "UserAuth", "UserBase", "UserCreate", "UserDTO"]
 
 
@@ -34,12 +33,13 @@ class UserDTO(CamelCaseBaseModel):
     def fields(cls) -> list[str]:
         mapping = {"password": "hashed_password"}
         result_fields = super().fields()
+
         for field, alias in mapping.items():
-            if field in result_fields: # КОСТЫЛЬ (который по идее можно удалить , ведь для password итак алиас есть), но пока что пускай будет
+            if field in result_fields:
                 result_fields.remove(field)
                 result_fields.append(alias)
+
         return result_fields
 
     def table_dict(self):
         return self.model_dump(exclude_unset=True, by_alias=True)
-    

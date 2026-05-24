@@ -1,8 +1,8 @@
 from enum import StrEnum
 from functools import cache
-from pydantic import SecretStr, BaseModel
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from pydantic import BaseModel, SecretStr
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 __all__ = ["get_settings", "Settings"]
 
@@ -13,9 +13,9 @@ class CryptoAlgorithm(StrEnum):
 
 
 class SameSiteEnum(StrEnum):
-    LAX = 'lax'
-    STRICT = 'strict'
-    NONE = 'none'
+    LAX = "lax"
+    STRICT = "strict"
+    NONE = "none"
 
 
 class CookieSettings(BaseModel):
@@ -38,7 +38,11 @@ class AuthSettings(BaseSettings):
 
 
 class PostgreSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='POSTGRES_', env_file="./config/postgres.env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_prefix="POSTGRES_",
+        env_file="./config/postgres.env",
+        extra="ignore",
+    )
 
     USER: str
     PASSWORD: SecretStr
@@ -48,7 +52,9 @@ class PostgreSettings(BaseSettings):
 
 
 class MinioSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='MINIO_', env_file="./config/minio-backend.env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_prefix="MINIO_", env_file="./config/minio-backend.env", extra="ignore"
+    )
 
     BUCKET_NAME: str
     HOSTNAME: str
@@ -57,8 +63,11 @@ class MinioSettings(BaseSettings):
     PASSWORD: str
     MAX_FILE_MB_SIZE: int
 
+
 class TrainSettings(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix='TRAIN_', env_file="./config/train.env", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_prefix="TRAIN_", env_file="./config/train.env", extra="ignore"
+    )
 
     REOPT_REQUIRED_LOGS_CNT: int
 
@@ -72,7 +81,11 @@ class Settings(BaseSettings):
     @staticmethod
     @cache
     def get_api_hosts() -> list[str]:
-        return ['https://letsrecall.ru/api', 'http://letsrecall.ru/api', 'http://localhost:8000']
+        return [
+            "https://letsrecall.ru/api",
+            "http://letsrecall.ru/api",
+            "http://localhost:8000",
+        ]
 
     @property
     def auth_algorithm(self) -> CryptoAlgorithm:
@@ -81,11 +94,11 @@ class Settings(BaseSettings):
     @property
     def auth_secret_key(self) -> SecretStr:
         return self.auth.SECRET_KEY
-    
+
     @property
     def access_token_key(self) -> str:
         return self.auth.ACCESS_TOKEN_KEY
-    
+
     @property
     def expire_hours(self) -> int:
         return self.auth.EXPIRE_HOURS
@@ -94,7 +107,9 @@ class Settings(BaseSettings):
     @cache
     def cookie_kwargs(self) -> CookieSettings:
         return CookieSettings(
-            httponly=self.auth.HTTPONLY, secure=self.auth.SECURE, samesite=self.auth.SAMESITE
+            httponly=self.auth.HTTPONLY,
+            secure=self.auth.SECURE,
+            samesite=self.auth.SAMESITE,
         )
 
     @property
@@ -102,41 +117,35 @@ class Settings(BaseSettings):
     def minio_url(self) -> str:
         """Hostname with port"""
         return f"{self.minio.HOSTNAME}:{self.minio.PORT}"
-    
+
     @property
     @cache
     def max_file_bytes_size(self) -> int:
         return self.minio.MAX_FILE_MB_SIZE * 1024 * 1024
-    
+
     @property
     @cache
     def max_file_mb_size(self) -> int:
         return self.minio.MAX_FILE_MB_SIZE
 
-    @cache
-    def __create_postgres_dialect_url(self, dialect: str) -> str:
-        return (f"postgresql+{dialect}://{self.db.USER}:{self.db.PASSWORD.get_secret_value()}"
-                f"@{self.db.HOST}:{self.db.HOST_PORT}/{self.db.DB}")
-
     @property
     def db_url_asyncpg(self) -> str:
-        return self.__create_postgres_dialect_url("asyncpg")
-
-    @property
-    def db_url_psycopg(self) -> str:
-        return self.__create_dialect_url("psycopg")
+        return (
+            f"postgresql+asyncpg://{self.db.USER}:{self.db.PASSWORD.get_secret_value()}"
+            f"@{self.db.HOST}:{self.db.HOST_PORT}/{self.db.DB}"
+        )
 
     @property
     def db_url_pysqlite(self) -> str:
         return "sqlite:///./sql_app.db"
-    
+
     @property
     @cache
     def reopt_required_logs_cnt(self) -> int:
         return self.train.REOPT_REQUIRED_LOGS_CNT
-    
+
     def __hash__(self):
-        return ''.__hash__()
+        return "".__hash__()
 
 
 __settings = Settings()

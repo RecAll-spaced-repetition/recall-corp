@@ -4,11 +4,10 @@ from .storage import router as storage_router
 from .train import router as training_router
 from .users import router as users_router
 
-
 all_routers = [
     cards_router,
     collections_router,
     storage_router,
     training_router,
-    users_router
+    users_router,
 ]
