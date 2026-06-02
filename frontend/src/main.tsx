@@ -34,3 +34,19 @@ const container = document.getElementById(`root`);
 if (container) {
   mountApp(container);
 }
+
+if ('serviceWorker' in navigator) {
+  (async () => {
+    const registration = await navigator.serviceWorker.register(
+      '/notifications.js',
+      {
+        scope: '/',
+      }
+    );
+    console.log('Service Worker Registered');
+    const permissions = await registration.pushManager.permissionState({
+      userVisibleOnly: true,
+    });
+    console.log(permissions);
+  })();
+}

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
+import { Redirect } from 'wouter';
 
 import { useAppStore } from '@/state';
 import { Button } from '@/components/library';
 import { useProfile } from '@/query/queryHooks';
-import { MiniCard } from '@/components/card';
-
 import intervalsImage from '@/assets/img/intervalsWide.png';
-import { StaticFlippingCard } from '@/components/card';
+import { MiniCard, StaticFlippingCard } from '@/components/card';
 import { MarkdownRenderComponent } from '@/components/editor';
-import { Redirect } from 'wouter';
 import { routes } from '@/routes';
 
 type ExampleCardSides = {
