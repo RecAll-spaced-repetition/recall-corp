@@ -3,6 +3,7 @@ from .collections import router as collections_router
 from .storage import router as storage_router
 from .train import router as training_router
 from .users import router as users_router
+from .notifications import router as notifications_router
 
 
 all_routers = [
@@ -10,5 +11,6 @@ all_routers = [
     collections_router,
     storage_router,
     training_router,
-    users_router
+    users_router,
+    notifications_router
 ]

@@ -7,3 +7,4 @@ from .user import *
 from .file import *
 from .file_card import *
 from .collection_subscription import *
+from .notification_subscription import *

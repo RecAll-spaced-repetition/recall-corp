@@ -4,3 +4,4 @@ from .collection import *
 from .train import *
 from .user import *
 from .storage import *
+from .notifications import *

@@ -10,9 +10,31 @@ self.addEventListener('install', () => {
 
 self.addEventListener('activate', (e) => {
   e.waitUntil(self.clients.claim());
-  self.registration.showNotification('Тестовое уведомление', {
-    icon: '/favicon.ico',
-  });
+});
+
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+  const pushData = event.data.json();
+
+  // Пример с расширенными опциями
+  const notificationOptions: NotificationOptions = {
+    body: pushData.body || 'Новое сообщение',
+    icon: pushData.icon || '/favicon.ico',
+    badge: pushData.badge,
+    // image: pushData.image,
+    tag: pushData.tag || 'default',
+    data: pushData.data,
+    requireInteraction: pushData.requireInteraction || false,
+    silent: pushData.silent || false,
+    // vibrate: pushData.vibrate || [200, 100, 200],
+    // timestamp: Date.now(),
+    // actions: pushData.actions || [],
+  };
+  // Без waitUntil браузер может убить SW до показа уведомления,
+  // а Chrome за push без видимого уведомления отзывает подписку
+  event.waitUntil(
+    self.registration.showNotification(pushData.title, notificationOptions)
+  );
 });
 
 self.addEventListener('notificationclick', (e) => {

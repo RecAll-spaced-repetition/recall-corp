@@ -10,6 +10,7 @@ import 'highlight.js/styles/intellij-light.min.css';
 import 'katex/dist/katex.min.css';
 import '@/index.css';
 import { setupClient } from './setupBackend';
+import { start } from './setupNotifications';
 
 export const mountApp = (container: Element) => {
   setupClient();
@@ -35,18 +36,4 @@ if (container) {
   mountApp(container);
 }
 
-if ('serviceWorker' in navigator) {
-  (async () => {
-    const registration = await navigator.serviceWorker.register(
-      '/notifications.js',
-      {
-        scope: '/',
-      }
-    );
-    console.log('Service Worker Registered');
-    const permissions = await registration.pushManager.permissionState({
-      userVisibleOnly: true,
-    });
-    console.log(permissions);
-  })();
-}
+start(); // Fire-and-forget

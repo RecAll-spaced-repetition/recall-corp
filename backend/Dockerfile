@@ -10,7 +10,9 @@ RUN curl -sSL https://install.python-poetry.org | python3 - --version 2.3.2
 ENV PATH="/root/.local/bin:$PATH" \
     POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_INSTALLER_MAX_WORKERS=1 \
+    PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 
 # Создание директории для приложения и установка зависимостей
 WORKDIR /code

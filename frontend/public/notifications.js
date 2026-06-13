@@ -6,9 +6,26 @@
   });
   self.addEventListener("activate", (e) => {
     e.waitUntil(self.clients.claim());
-    self.registration.showNotification("\u0422\u0435\u0441\u0442\u043E\u0432\u043E\u0435 \u0443\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u0435", {
-      icon: "/favicon.ico"
-    });
+  });
+  self.addEventListener("push", (event) => {
+    if (!event.data) return;
+    const pushData = event.data.json();
+    const notificationOptions = {
+      body: pushData.body || "\u041D\u043E\u0432\u043E\u0435 \u0441\u043E\u043E\u0431\u0449\u0435\u043D\u0438\u0435",
+      icon: pushData.icon || "/favicon.ico",
+      badge: pushData.badge,
+      // image: pushData.image,
+      tag: pushData.tag || "default",
+      data: pushData.data,
+      requireInteraction: pushData.requireInteraction || false,
+      silent: pushData.silent || false
+      // vibrate: pushData.vibrate || [200, 100, 200],
+      // timestamp: Date.now(),
+      // actions: pushData.actions || [],
+    };
+    event.waitUntil(
+      self.registration.showNotification(pushData.title, notificationOptions)
+    );
   });
   self.addEventListener("notificationclick", (e) => {
     e.notification.close();

@@ -63,11 +63,19 @@ class TrainSettings(BaseSettings):
     REOPT_REQUIRED_LOGS_CNT: int
 
 
+class NotificationsSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix='NOTIFICATIONS_', env_file="./config/notifications.env", extra="ignore")
+
+    VAPID_PRIVATE_KEY: str
+    VAPID_SUBJECT: str
+
+
 class Settings(BaseSettings):
     auth: AuthSettings = AuthSettings()
     db: PostgreSettings = PostgreSettings()
     minio: MinioSettings = MinioSettings()
     train: TrainSettings = TrainSettings()
+    notifications: NotificationsSettings = NotificationsSettings()
 
     @staticmethod
     @cache
