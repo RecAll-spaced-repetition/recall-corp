@@ -3,6 +3,7 @@ import { dataExtractionWrapper } from '@/query';
 import { getProfileQueryOptions } from '@/query/queryHooks';
 import { createUserUserRegisterPost, User } from '@/api';
 import { UserRegisterData } from '@/components/auth/RegisterForm';
+import { refreshSubscription } from '@/setupNotifications';
 
 export const useRegister = (onSuccess?: (response: User) => void) => {
   const queryClient = useQueryClient();
@@ -19,6 +20,7 @@ export const useRegister = (onSuccess?: (response: User) => void) => {
       ),
     onSuccess: (data) => {
       queryClient.setQueryData(getProfileQueryOptions().queryKey, data);
+      refreshSubscription({ requestPermissionOnPrompt: true });
       onSuccess?.(data);
     },
   });
