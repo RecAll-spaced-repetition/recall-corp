@@ -1,6 +1,9 @@
+import asyncio
 import json
 import logging
-from pywebpush import webpush, WebPushException
+
+import aiohttp
+from pywebpush import webpush_async, WebPushException
 
 from .config import get_settings
 
@@ -12,28 +15,38 @@ __settings = get_settings()
 __all__ = ["push_notification"]
 
 
-def push_notification(subscriptions: list[str], title: str, body: str, url: str = '/') -> list[str]:
-    """Шлёт уведомление по списку подписок (синхронно, из async-кода запускать в thread'е).
+async def _send_one(session: aiohttp.ClientSession, subscription: dict, data: str) -> bool:
+    """Шлёт один пуш. Возвращает True, если подписка протухла (404/410) и её надо удалить."""
+    try:
+        await webpush_async(
+            subscription_info=subscription,
+            data=data,
+            vapid_private_key=__settings.notifications.VAPID_PRIVATE_KEY,
+            # claims мутируется внутри (дописывается aud/exp эндпоинта) — свежий dict на каждый вызов
+            vapid_claims={'sub': __settings.notifications.VAPID_SUBJECT},
+            aiohttp_session=session,
+        )
+        return False
+    except WebPushException as ex:
+        # у aiohttp-ответа статус в .status (а не .status_code, как у requests)
+        if getattr(ex.response, 'status', None) in (404, 410):
+            return True
+        logger.error("Web push failed: %r", ex)
+        return False
+
+
+async def push_notification(subscriptions: list[dict], title: str, body: str, url: str = '/') -> list[dict]:
+    """Асинхронно шлёт уведомление по списку подписок, переиспользуя один aiohttp-сессион.
 
     Возвращает протухшие подписки (push-сервис ответил 404/410) — их нужно удалить из БД.
     """
-    expired_subscriptions = []
     data = json.dumps({
         'title': title,
         'body': body,
         'data': {'url': url},
     })
-    for subscription in subscriptions:
-        try:
-            webpush(
-                subscription_info=json.loads(subscription),
-                data=data,
-                vapid_private_key=__settings.notifications.VAPID_PRIVATE_KEY,
-                vapid_claims={'sub': __settings.notifications.VAPID_SUBJECT},
-            )
-        except WebPushException as ex:
-            if ex.response is not None and ex.response.status_code in (404, 410):
-                expired_subscriptions.append(subscription)
-            else:
-                logger.error("Web push failed: %r", ex)
-    return expired_subscriptions
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(
+            *(_send_one(session, subscription, data) for subscription in subscriptions)
+        )
+    return [sub for sub, expired in zip(subscriptions, results) if expired]
