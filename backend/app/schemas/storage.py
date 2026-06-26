@@ -1,18 +1,49 @@
 from functools import cache
 from typing import Literal, get_args
+
 from pydantic import BaseModel, ConfigDict
 
-from .base import CamelCaseBaseModel, PublicStatusMixin
 from app.core.minio import FileStream
 
-__all__ = ["get_allowed_types", "get_allowed_exts", "FileCreate", "FileMeta", "StreamingFile"]
+from .base import CamelCaseBaseModel, PublicStatusMixin
+
+__all__ = [
+    "get_allowed_types",
+    "get_allowed_exts",
+    "FileCreate",
+    "FileMeta",
+    "StreamingFile",
+]
 
 
 AllowedTypes = Literal["image", "video", "audio"]
 AllowedExts = Literal[
-    "bmp", "gif", "jpg", "jpeg", "png", "svg", "tif", "tiff", "webp",
-    "avi", "m4v", "mkv", "mov", "mpg", "mp4", "ogv", "webm", "wmv",
-    "aac", "flac", "m4a", "mp3", "mpeg", "oga", "ogg", "wav"
+    "bmp",
+    "gif",
+    "jpg",
+    "jpeg",
+    "png",
+    "svg",
+    "tif",
+    "tiff",
+    "webp",
+    "avi",
+    "m4v",
+    "mkv",
+    "mov",
+    "mpg",
+    "mp4",
+    "ogv",
+    "webm",
+    "wmv",
+    "aac",
+    "flac",
+    "m4a",
+    "mp3",
+    "mpeg",
+    "oga",
+    "ogg",
+    "wav",
 ]
 
 
@@ -42,6 +73,7 @@ class FileMeta(FileCreate, PublicStatusMixin):
 
 class StreamingFile(BaseModel):
     """Модель для потоковой передачи файла с метаданными. Не используется в ответах API."""
+
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     metadata: FileMeta

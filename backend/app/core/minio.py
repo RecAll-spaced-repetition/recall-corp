@@ -1,14 +1,23 @@
 import os.path
-from typing import AsyncGenerator, Any
+from collections.abc import AsyncGenerator
+from typing import Any
+
+from aiohttp import ClientResponse, ClientSession
 from fastapi import UploadFile
-from miniopy_async import Minio, S3Error
+from miniopy_async.api import Minio
+from miniopy_async.datatypes import Object
+from miniopy_async.error import S3Error
 from miniopy_async.helpers import ObjectWriteResult
-from miniopy_async.datatypes import ClientResponse, ClientSession, Object
 
 from .config import get_settings
 
-
-__all__ = ["FileStream", "is_bucket_available", "get_file_stream", "upload_file", "delete_file"]
+__all__ = [
+    "FileStream",
+    "is_bucket_available",
+    "get_file_stream",
+    "upload_file",
+    "delete_file",
+]
 
 
 FileStream = AsyncGenerator[bytes, Any]
@@ -20,7 +29,7 @@ __storage = Minio(
     __settings.minio_url,
     __settings.minio.LOGIN,
     __settings.minio.PASSWORD,
-    secure=False
+    secure=False,
 )
 
 
@@ -42,18 +51,22 @@ def is_file_in_list(full_path: str, files: list[Object]) -> bool:
 async def upload_file(file: UploadFile) -> ObjectWriteResult:
     full_path = file.filename
     name, extension = os.path.splitext(file.filename)
+    
     files = await get_same_name_files(name)
+    
     index = 0
     while is_file_in_list(full_path, files):
         index += 1
         full_path = f"{name}_{index}{extension}"
+    
     return await __storage.put_object(
-        __settings.minio.BUCKET_NAME,
-        full_path, file.file, file.size
+        __settings.minio.BUCKET_NAME, full_path, file.file, file.size
     )
 
 
-async def __file_stream_generator(session: ClientSession, file_response: ClientResponse) -> FileStream:
+async def __file_stream_generator(
+    session: ClientSession, file_response: ClientResponse
+) -> FileStream:
     try:
         async for chunk, _ in file_response.content.iter_chunks():
             yield chunk
@@ -66,7 +79,9 @@ async def __file_stream_generator(session: ClientSession, file_response: ClientR
 async def get_file_stream(full_path: str) -> FileStream | None:
     try:
         session = ClientSession()
-        file_response = await __storage.get_object(__settings.minio.BUCKET_NAME, full_path, session)
+        file_response = await __storage.get_object(
+            __settings.minio.BUCKET_NAME, full_path, session
+        )
         return __file_stream_generator(session, file_response)
     except S3Error:
         return None
@@ -76,4 +91,4 @@ async def delete_file(full_path: str) -> None:
     try:
         await __storage.remove_object(__settings.minio.BUCKET_NAME, full_path)
     except S3Error as e:
-        raise ValueError(e.message)
+        raise ValueError(e.message) from e

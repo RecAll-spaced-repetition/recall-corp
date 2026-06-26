@@ -2,8 +2,8 @@ from .base import *
 from .card import *
 from .card_collection import *
 from .collection import *
-from .train import *
-from .user import *
+from .collection_subscription import *
 from .file import *
 from .file_card import *
-from .collection_subscription import *
+from .train import *
+from .user import *

@@ -1,15 +1,25 @@
 from typing import Annotated
-from fastapi import Depends, Body
+
+from fastapi import Body, Depends
 
 from app.core import get_profile_id, get_profile_id_soft
-from app.services import CardService, UserService, CollectionService, TrainService, StorageService
-
+from app.services import (
+    CardService,
+    CollectionService,
+    StorageService,
+    TrainService,
+    UserService,
+)
 
 __all__ = [
-    "CardServiceDep", "CollectionServiceDep", 
-    "TrainCardServiceDep", "StorageServiceDep",
-    "UserIdDep", "UserIdSoftDep",
-    "UserServiceDep", "IntListBody"
+    "CardServiceDep",
+    "CollectionServiceDep",
+    "TrainCardServiceDep",
+    "StorageServiceDep",
+    "UserIdDep",
+    "UserIdSoftDep",
+    "UserServiceDep",
+    "IntListBody",
 ]
 
 

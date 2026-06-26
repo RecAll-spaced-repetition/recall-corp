@@ -2,7 +2,6 @@ from pydantic import Field
 
 from .base import CamelCaseBaseModel, PublicStatusMixin
 
-
 __all__ = ["Card", "CardCreate"]
 
 

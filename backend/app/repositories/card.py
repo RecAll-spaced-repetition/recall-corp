@@ -1,10 +1,8 @@
 from sqlalchemy import and_, select
-from typing import Type
 
-from app.db import CardTable
+from app.models import CardTable
 
 from .base import BaseSQLAlchemyRepository, SchemaType
-
 
 __all__ = ["CardRepository"]
 
@@ -13,7 +11,7 @@ class CardRepository(BaseSQLAlchemyRepository):
     table = CardTable
 
     async def get_card_by_id(
-            self, card_id: int, output_schema: Type[SchemaType]
+        self, card_id: int, output_schema: type[SchemaType]
     ) -> SchemaType | None:
         return await self.get_one_or_none(self._item_id_filter(card_id), output_schema)
 
@@ -21,13 +19,19 @@ class CardRepository(BaseSQLAlchemyRepository):
         query = select(self.table.c.id).where(self.table.c.owner_id == owner_id).offset(offset)
         if limit is not None:
             query = query.limit(limit)
+
         result = await self.connection.execute(query)
+
         return list(result.scalars().all())
 
     async def update_card_by_id(
-            self, card_id: int, update_values: dict, output_schema: Type[SchemaType]
+        self, card_id: int, update_values: dict, output_schema: type[SchemaType]
     ) -> SchemaType:
-        return await self.update_one(self._item_id_filter(card_id), update_values, output_schema)
+        return await self.update_one(
+            filter_expr=self._item_id_filter(card_id),
+            update_values=update_values,
+            output_schema=output_schema,
+        )
 
     async def delete_card(self, card_id: int) -> None:
         await self.delete(self._item_id_filter(card_id))

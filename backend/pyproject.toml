@@ -1,20 +1,20 @@
 [project]
 name = "recall-back"
-version = "0.2.1"
+version = "0.8.1"
 description = ""
 readme = "README.md"
 authors = [
     {name = "AntonTsoy", email = "tcoy210@gmail.com"},
     {name = "Kozlov Kirill", email = "kozlov.kirill.v.work@gmail.com"}
 ]
-requires-python = ">=3.11,<4.0"
+requires-python = ">=3.11,<3.15"
 dynamic = ["version", "readme", "dependencies"]
 
 [tool.poetry]
 package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.15"
 sqlalchemy = "^2.0.36"
 fastapi = {extras = ["standard"], version = "^0.115.3"}
 python-multipart = "^0.0.17"
@@ -28,6 +28,29 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 uvicorn = "^0.33.0"
 miniopy-async = "^1.22.1"
 fsrs = {extras = ["optimizer"], version = "^6.3.1"}
+ruff = "^0.15.14"
+
+[tool.ruff]
+line-length = 96
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle
+    "F",     # pyflakes
+    "I",     # imports
+    "B",     # bugbear
+    "SIM",   # simplify
+    "RET",   # return cleanup
+    "UP",    # pyupgrade
+    "C90",   # complexity
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
 
 
 [build-system]
