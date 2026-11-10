@@ -1,4 +1,4 @@
-import { serverUrl } from './setupBackend';
+import { subscribeToPushWebPushPost } from './api';
 
 const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 const SW_SCOPES = ['/'];
@@ -81,22 +81,17 @@ const sendSubscriptionToServer = async (subscription: PushSubscription) => {
     const subscriptionInfo = {
       endpoint: subscription.endpoint,
       keys: {
-        p256dh: subscriptionJson.keys.p256dh,
+        p256Dh: subscriptionJson.keys.p256dh,
         auth: subscriptionJson.keys.auth,
       },
     };
 
-    const response = await fetch(`${serverUrl}/web-push/`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(subscriptionInfo),
+    const response = await subscribeToPushWebPushPost({
+      body: subscriptionInfo,
     });
 
-    if (!response.ok) {
-      throw new Error(`Subscription request failed: ${response.status}`);
+    if (response.error) {
+      throw new Error(`Subscription request failed`, { cause: response.error });
     }
   } catch (error) {
     console.error('Server subscription error:', error);

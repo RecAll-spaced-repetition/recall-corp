@@ -17,6 +17,8 @@ class UserCreate(UserBase):
 
 class User(UserBase):
     id: int
+    push_notifications_allowed: bool
+    email_notifications_allowed: bool
 
 
 class UserAuth(CamelCaseBaseModel):
@@ -29,6 +31,8 @@ class UserDTO(CamelCaseBaseModel):
     email: EmailStr | None = None
     nickname: str | None = None
     password: str | None = Field(None, alias="hashed_password")
+    push_notifications_allowed: bool | None = None
+    email_notifications_allowed: bool | None = None
 
     @classmethod
     def fields(cls) -> list[str]:

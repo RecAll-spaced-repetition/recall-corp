@@ -21,7 +21,7 @@ async def subscribe_to_push(
 
 
 @router.delete("/", response_class=Response)
-async def unsubscribe_user_from_push(
+async def unsubscribe_from_push(
         user_id: UserIdDep, subscription: WebPushOnlyEndPoint,
         notification_service: NotificationServiceDep
 ):

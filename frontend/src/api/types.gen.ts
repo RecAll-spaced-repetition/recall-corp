@@ -196,6 +196,8 @@ export type User = {
   nickname: string;
   email: string;
   id: number;
+  pushNotificationsAllowed: boolean;
+  emailNotificationsAllowed: boolean;
 };
 
 export type UserAuth = {
@@ -218,6 +220,20 @@ export type ValidationError = {
   loc: Array<string | number>;
   msg: string;
   type: string;
+};
+
+export type WebPushKeys = {
+  p256Dh: string;
+  auth: string;
+};
+
+export type WebPushOnlyEndPoint = {
+  endpoint: string;
+};
+
+export type WebPushSubscription = {
+  endpoint: string;
+  keys: WebPushKeys;
 };
 
 export type ReadCardCardsCardIdGetData = {
@@ -563,6 +579,28 @@ export type UpdateUserUserEditProfilePutResponse = User;
 
 export type UpdateUserUserEditProfilePutError = HTTPValidationError;
 
+export type ChangePushNotificationsUserNotificationsPushPatchData = {
+  query: {
+    allowed: boolean;
+  };
+};
+
+export type ChangePushNotificationsUserNotificationsPushPatchResponse = User;
+
+export type ChangePushNotificationsUserNotificationsPushPatchError =
+  HTTPValidationError;
+
+export type ChangePushNotificationsUserNotificationsEmailPatchData = {
+  query: {
+    allowed: boolean;
+  };
+};
+
+export type ChangePushNotificationsUserNotificationsEmailPatchResponse = User;
+
+export type ChangePushNotificationsUserNotificationsEmailPatchError =
+  HTTPValidationError;
+
 export type DeleteUserUserDeleteProfileDeleteResponse = unknown;
 
 export type DeleteUserUserDeleteProfileDeleteError = unknown;
@@ -578,3 +616,37 @@ export type AuthenticateUserUserLoginPostError = HTTPValidationError;
 export type LogoutUserUserLogoutPostResponse = unknown;
 
 export type LogoutUserUserLogoutPostError = unknown;
+
+export type SubscribeToPushWebPushPostData = {
+  body: WebPushSubscription;
+};
+
+export type SubscribeToPushWebPushPostResponse = unknown;
+
+export type SubscribeToPushWebPushPostError = HTTPValidationError;
+
+export type UnsubscribeFromPushWebPushDeleteData = {
+  body: WebPushOnlyEndPoint;
+};
+
+export type UnsubscribeFromPushWebPushDeleteResponse = unknown;
+
+export type UnsubscribeFromPushWebPushDeleteError = HTTPValidationError;
+
+export type UnsubscribeUserFromPushWebPushAllDeleteResponse = unknown;
+
+export type UnsubscribeUserFromPushWebPushAllDeleteError = unknown;
+
+export type SendTestNotficationsWebPushSendUserIdPostData = {
+  path: {
+    user_id: number;
+  };
+  query: {
+    message: string;
+  };
+};
+
+export type SendTestNotficationsWebPushSendUserIdPostResponse = unknown;
+
+export type SendTestNotficationsWebPushSendUserIdPostError =
+  HTTPValidationError;

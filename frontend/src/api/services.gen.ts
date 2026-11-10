@@ -104,6 +104,12 @@ import type {
   UpdateUserUserEditProfilePutData,
   UpdateUserUserEditProfilePutError,
   UpdateUserUserEditProfilePutResponse,
+  ChangePushNotificationsUserNotificationsPushPatchData,
+  ChangePushNotificationsUserNotificationsPushPatchError,
+  ChangePushNotificationsUserNotificationsPushPatchResponse,
+  ChangePushNotificationsUserNotificationsEmailPatchData,
+  ChangePushNotificationsUserNotificationsEmailPatchError,
+  ChangePushNotificationsUserNotificationsEmailPatchResponse,
   DeleteUserUserDeleteProfileDeleteError,
   DeleteUserUserDeleteProfileDeleteResponse,
   AuthenticateUserUserLoginPostData,
@@ -111,6 +117,17 @@ import type {
   AuthenticateUserUserLoginPostResponse,
   LogoutUserUserLogoutPostError,
   LogoutUserUserLogoutPostResponse,
+  SubscribeToPushWebPushPostData,
+  SubscribeToPushWebPushPostError,
+  SubscribeToPushWebPushPostResponse,
+  UnsubscribeFromPushWebPushDeleteData,
+  UnsubscribeFromPushWebPushDeleteError,
+  UnsubscribeFromPushWebPushDeleteResponse,
+  UnsubscribeUserFromPushWebPushAllDeleteError,
+  UnsubscribeUserFromPushWebPushAllDeleteResponse,
+  SendTestNotficationsWebPushSendUserIdPostData,
+  SendTestNotficationsWebPushSendUserIdPostError,
+  SendTestNotficationsWebPushSendUserIdPostResponse,
 } from './types.gen';
 
 export const client = createClient(createConfig());
@@ -725,6 +742,48 @@ export const updateUserUserEditProfilePut = <
 };
 
 /**
+ * Change Push Notifications
+ */
+export const changePushNotificationsUserNotificationsPushPatch = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ChangePushNotificationsUserNotificationsPushPatchData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).patch<
+    ChangePushNotificationsUserNotificationsPushPatchResponse,
+    ChangePushNotificationsUserNotificationsPushPatchError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/user/notifications/push',
+  });
+};
+
+/**
+ * Change Push Notifications
+ */
+export const changePushNotificationsUserNotificationsEmailPatch = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<
+    ChangePushNotificationsUserNotificationsEmailPatchData,
+    ThrowOnError
+  >
+) => {
+  return (options?.client ?? client).patch<
+    ChangePushNotificationsUserNotificationsEmailPatchResponse,
+    ChangePushNotificationsUserNotificationsEmailPatchError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/user/notifications/email',
+  });
+};
+
+/**
  * Delete User
  */
 export const deleteUserUserDeleteProfileDelete = <
@@ -773,5 +832,77 @@ export const logoutUserUserLogoutPost = <ThrowOnError extends boolean = false>(
   >({
     ...options,
     url: '/user/logout',
+  });
+};
+
+/**
+ * Subscribe To Push
+ */
+export const subscribeToPushWebPushPost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<SubscribeToPushWebPushPostData, ThrowOnError>
+) => {
+  return (options?.client ?? client).post<
+    SubscribeToPushWebPushPostResponse,
+    SubscribeToPushWebPushPostError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/web-push/',
+  });
+};
+
+/**
+ * Unsubscribe From Push
+ */
+export const unsubscribeFromPushWebPushDelete = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<UnsubscribeFromPushWebPushDeleteData, ThrowOnError>
+) => {
+  return (options?.client ?? client).delete<
+    UnsubscribeFromPushWebPushDeleteResponse,
+    UnsubscribeFromPushWebPushDeleteError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/web-push/',
+  });
+};
+
+/**
+ * Unsubscribe User From Push
+ */
+export const unsubscribeUserFromPushWebPushAllDelete = <
+  ThrowOnError extends boolean = false,
+>(
+  options?: Options<unknown, ThrowOnError>
+) => {
+  return (options?.client ?? client).delete<
+    UnsubscribeUserFromPushWebPushAllDeleteResponse,
+    UnsubscribeUserFromPushWebPushAllDeleteError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/web-push/all',
+  });
+};
+
+/**
+ * Send Test Notfications
+ */
+export const sendTestNotficationsWebPushSendUserIdPost = <
+  ThrowOnError extends boolean = false,
+>(
+  options: Options<SendTestNotficationsWebPushSendUserIdPostData, ThrowOnError>
+) => {
+  return (options?.client ?? client).post<
+    SendTestNotficationsWebPushSendUserIdPostResponse,
+    SendTestNotficationsWebPushSendUserIdPostError,
+    ThrowOnError
+  >({
+    ...options,
+    url: '/web-push/send/{user_id}',
   });
 };

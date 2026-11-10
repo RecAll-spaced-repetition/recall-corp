@@ -62,6 +62,22 @@ async def update_user(
     return await user_service.update_profile(user_id, user)
 
 
+@router.patch('/notifications/push')
+async def change_push_notifications(
+    user_id: UserIdDep, allowed: bool,
+    user_service: UserServiceDep
+) -> User:
+    return await user_service.update_push_notifications(user_id, allowed)
+
+
+@router.patch('/notifications/email')
+async def change_email_notifications(
+    user_id: UserIdDep, allowed: bool,
+    user_service: UserServiceDep
+) -> User:
+    return await user_service.update_email_notifications(user_id, allowed)
+
+
 @router.delete("/delete_profile", response_class=Response)
 async def delete_user(
         response: Response, user_id: UserIdDep, user_service: UserServiceDep

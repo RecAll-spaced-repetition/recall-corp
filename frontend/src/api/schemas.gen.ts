@@ -709,9 +709,23 @@ export const UserSchema = {
       type: 'integer',
       title: 'Id',
     },
+    pushNotificationsAllowed: {
+      type: 'boolean',
+      title: 'Pushnotificationsallowed',
+    },
+    emailNotificationsAllowed: {
+      type: 'boolean',
+      title: 'Emailnotificationsallowed',
+    },
   },
   type: 'object',
-  required: ['nickname', 'email', 'id'],
+  required: [
+    'nickname',
+    'email',
+    'id',
+    'pushNotificationsAllowed',
+    'emailNotificationsAllowed',
+  ],
   title: 'User',
 } as const;
 
@@ -806,4 +820,47 @@ export const ValidationErrorSchema = {
   type: 'object',
   required: ['loc', 'msg', 'type'],
   title: 'ValidationError',
+} as const;
+
+export const WebPushKeysSchema = {
+  properties: {
+    p256Dh: {
+      type: 'string',
+      title: 'P256Dh',
+    },
+    auth: {
+      type: 'string',
+      title: 'Auth',
+    },
+  },
+  type: 'object',
+  required: ['p256Dh', 'auth'],
+  title: 'WebPushKeys',
+} as const;
+
+export const WebPushOnlyEndPointSchema = {
+  properties: {
+    endpoint: {
+      type: 'string',
+      title: 'Endpoint',
+    },
+  },
+  type: 'object',
+  required: ['endpoint'],
+  title: 'WebPushOnlyEndPoint',
+} as const;
+
+export const WebPushSubscriptionSchema = {
+  properties: {
+    endpoint: {
+      type: 'string',
+      title: 'Endpoint',
+    },
+    keys: {
+      $ref: '#/components/schemas/WebPushKeys',
+    },
+  },
+  type: 'object',
+  required: ['endpoint', 'keys'],
+  title: 'WebPushSubscription',
 } as const;

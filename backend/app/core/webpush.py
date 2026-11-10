@@ -36,7 +36,8 @@ async def _send_one(session: aiohttp.ClientSession, subscription: dict, data: st
 
 
 async def push_notification(subscriptions: list[dict], title: str, body: str, url: str = '/') -> list[dict]:
-    """Асинхронно шлёт уведомление по списку подписок, переиспользуя один aiohttp-сессион.
+    """
+    Асинхронно шлёт уведомление по списку подписок, переиспользуя один aiohttp-сессион.
 
     Возвращает протухшие подписки (push-сервис ответил 404/410) — их нужно удалить из БД.
     """

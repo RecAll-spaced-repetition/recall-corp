@@ -18,7 +18,7 @@ export const useLogin = (onSuccess?: (response: User) => void) => {
       ),
     onSuccess: (data) => {
       queryClient.setQueryData(getProfileQueryOptions().queryKey, data);
-      refreshSubscription({ requestPermissionOnPrompt: true }); // TODO: Почему-то в Edge это не работает - надо понять, почему
+      void refreshSubscription({ requestPermissionOnPrompt: true }); // TODO: Почему-то в Edge это не работает - надо понять, почему
       onSuccess?.(data);
     },
   });

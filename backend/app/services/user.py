@@ -73,6 +73,22 @@ class UserService(BaseService):
         return await user_repo.update_user_by_id(user_id, update_values, User)
 
     @with_unit_of_work
+    async def update_push_notifications(self, user_id: int, allowed: bool) -> User:
+        user_repo = self.uow.get_repository(UserRepository)
+        user = await user_repo.get_user_by_id(user_id, UserDTO)
+        if not user:
+            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        return await user_repo.update_user_by_id(user_id, {'push_notifications_allowed': allowed}, User)
+
+    @with_unit_of_work
+    async def update_email_notifications(self, user_id: int, allowed: bool) -> User:
+        user_repo = self.uow.get_repository(UserRepository)
+        user = await user_repo.get_user_by_id(user_id, UserDTO)
+        if not user:
+            raise HTTPException(status_code=400)  ## ТУТ ДОЛЖНО БЫТЬ КАСТОМНОЕ ИСКЛЮЧЕНИЕ!
+        return await user_repo.update_user_by_id(user_id, {'email_notifications_allowed': allowed}, User)
+
+    @with_unit_of_work
     async def delete_profile(self, user_id: int) -> None:
         user_repo = self.uow.get_repository(UserRepository)
         if not await user_repo.exists_user_with_id(user_id):

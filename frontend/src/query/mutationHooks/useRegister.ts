@@ -20,7 +20,7 @@ export const useRegister = (onSuccess?: (response: User) => void) => {
       ),
     onSuccess: (data) => {
       queryClient.setQueryData(getProfileQueryOptions().queryKey, data);
-      refreshSubscription({ requestPermissionOnPrompt: true });
+      void refreshSubscription({ requestPermissionOnPrompt: true });
       onSuccess?.(data);
     },
   });
