@@ -1,8 +1,25 @@
 # RecAll
 
-![RecAll logo]()
+![RecAll logo](./docs/images/logo.png)
 
 RecAll is a self-hosted flashcard app for spaced repetition. Create cards, organize them into collections and review them when they are due.
+
+## Table of contents
+- [Description and features](#description-and-features)
+  - [Markdown editor](#markdown-editor)
+  - [Review scheduling](#review-scheduling)
+  - [File storage](#file-storage)
+- [How to use](#how-to-use)
+  - [Our site](#our-site)
+  - [Self-hosting](#self-hosting)
+- [Stack and implementation](#stack-and-implementation)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+  - [Infrastructure](#infrastructure)
+- [Authors](#authors)
+  - [Responsibilities](#responsibilities)
+    - [Kirill Kozlov](#kirill-kozlov)
+    - [Anton Tsoy](#anton-tsoy)
 
 ## Description and features
 
@@ -10,24 +27,24 @@ RecAll is a self-hosted flashcard app for spaced repetition. Create cards, organ
 
 Both sides of a card support Markdown, LaTeX formulas, images, audio, video and syntax-highlighted code blocks.
 
-![Formats]()
+![Formats](./docs/images/formats.png)
 
 The editor supports keyboard shortcuts, undo, pasting links and dropping media files directly onto a card.
 
-![Editor]()
+<img src="./docs/images/editor-active.png" width="48%" />
+<img src="./docs/images/editor-demo.png" width="48%" />
 
 ### Review scheduling
 
-RecAll uses each learner's review history to tune the FSRS scheduler. The review calendar shows which collections are due on a selected day. [Python FSRS implementation](https://github.com/open-spaced-repetition/py-fsrs)
+RecAll uses each learner's review history to tune the [Python FSRS](https://github.com/open-spaced-repetition/py-fsrs) scheduler. The review calendar shows which collections are due on a selected day.
 
-![FSRS efficiency chart]()
-![Calendar]()
+![Calendar](./docs/images/calendar.png)
 
 ### File storage
 
 RecAll stores uploaded media in your MinIO instance. Attachments become public when a linked card is shared through a public collection.
 
-![File controls]()
+![File controls](./docs/images/files.png)
 
 ## How to use
 
