@@ -3,7 +3,7 @@ FROM python:3.12.10 AS builder
 
 RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.8.1
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 2.4.1
 
 # Add Poetry to PATH
 ENV PATH="/root/.local/bin:$PATH" \

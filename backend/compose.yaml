@@ -1,5 +1,8 @@
 name: recall-corp-backend
 
+# Mirror of the upstream RELEASE.2025-09-07T16-13-09Z image, which includes mc.
+x-minio-image: &minio-image ghcr.io/datalens-tech/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+
 networks:
   dev:
 
@@ -22,7 +25,7 @@ services:
     depends_on:
       minio:
         condition: service_healthy
-    image: minio/mc:latest
+    image: *minio-image
     env_file:
       - ./config/minio-server.env
       - ./config/minio-backend.env
@@ -37,7 +40,7 @@ services:
       - dev
   minio:
     container_name: recall-corp-minio
-    image: minio/minio:latest
+    image: *minio-image
     environment:
       - MINIO_CONFIG_ENV_FILE=/etc/config.env
     ports:
