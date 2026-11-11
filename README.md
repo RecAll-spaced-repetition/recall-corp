@@ -31,10 +31,8 @@ Both sides of a card support Markdown, LaTeX formulas, images, audio, video and 
 
 The editor supports keyboard shortcuts, undo, pasting links and dropping media files directly onto a card.
 
-<div style="display: flex; justify-content: space-around; width: 100%">
-<img src="./docs/images/editor-active.png" width="49%" />
-<img src="./docs/images/editor-demo.png" width="49%" />
-</div>
+![](./docs/images/editor-active.png)
+![](./docs/images/editor-demo.png)
 
 ### Review scheduling
 
