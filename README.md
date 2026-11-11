@@ -61,15 +61,15 @@ RecAll stores uploaded media in your MinIO instance. Attachments become public w
 
 2. **Create the environment files.**
 
-   ```sh
-   cp .env.example .env
-   cp frontend/.env.example frontend/.env
-   cp backend/.env.example backend/.env
-   for template in backend/config/examples/*.env.example; do
-     name=$(basename "$template" .example)
-     cp "$template" "backend/config/$name"
-   done
-   ```
+```sh
+cp .env.example .env
+cp frontend/.env.example frontend/.env
+cp backend/.env.example backend/.env
+for template in backend/config/examples/*.env.example; do
+  name=$(basename "$template" .example)
+  cp "$template" "backend/config/$name"
+done
+```
 
 3. **Set the deployment values.** Replace the placeholders in all eight files. The examples below use `recall.example.org`. Generate a different secret for each credential, for example with `openssl rand -hex 32`.
 
